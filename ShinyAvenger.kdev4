@@ -1,0 +1,4 @@
+[Project]
+Name=ShinyAvenger
+Manager=KDevCMakeManager
+VersionControl=kdevgit
