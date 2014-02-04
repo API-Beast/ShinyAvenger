@@ -1,7 +1,10 @@
+
 #include <iostream>
+#include "Source/Game.h"
 
 int main(int argc, char **argv)
 {
-    std::cout << "Hello, world!" << std::endl;
-    return 0;
+	Game game(argc, argv);
+	game.execute();
+	return 0;
 }

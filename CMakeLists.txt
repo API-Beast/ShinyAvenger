@@ -9,8 +9,7 @@ ENABLE_CPP11()
 find_package(GLFW REQUIRED)
 find_package(Springbok REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR})
-include_directories(${SPRINGBOK_INCLUDE_DIR})
-include_directories(${GLFW_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${SPRINGBOK_INCLUDE_DIR} ${GLFW_INCLUDE_DIR})
 
-add_executable(shinyavenger main.cpp)
+add_executable(shinyavenger main.cpp Source/Game.cpp)
+target_link_libraries(shinyavenger ${GLFW_LIBRARY} ${SPRINGBOK_LIBRARY})
