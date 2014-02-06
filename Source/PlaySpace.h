@@ -19,9 +19,9 @@ public:
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
-	void onMovementInput(Angle angle);
+	void onMovementInput(Angle angle, float time);
 public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;
-	float AirDrag = 0.01;
+	float AirDrag = 0.005;
 };

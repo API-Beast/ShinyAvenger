@@ -12,7 +12,8 @@
 class Player : public PhysicsObject
 {
 public:
-	Vec2F MovementDirection = 0;
+	Angle MovementDirection = 0;
+	Angle TargetDirection = 0;
 	Image Sprite;
 public:
 	Player() : Sprite("Player/Sprite.png"){};

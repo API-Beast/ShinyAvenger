@@ -35,16 +35,18 @@ void Game::execute()
 		for(const ButtonPressEvent& press : Input->poll())
 		{
 			if(Buttons::Escape.matches(press)) // Escape was pressed
+			{
 				Surface->requestClose();
-			if(Buttons::Up.matches(press))
-				Playfield->onMovementInput(0.00f);
-			else if(Buttons::Right.matches(press))
-				Playfield->onMovementInput(0.25f);
-			else if(Buttons::Down.matches(press))
-				Playfield->onMovementInput(0.50f);
-			else if(Buttons::Left.matches(press))
-				Playfield->onMovementInput(0.75f);
+				continue;
+			}
 		}
+		bool up    = Buttons::Up.isPressed(Input);
+		bool down  = Buttons::Down.isPressed(Input);
+		bool right = Buttons::Right.isPressed(Input);
+		bool left  = Buttons::Left.isPressed(Input);
+		
+		if(up || down || right || left)
+			Playfield->onMovementInput(Angle::FromBooleanDirectionMatrix(up, down, right, left), dt);
 		
 		Playfield->update(dt);
 		Playfield->draw();

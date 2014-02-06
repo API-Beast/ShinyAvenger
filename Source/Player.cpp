@@ -5,15 +5,18 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Player.h"
+#include <Springbok/Animation/Interpolation.h>
 
 void Player::draw(RenderContext r)
 {
 	r.Offset = Position;
-	r.Rotation = MovementDirection.getAngle();
+	r.Rotation = MovementDirection;
 	Sprite.draw(r);
 }
 
 void Player::update(float t)
 {
-	Acceleration = MovementDirection * 250;
+	Acceleration = MovementDirection.toDirection() * 1000;
+	
+	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t, t);
 }

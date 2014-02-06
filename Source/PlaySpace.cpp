@@ -6,6 +6,7 @@
 
 #include "PlaySpace.h"
 #include <GL/gl.h>
+#include <Springbok/Animation/Interpolation.h>
 
 PlaySpace::PlaySpace()
 {
@@ -35,12 +36,12 @@ void PlaySpace::update(float time)
 	for(PhysicsObject* obj : Objects)
 	{
 		obj->Speed    += obj->Acceleration * time;
-		obj->Speed    -= obj->Speed * (AirDrag * time) * obj->Speed.getLength();
+		obj->Speed    -= obj->Speed * (AirDrag * obj->Drag * time) * obj->Speed.getLength();
 		obj->Position += obj->Speed * time;
 	}
 }
 
-void PlaySpace::onMovementInput(Angle angle)
+void PlaySpace::onMovementInput(Angle angle, float time)
 {
-	ThePlayer->MovementDirection = angle.toDirection();
+	ThePlayer->TargetDirection = Approach(ThePlayer->TargetDirection, angle, time*2, time*0.01);
 }
