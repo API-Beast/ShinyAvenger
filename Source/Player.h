@@ -14,6 +14,7 @@ class Player : public PhysicsObject
 public:
 	Angle MovementDirection = 0;
 	Angle TargetDirection = 0;
+	float AcclerateFactor = 0.0f;
 	Image Sprite;
 public:
 	Player() : Sprite("Player/Sprite.png"){};

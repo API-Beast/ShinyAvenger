@@ -7,6 +7,8 @@
 #include "Player.h"
 #include <Springbok/Animation/Interpolation.h>
 
+#include <iostream>
+
 void Player::draw(RenderContext r)
 {
 	r.Offset = Position;
@@ -16,7 +18,8 @@ void Player::draw(RenderContext r)
 
 void Player::update(float t)
 {
-	Acceleration = MovementDirection.toDirection() * 1000;
-	
-	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t, t);
+	Acceleration = MovementDirection.toDirection() * 2000 * AcclerateFactor;
+	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
+	TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (1-(AcclerateFactor*AcclerateFactor))*t);
+	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
 }

@@ -29,7 +29,8 @@ void Game::execute()
 	Clock->start();
 	while(!Surface->closeRequested())
 	{
-		float dt = Clock->elapsed();
+		float dt = 0.0f;
+		dt = Clock->elapsed();
 		Clock->start();
 		
 		for(const ButtonPressEvent& press : Input->poll())

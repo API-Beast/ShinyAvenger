@@ -15,6 +15,7 @@ struct PhysicsObject
 	Vec2F Speed = 0;
 	Vec2F Acceleration = 0;
 	Vec2F Drag = 1;
+	Vec2F Mass = 1;
 public:
 	virtual void draw(RenderContext r){};
 };

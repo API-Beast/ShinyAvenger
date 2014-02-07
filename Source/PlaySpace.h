@@ -9,8 +9,18 @@
 #include "Player.h"
 #include "Space.h"
 #include "PhysicsObject.h"
+
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
+
+struct GravitySource
+{
+	Vec2F Position;
+	float Gravity;
+	float Range;
+	
+	Image Graphics;
+};
 
 class PlaySpace : public Space
 {
@@ -23,5 +33,6 @@ public:
 public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;
+	List<GravitySource> GravitySources;
 	float AirDrag = 0.005;
 };
