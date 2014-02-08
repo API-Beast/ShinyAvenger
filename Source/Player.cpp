@@ -38,8 +38,8 @@ void Player::update(float t, PlaySpace* space)
 			Bullet bullet;
 			bullet.Sprite = Image("Player/Bullet.png");
 			bullet.Position = Position;
-			bullet.Speed = ShootingDirection.toDirection()*600;
-			bullet.Mass = 2;
+			bullet.Speed = ShootingDirection.toDirection()*800 + Speed / 2;
+			bullet.Mass = 3;
 			bullet.Drag = 0;
 			space->spawnPlayerBullet(bullet);
 		}
