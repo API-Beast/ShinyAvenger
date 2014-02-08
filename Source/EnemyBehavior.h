@@ -8,7 +8,7 @@
 
 #include "PhysicsObject.h"
 #include "Enemy.h"
-
+#include <iostream>
 class EnemyBehavior
 {
 public:
@@ -21,12 +21,12 @@ public:
       PhysicsObject *Target;
       double Speed;
       
-      TrackingBehavior(PhysicsObject *PhysicsTarget, const double Speed = 100.0) : Target(PhysicsTarget) {}
+      TrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
       
       void update(float t, Enemy *const TheEnemy)
       {
           Vec2F Distance = Target->Position - TheEnemy->Position;
-	  TheEnemy->Position += Distance.normalized() * Speed * t;
+	  TheEnemy->Acceleration += Distance.normalized() * 100.0f * t * Speed;
 	  TheEnemy->TargetDirection = Distance.getAngle();
       }
 };

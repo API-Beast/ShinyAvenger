@@ -22,8 +22,8 @@ PlaySpace::PlaySpace()
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i) {
 	  
-	    const double Speed = rand() % 10 + 80;
-	    EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, Speed);
+	    const double ShipSpeed = rand() % 10 + 120.0;
+	    EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
 	    Enemy *enemy = new Enemy(behavior);
 	    enemy->Position.X = rand() % 2000 - 1000;
 	    enemy->Position.Y = rand() % 2000 - 1000;
