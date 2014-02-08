@@ -29,6 +29,7 @@ public:
 	Color HighlightColor;
 	
 	float TimeSinceSpawn = 0.0f;
+	float CenterSize = 1.0f;
 	
 	Image GlowSprite = Image("Glow.png");
 	Image Graphics = Image("GravitySource.png");

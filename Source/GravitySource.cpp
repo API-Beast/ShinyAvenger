@@ -16,6 +16,8 @@ void GravitySource::update(float dt, PlaySpace* space)
 
 void GravitySource::draw(RenderContext r)
 {
+	r.Offset = Position;
+	
 	// Background 1
 	r.Rotation = TimeSinceSpawn*0.15f;
 	r.Scale = 1.2f;
@@ -30,19 +32,19 @@ void GravitySource::draw(RenderContext r)
 	
 	// Background Center 1
 	r.Rotation = TimeSinceSpawn*0.21f;
-	r.Scale = 1.6f;
+	r.Scale = CenterSize * 1.5f;
 	r.setColor(CenterColor, 0.7f);
 	Graphics.draw(r);
 	
 	// Background Center 2
 	r.Rotation = TimeSinceSpawn*0.36f;
-	r.Scale = 1.1f;
+	r.Scale = CenterSize * 1.1f;
 	r.setColor(CenterColor);
 	Graphics.draw(r);
 	
 	// Background Center Highlight
 	r.Rotation = TimeSinceSpawn*0.40f;
-	r.Scale = 1.0f;
+	r.Scale = CenterSize;
 	r.setColor(HighlightColor);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	HighlightGraphics.draw(r);
