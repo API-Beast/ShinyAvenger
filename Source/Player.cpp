@@ -22,13 +22,12 @@ void Player::update(float t)
 	Acceleration = MovementDirection.toDirection() * 2000 * AcclerateFactor;
 	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
 	
-	double diff = MovementDirection.difference(TargetDirection);	
+	double diff = Speed.getAngle();
 	float factor = 1;
-	double tolerance = 0.02;
+	double tolerance = 0.01;
 	
 	if (diff < tolerance && diff > -tolerance) {
 	  factor = 0;
-	  MovementDirection = TargetDirection;
 	}
 	
 	TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (factor-(AcclerateFactor*AcclerateFactor))*t);
