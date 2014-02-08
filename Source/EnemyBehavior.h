@@ -24,7 +24,9 @@ public:
       
       void update(float t, Enemy *const TheEnemy)
       {
-          TheEnemy->Position.X = 10;
+          Vec2F Distance = Target->Position - TheEnemy->Position;
+	  const double SPEED = 100.0;
+	  TheEnemy->Position += Distance.normalized() * SPEED * t;
       }
 };
 
