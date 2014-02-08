@@ -13,12 +13,13 @@ PlaySpace::PlaySpace()
 	ThePlayer = new Player;
 	ThePlayer->Position = {200, 150};
 	Objects.pushBack(ThePlayer);
+	GlowSprite = Image("Glow.png");
+	GravitySourceSprite = Image("GravitySource.png");
+	GravitySourceHighlight = Image("GravitySourceHighlight.png");
 	
-	GravitySources.pushBack({Vec2F(0,0), 2.f, 100.f, Image("GravitySource.png")});
-	GravitySources.pushBack({Vec2F(600,800), 2.f, 100.f, Image("GravitySource.png")});
-	GravitySources.pushBack({Vec2F(400,400), -2.f, 50.f, Image("AntiGravitySource.png")});
+	GravitySources.pushBack({Vec2F(0,0), 0.3f, 750.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
-	glClearColor(0.2f, 0.2f, 0.2f, 0.0f);
+	glClearColor(0.22f, 0.15f, 0.24f, 0.0f);
 }
 
 PlaySpace::~PlaySpace()
@@ -30,19 +31,55 @@ PlaySpace::~PlaySpace()
 void PlaySpace::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	RenderContext r;
-	r.CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
-	for(PhysicsObject* obj : Objects)
-		obj->draw(r);
+	RenderContext r2;
+	r2.CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
 	for(GravitySource& src : GravitySources)
 	{
+		RenderContext r(r2);
 		r.Offset = src.Position;
-		src.Graphics.draw(r);
+		
+		// Background 1
+		r.Rotation = GameTime*0.15f;
+		r.Scale = 1.2f;
+		r.setColor(Colors::Black, 0.4f);
+		GlowSprite.drawStretched(src.Range*2, r);
+		
+		// Background 2
+		r.Rotation = GameTime*0.32f;
+		r.Scale = 1.0f;
+		r.setColor(Colors::Black, 0.6f);
+		GlowSprite.drawStretched(src.Range*2, r);
+		
+		// Background Center 1
+		r.Rotation = GameTime*0.21f;
+		r.Scale = 1.6f;
+		r.setColor(src.CenterColor, 0.7f);
+		GravitySourceSprite.draw(r);
+		
+		// Background Center 2
+		r.Rotation = GameTime*0.36f;
+		r.Scale = 1.1f;
+		r.setColor(src.CenterColor);
+		GravitySourceSprite.draw(r);
+		
+		// Background Center Highlight
+		r.Rotation = GameTime*0.40f;
+		r.Scale = 1.0f;
+		r.setColor(src.HighlightColor);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+		GravitySourceHighlight.draw(r);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+	r2.setColor(Colors::White);
+	for(PhysicsObject* obj : Objects)
+		obj->draw(r2);
 }
 
 void PlaySpace::update(float time)
 {
+	GameTime += time;
+	
+	
 	ThePlayer->update(time);
 	for(PhysicsObject* obj : Objects)
 	{

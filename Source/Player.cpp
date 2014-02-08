@@ -19,7 +19,7 @@ void Player::draw(RenderContext r)
 
 void Player::update(float t)
 {	
-	Acceleration = MovementDirection.toDirection() * 2000 * AcclerateFactor;
+	Acceleration = MovementDirection.toDirection() * 400 * AcclerateFactor;
 	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
 	
 	if(Abs(TargetDirection.difference(Speed.getAngle())) > 0.01) {

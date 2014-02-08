@@ -19,7 +19,8 @@ struct GravitySource
 	float Gravity;
 	float Range;
 	
-	Image Graphics;
+	Color CenterColor;
+	Color HighlightColor;
 };
 
 class PlaySpace : public Space
@@ -34,5 +35,9 @@ public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;
 	List<GravitySource> GravitySources;
-	float AirDrag = 0.005;
+	Image GlowSprite;
+	Image GravitySourceSprite;
+	Image GravitySourceHighlight;
+	float AirDrag = 0.0005f;
+	float GameTime = 0.0f;
 };
