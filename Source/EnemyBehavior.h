@@ -28,8 +28,10 @@ public:
 	void update(float t, Enemy *const TheEnemy)
 	{
 		Vec2F Distance = Target->Position - TheEnemy->Position;
-		TheEnemy->TargetDirection = Approach<Angle, double>(TheEnemy->TargetDirection, Distance.getAngle(), t / 2.0f);		
-		TheEnemy->Acceleration = TheEnemy->TargetDirection.toDirection() * Speed;		
+		if (Distance.getLength() < 500.0) {
+			TheEnemy->TargetDirection = Approach<Angle, double>(TheEnemy->TargetDirection, Distance.getAngle(), t / 2.0f);		
+			TheEnemy->Acceleration = TheEnemy->TargetDirection.toDirection() * Speed;
+		}		
 	}
 };
 
