@@ -14,16 +14,12 @@ class EnemyBehavior;
 
 class Enemy : public PhysicsObject
 {
-public:
-      Angle MovementDirection = 0;
-      Angle TargetDirection = 0;
-      float AcclerateFactor = 0.0f;
 private:
-      Image Sprite;
-      EnemyBehavior *Behavior;
+	Image Sprite;
+	EnemyBehavior *Behavior;
 public:
-      Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
-      void update(float t, PlaySpace*);
-      virtual void draw(RenderContext r);
+	Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
+	void update(float t, PlaySpace*);
+	virtual void draw(RenderContext r);
 };
 

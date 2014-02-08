@@ -13,21 +13,14 @@
 void Enemy::draw(RenderContext r)
 {
 	r.Offset = Position;
-	r.Rotation = MovementDirection;
+	r.Rotation = Acceleration.getAngle();
 	Sprite.draw(r);
 }
 
 void Enemy::update(float t, PlaySpace *Space)
 {	
-	Acceleration = MovementDirection.toDirection() * 400 * AcclerateFactor;
-	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
-	
-	if(Abs(TargetDirection.difference(Speed.getAngle())) > 0.01) {
-	  TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (1-(AcclerateFactor*AcclerateFactor))*t);
-	}
-	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
-	
-	if (Behavior != NULL) {
-	    Behavior->update(t, this);
+	if (Behavior != NULL)
+	{
+		Behavior->update(t, this);
 	}
 }

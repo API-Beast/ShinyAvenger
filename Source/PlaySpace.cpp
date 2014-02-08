@@ -15,20 +15,20 @@ PlaySpace::PlaySpace()
 	Objects.pushBack(ThePlayer);
 	
 	// Add enemies
-	const int ENEMY_COUNT = 40;
+	const int ENEMY_COUNT = 4;
 	const int ENEMY_RANGE = 500;
 	
 	srand( time( NULL ) );
 	
-	for (int i = 0; i < ENEMY_COUNT; ++i) {
-	  
-	    const double ShipSpeed = rand() % 10 + 120.0;
-	    EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
-	    Enemy *enemy = new Enemy(behavior);
-	    enemy->Position.X = rand() % 2000 - 1000;
-	    enemy->Position.Y = rand() % 2000 - 1000;
-	    Enemies.pushBack(enemy);
-	    Objects.pushBack(enemy);
+	for (int i = 0; i < ENEMY_COUNT; ++i)
+	{
+		const double ShipSpeed = rand() % 10 + 400.0;
+		EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
+		Enemy *enemy = new Enemy(behavior);
+		enemy->Position.X = rand() % 2000 - 1000;
+		enemy->Position.Y = rand() % 2000 - 1000;
+		Enemies.pushBack(enemy);
+		Objects.pushBack(enemy);
 	}
 	
 	GravitySources.pushBack({Vec2F(0,0), 0.3f, 750.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});

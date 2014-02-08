@@ -12,22 +12,21 @@
 class EnemyBehavior
 {
 public:
-      virtual void update(float t, Enemy* const) = 0;      
+	virtual void update(float t, Enemy* const) = 0;
 };
 
 class TrackingBehavior : public EnemyBehavior
 {
 public:
-      PhysicsObject *Target;
-      double Speed;
-      
-      TrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
-      
-      void update(float t, Enemy *const TheEnemy)
-      {
-          Vec2F Distance = Target->Position - TheEnemy->Position;
-	  TheEnemy->Acceleration += Distance.normalized() * 100.0f * t * Speed;
-	  TheEnemy->TargetDirection = Distance.getAngle();
-      }
+	PhysicsObject *Target;
+	double Speed;
+
+	TrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
+
+	void update(float t, Enemy *const TheEnemy)
+	{
+		Vec2F Distance = Target->Position - TheEnemy->Position;
+		TheEnemy->Acceleration = Distance.normalized() * Speed;
+	}
 };
 
