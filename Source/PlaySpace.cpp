@@ -15,18 +15,18 @@ PlaySpace::PlaySpace()
 	Objects.pushBack(ThePlayer);
 	
 	// Add enemies
-	const int ENEMY_COUNT = 4;
+	const int ENEMY_COUNT = 30;
 	const int ENEMY_RANGE = 500;
 	
 	srand( time( NULL ) );
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i)
 	{
-		const double ShipSpeed = rand() % 10 + 400.0;
+		const double ShipSpeed = rand() % 10 + 50.0;
 		EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
 		Enemy *enemy = new Enemy(behavior);
-		enemy->Position.X = rand() % 2000 - 1000;
-		enemy->Position.Y = rand() % 2000 - 1000;
+		enemy->Position.X = rand() % 4000 - 2000;
+		enemy->Position.Y = rand() % 4000 - 2000;
 		Enemies.pushBack(enemy);
 		Objects.pushBack(enemy);
 	}

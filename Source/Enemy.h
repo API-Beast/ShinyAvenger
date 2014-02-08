@@ -15,8 +15,11 @@ class EnemyBehavior;
 class Enemy : public PhysicsObject
 {
 private:
+	
 	Image Sprite;
 	EnemyBehavior *Behavior;
+public:
+	Angle TargetDirection = 0;
 public:
 	Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
 	void update(float t, PlaySpace*);
