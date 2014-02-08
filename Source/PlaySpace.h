@@ -35,6 +35,7 @@ public:
 public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;
+	List<Enemy*> Enemies;
 	List<GravitySource> GravitySources;
 	Image GlowSprite;
 	Image GravitySourceSprite;

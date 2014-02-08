@@ -14,3 +14,4 @@ public:
       virtual void update(float t, Enemy enemy) = 0;
       
 };
+

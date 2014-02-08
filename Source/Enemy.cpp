@@ -28,5 +28,7 @@ void Enemy::update(float t)
 	}
 	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
 	
-	Behavior->update(t, this);
+	if (Behavior != NULL) {
+	    Behavior->update(t, this);
+	}
 }
