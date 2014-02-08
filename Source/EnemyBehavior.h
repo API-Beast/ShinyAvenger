@@ -29,7 +29,7 @@ public:
 	{
 		Vec2F Distance = Target->Position - TheEnemy->Position;
 		TheEnemy->TargetDirection = Approach<Angle, double>(TheEnemy->TargetDirection, Distance.getAngle(), t / 2.0f);		
-		TheEnemy->Acceleration = TheEnemy->TargetDirection.toDirection() * Speed * t * 25.0;		
+		TheEnemy->Acceleration = TheEnemy->TargetDirection.toDirection() * Speed;		
 	}
 };
 
