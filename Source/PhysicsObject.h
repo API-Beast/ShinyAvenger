@@ -9,6 +9,8 @@
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Graphics/RenderContext.h>
 
+class PlaySpace;
+
 struct PhysicsObject
 {
 	Vec2F Position = 0;
@@ -18,5 +20,5 @@ struct PhysicsObject
 	Vec2F Mass = 1;
 public:
 	virtual void draw(RenderContext r){};
-	virtual void update(float dt){};
+	virtual void update(float dt, PlaySpace* space){};
 };

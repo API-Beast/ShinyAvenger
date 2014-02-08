@@ -9,7 +9,7 @@
 #include "GravitySource.h"
 #include <GL/gl.h>
 
-void GravitySource::update(float dt)
+void GravitySource::update(float dt, PlaySpace* space)
 {
 	TimeSinceSpawn += dt;
 }

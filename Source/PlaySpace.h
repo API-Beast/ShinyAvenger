@@ -12,6 +12,7 @@
 #include "EnemyBehavior.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
+#include "Bullet.h"
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
@@ -23,12 +24,18 @@ public:
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
+	void applyPhysics(PhysicsObject* obj, float dt);
 	void onMovementInput(Angle angle, float time);
+	void onMouseHoldInput(Vec2F mousePos);
+	void spawnPlayerBullet(Bullet bullet);
 public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;
 	List<Enemy*> Enemies;
+	List<Bullet> PlayerBullets;
 	List<GravitySource> GravitySources;
+	
+	Vec2F CameraPos;
 
 	float AirDrag = 0.0005f;
 	float GameTime = 0.0f;

@@ -46,7 +46,7 @@ void PlaySpace::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	RenderContext r;
-	r.CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
+	r.CameraPos = CameraPos;
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
@@ -54,6 +54,8 @@ void PlaySpace::draw()
 	r.setColor(Colors::White);
 	for(PhysicsObject* obj : Objects)
 		obj->draw(r);
+	for(Bullet& obj : PlayerBullets)
+		obj.draw(r);
 }
 
 void PlaySpace::update(float time)
@@ -61,22 +63,34 @@ void PlaySpace::update(float time)
 	GameTime += time;
 	
 	for(PhysicsObject* obj : Objects)
-		obj->update(time);
+		obj->update(time, this);
 	for(GravitySource& src : GravitySources)
-		src.update(time);
+		src.update(time, this);
+	for(Bullet& obj : PlayerBullets)
+		obj.update(time, this);
 	
 	// Physics
 	for(PhysicsObject* obj : Objects)
-	{
-		obj->Speed    += obj->Acceleration * time;
-		obj->Speed    -= obj->Speed * (AirDrag * obj->Drag * time) * obj->Speed.getLength();
-		
-		// Add gravity
-		for(GravitySource& src : GravitySources)
-			src.influence(obj, time);
-		
-		obj->Position += obj->Speed * time;
-	}
+		applyPhysics(obj, time);
+	for(Bullet& obj : PlayerBullets)
+		applyPhysics(&obj, time);
+	
+	CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
+	
+	// Will be reset to true before next PlaySpace::update
+	ThePlayer->IsShooting = false;
+}
+
+void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
+{
+	obj->Speed += obj->Acceleration * dt;
+	obj->Speed -= obj->Speed * (AirDrag * obj->Drag * dt) * obj->Speed.getLength();
+	
+	// Add gravity
+	for(GravitySource& src : GravitySources)
+		src.influence(obj, dt);
+	
+	obj->Position += obj->Speed * dt;
 }
 
 void PlaySpace::onMovementInput(Angle angle, float time)
@@ -85,3 +99,13 @@ void PlaySpace::onMovementInput(Angle angle, float time)
 	ThePlayer->AcclerateFactor = 1.0f;
 }
 
+void PlaySpace::onMouseHoldInput(Vec2F mousePos)
+{
+	ThePlayer->ShootingDirection = ((mousePos + CameraPos) - ThePlayer->Position).getAngle();
+	ThePlayer->IsShooting = true;
+}
+
+void PlaySpace::spawnPlayerBullet(Bullet bullet)
+{
+	PlayerBullets.pushBack(bullet);
+}

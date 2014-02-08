@@ -49,6 +49,9 @@ void Game::execute()
 		if(up || down || right || left)
 			Playfield->onMovementInput(Angle::FromBooleanDirectionMatrix(up, down, right, left), dt);
 		
+		if(Input->getPrimaryPointerDevice()->anyButtonPressed())
+			Playfield->onMouseHoldInput(Input->getPrimaryPointerDevice()->getCursorPosition(0));
+		
 		Playfield->update(dt);
 		Playfield->draw();
 		
