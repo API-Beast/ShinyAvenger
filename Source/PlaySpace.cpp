@@ -22,7 +22,7 @@ PlaySpace::PlaySpace()
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i)
 	{
-		const double ShipSpeed = rand() % 10 + 50.0;
+		const double ShipSpeed = rand() % 100 + 550.0;
 		EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
 		Enemy *enemy = new Enemy(behavior);
 		enemy->Position.X = rand() % 4000 - 2000;
