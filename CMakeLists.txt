@@ -12,5 +12,5 @@ find_package(Springbok REQUIRED)
 
 include_directories(${SPRINGBOK_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
-add_executable(shinyavenger main.cpp Source/GravitySource.cpp Source/Game.cpp Source/Player.cpp Source/Enemy.cpp Source/PlaySpace.cpp Source/GravitySource.h Source/PhysicsObject.h Source/Space.h Source/Game.h Source/Player.h Source/EnemyBehavior.h Source/Enemy.h Source/PlaySpace.h)
+add_executable(shinyavenger main.cpp Source/GravitySource.cpp Source/Game.cpp Source/Player.cpp Source/Enemy.cpp Source/PlaySpace.cpp Source/GravitySource.h Source/PhysicsObject.h Source/Space.h Source/Game.h Source/Player.h Source/Enemy.h Source/EnemyBehavior.h Source/PlaySpace.h)
 target_link_libraries(shinyavenger ${GLFW_LIBRARY} ${SPRINGBOK_LIBRARY} ${OPENGL_LIBRARY})

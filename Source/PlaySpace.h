@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Space.h"
 #include "Enemy.h"
+#include "EnemyBehavior.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 

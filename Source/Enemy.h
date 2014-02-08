@@ -9,7 +9,8 @@
 #include <Springbok/Geometry/Angle.h>
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
-#include "EnemyBehavior.h"
+
+class EnemyBehavior;
 
 class Enemy : public PhysicsObject
 {

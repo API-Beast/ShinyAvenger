@@ -21,7 +21,8 @@ PlaySpace::PlaySpace()
 	srand( time( NULL ) );
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i) {
-	    Enemy *enemy = new Enemy;
+	  EnemyBehavior *behavior = new TrackingBehavior(ThePlayer);
+	    Enemy *enemy = new Enemy(behavior);
 	    enemy->Position.X = rand() % 2000 - 1000;
 	    enemy->Position.Y = rand() % 2000 - 1000;
 	    Enemies.pushBack(enemy);

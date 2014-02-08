@@ -5,8 +5,8 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Enemy.h"
+#include "EnemyBehavior.h"
 #include <Springbok/Animation/Interpolation.h>
-
 #include <iostream>
 #include <cmath>
 
