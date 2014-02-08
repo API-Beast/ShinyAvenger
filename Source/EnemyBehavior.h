@@ -27,6 +27,7 @@ public:
           Vec2F Distance = Target->Position - TheEnemy->Position;
 	  const double SPEED = 100.0;
 	  TheEnemy->Position += Distance.normalized() * SPEED * t;
+	  TheEnemy->TargetDirection = Distance.getAngle();
       }
 };
 
