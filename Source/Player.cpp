@@ -8,6 +8,7 @@
 #include <Springbok/Animation/Interpolation.h>
 
 #include <iostream>
+#include <cmath>
 
 void Player::draw(RenderContext r)
 {
@@ -17,9 +18,19 @@ void Player::draw(RenderContext r)
 }
 
 void Player::update(float t)
-{
+{	
 	Acceleration = MovementDirection.toDirection() * 2000 * AcclerateFactor;
 	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
-	TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (1-(AcclerateFactor*AcclerateFactor))*t);
+	
+	double diff = MovementDirection.difference(TargetDirection);	
+	float factor = 1;
+	double tolerance = 0.02;
+	
+	if (diff < tolerance && diff > -tolerance) {
+	  factor = 0;
+	  MovementDirection = TargetDirection;
+	}
+	
+	TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (factor-(AcclerateFactor*AcclerateFactor))*t);
 	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
 }
