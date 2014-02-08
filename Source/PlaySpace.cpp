@@ -18,11 +18,15 @@ PlaySpace::PlaySpace()
 	GravitySourceHighlight = Image("GravitySourceHighlight.png");
 	
 	// Add enemies
-	const int ENEMY_COUNT = 10;
+	const int ENEMY_COUNT = 40;
 	const int ENEMY_RANGE = 500;
+	
+	srand( time( NULL ) );
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i) {
 	    Enemy *enemy = new Enemy;
+	    enemy->Position.X = rand() % 2000 - 1000;
+	    enemy->Position.Y = rand() % 2000 - 1000;
 	    Enemies.pushBack(enemy);
 	    Objects.pushBack(enemy);
 	}
