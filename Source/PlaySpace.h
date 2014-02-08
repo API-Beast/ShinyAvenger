@@ -8,6 +8,7 @@
 
 #include "Player.h"
 #include "Space.h"
+#include "Enemy.h"
 #include "PhysicsObject.h"
 
 #include <Springbok/Geometry/Vec2.h>

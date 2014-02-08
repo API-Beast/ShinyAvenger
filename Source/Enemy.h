@@ -9,6 +9,7 @@
 #include <Springbok/Geometry/Angle.h>
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
+#include "EnemyBehavior.h"
 
 class Enemy : public PhysicsObject
 {
@@ -17,6 +18,10 @@ private:
       Angle TargetDirection = 0;
       float AcclerateFactor = 0.0f;
       Image Sprite;
+      EnemyBehavior *Behavior;
 public:
-      Enemy() : Sprite("Enemy/Enemy01.png") {};
-}
+      Enemy(EnemyBehavior *Be) : Sprite("Enemy/Enemy01.png"), Behavior(Be) {};
+      void update(float t);
+      virtual void draw(RenderContext r);
+};
+
