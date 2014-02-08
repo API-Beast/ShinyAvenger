@@ -19,14 +19,14 @@ class TrackingBehavior : public EnemyBehavior
 {
 public:
       PhysicsObject *Target;
+      double Speed;
       
-      TrackingBehavior(PhysicsObject *PhysicsTarget) : Target(PhysicsTarget) {}
+      TrackingBehavior(PhysicsObject *PhysicsTarget, const double Speed = 100.0) : Target(PhysicsTarget) {}
       
       void update(float t, Enemy *const TheEnemy)
       {
           Vec2F Distance = Target->Position - TheEnemy->Position;
-	  const double SPEED = 100.0;
-	  TheEnemy->Position += Distance.normalized() * SPEED * t;
+	  TheEnemy->Position += Distance.normalized() * Speed * t;
 	  TheEnemy->TargetDirection = Distance.getAngle();
       }
 };

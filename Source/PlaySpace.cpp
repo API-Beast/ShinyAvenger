@@ -21,7 +21,9 @@ PlaySpace::PlaySpace()
 	srand( time( NULL ) );
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i) {
-	  EnemyBehavior *behavior = new TrackingBehavior(ThePlayer);
+	  
+	    const double Speed = rand() % 10 + 80;
+	    EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, Speed);
 	    Enemy *enemy = new Enemy(behavior);
 	    enemy->Position.X = rand() % 2000 - 1000;
 	    enemy->Position.Y = rand() % 2000 - 1000;
@@ -82,3 +84,4 @@ void PlaySpace::onMovementInput(Angle angle, float time)
 	ThePlayer->TargetDirection = Approach(ThePlayer->TargetDirection, angle, time);
 	ThePlayer->AcclerateFactor = 1.0f;
 }
+
