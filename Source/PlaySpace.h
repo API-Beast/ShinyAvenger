@@ -34,6 +34,7 @@ public:
 	List<Enemy*> Enemies;
 	List<Bullet> PlayerBullets;
 	List<GravitySource> GravitySources;
+	KeyframeList<Color> BackgroundGradient;
 	
 	Vec2F CameraPos;
 

@@ -31,9 +31,12 @@ PlaySpace::PlaySpace()
 		Objects.pushBack(enemy);
 	}
 	
-	GravitySources.pushBack({Vec2F(0,0), 0.3f, 750.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
+	GravitySources.pushBack({Vec2F(0,0), 0.3f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
-	glClearColor(0.22f, 0.15f, 0.24f, 0.0f);
+	BackgroundGradient[0].insert(Color(0.22f, 0.15f, 0.24f));
+	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
+	BackgroundGradient[5000].insert(Color(0.12f, 0.10f, 0.10f));
+	BackgroundGradient[9000].insert(Colors::Black);
 }
 
 PlaySpace::~PlaySpace()
@@ -44,6 +47,8 @@ PlaySpace::~PlaySpace()
 
 void PlaySpace::draw()
 {
+	Color bgColor = BackgroundGradient[ThePlayer->Position.getLength()];
+	glClearColor(bgColor.Red, bgColor.Green, bgColor.Blue, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	RenderContext r;
 	r.CameraPos = CameraPos;
