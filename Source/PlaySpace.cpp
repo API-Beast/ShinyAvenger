@@ -22,7 +22,9 @@ PlaySpace::PlaySpace()
 	const int ENEMY_RANGE = 500;
 	
 	for (int i = 0; i < ENEMY_COUNT; ++i) {
-	    Enemy *enemy = new Enemy(NULL);
+	    Enemy *enemy = new Enemy;
+	    Enemies.pushBack(enemy);
+	    Objects.pushBack(enemy);
 	}
 	
 	GravitySources.pushBack({Vec2F(0,0), 0.3f, 750.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});

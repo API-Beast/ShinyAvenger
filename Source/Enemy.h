@@ -20,7 +20,7 @@ private:
       Image Sprite;
       EnemyBehavior *Behavior;
 public:
-      Enemy(EnemyBehavior* b) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
+      Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
       void update(float t);
       virtual void draw(RenderContext r);
 };

@@ -5,7 +5,6 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Enemy.h"
-
 #include <Springbok/Animation/Interpolation.h>
 
 #include <iostream>
