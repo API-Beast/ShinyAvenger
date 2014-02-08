@@ -17,7 +17,7 @@ void Enemy::draw(RenderContext r)
 	Sprite.draw(r);
 }
 
-void Enemy::update(float t)
+void Enemy::update(float t, PlaySpace *Space)
 {	
 	Acceleration = MovementDirection.toDirection() * 400 * AcclerateFactor;
 	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
