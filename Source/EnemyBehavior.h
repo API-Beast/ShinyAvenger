@@ -11,7 +11,7 @@ class Enemy;
 class EnemyBehavior
 {
 public:
-      virtual void update(float t, Enemy* const enemy) = 0;
+      virtual void update(float t, Enemy* const) = 0;
       
 };
 

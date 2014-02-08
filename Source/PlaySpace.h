@@ -10,19 +10,10 @@
 #include "Space.h"
 #include "Enemy.h"
 #include "PhysicsObject.h"
+#include "GravitySource.h"
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
-
-struct GravitySource
-{
-	Vec2F Position;
-	float Gravity;
-	float Range;
-	
-	Color CenterColor;
-	Color HighlightColor;
-};
 
 class PlaySpace : public Space
 {
@@ -37,9 +28,7 @@ public:
 	List<PhysicsObject*> Objects;
 	List<Enemy*> Enemies;
 	List<GravitySource> GravitySources;
-	Image GlowSprite;
-	Image GravitySourceSprite;
-	Image GravitySourceHighlight;
+
 	float AirDrag = 0.0005f;
 	float GameTime = 0.0f;
 };

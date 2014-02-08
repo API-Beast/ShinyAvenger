@@ -18,6 +18,6 @@ public:
 	Image Sprite;
 public:
 	Player() : Sprite("Player/Sprite.png"){};
-	void update(float t);
+	virtual void update(float t);
 	virtual void draw(RenderContext r);
 };

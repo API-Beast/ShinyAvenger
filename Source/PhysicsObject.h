@@ -18,4 +18,5 @@ struct PhysicsObject
 	Vec2F Mass = 1;
 public:
 	virtual void draw(RenderContext r){};
+	virtual void update(float dt){};
 };
