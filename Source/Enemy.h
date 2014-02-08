@@ -23,7 +23,7 @@ private:
       EnemyBehavior *Behavior;
 public:
       Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
-      void update(float t);
+      void update(float t, PlaySpace*);
       virtual void draw(RenderContext r);
 };
 
