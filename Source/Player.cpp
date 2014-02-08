@@ -5,6 +5,8 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Player.h"
+#include "Bullet.h"
+#include "PlaySpace.h"
 #include <Springbok/Animation/Interpolation.h>
 
 #include <iostream>
@@ -17,7 +19,7 @@ void Player::draw(RenderContext r)
 	Sprite.draw(r);
 }
 
-void Player::update(float t)
+void Player::update(float t, PlaySpace* space)
 {	
 	Acceleration = MovementDirection.toDirection() * 400 * AcclerateFactor;
 	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
@@ -26,4 +28,20 @@ void Player::update(float t)
 	  TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (1-(AcclerateFactor*AcclerateFactor))*t);
 	}
 	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
+	
+	if(IsShooting)
+	{
+		ShootTimer -= t;
+		if(ShootTimer < 0)
+		{
+			ShootTimer = 0.1f;
+			Bullet bullet;
+			bullet.Sprite = Image("Player/Bullet.png");
+			bullet.Position = Position;
+			bullet.Speed = ShootingDirection.toDirection()*600;
+			bullet.Mass = 2;
+			bullet.Drag = 0;
+			space->spawnPlayerBullet(bullet);
+		}
+	}
 }

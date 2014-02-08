@@ -9,13 +9,15 @@
 
 #include <Springbok/Graphics/Image.h>
 
+class PlaySpace;
+
 struct GravitySource
 {
 public:
 	GravitySource(Vec2F pos, float grav, float range, Color color, Color hcolor)
 	 : Position(pos),Gravity(grav),Range(range),CenterColor(color),HighlightColor(hcolor){};
 	GravitySource() = default;
-	void update(float dt);
+	void update(float dt, PlaySpace* space);
 	void draw(RenderContext r);
 	void influence(PhysicsObject* obj, float dt);
 public:

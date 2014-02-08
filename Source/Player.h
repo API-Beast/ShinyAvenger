@@ -15,9 +15,13 @@ public:
 	Angle MovementDirection = 0;
 	Angle TargetDirection = 0;
 	float AcclerateFactor = 0.0f;
-	Image Sprite;
+	
+	Angle ShootingDirection = 0;
+	bool IsShooting = false;
+	float ShootTimer = 0.f;
+	
+	Image Sprite = Image("Player/Sprite.png");
 public:
-	Player() : Sprite("Player/Sprite.png"){};
-	virtual void update(float t);
+	virtual void update(float t, PlaySpace* space);
 	virtual void draw(RenderContext r);
 };
