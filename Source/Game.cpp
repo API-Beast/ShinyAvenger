@@ -46,8 +46,15 @@ void Game::execute()
 		bool right = Buttons::Right.isPressed(Input);
 		bool left  = Buttons::Left.isPressed(Input);
 		
+		bool actionA = Buttons::Confirm.isPressed(Input);
+		bool actionB = Buttons::ActionB.isPressed(Input);
+		bool actionC = Buttons::ActionC.isPressed(Input);
+		
 		if(up || down || right || left)
-			Playfield->onMovementInput(Angle::FromBooleanDirectionMatrix(up, down, right, left), dt);
+			Playfield->onMovementInput(up, down, right, left, dt);
+		
+		if(actionA || actionB || actionC)
+			Playfield->onActionInput(actionA, actionB, actionC);
 		
 		if(Input->getPrimaryPointerDevice()->anyButtonPressed())
 			Playfield->onMouseHoldInput(Input->getPrimaryPointerDevice()->getCursorPosition(0));
