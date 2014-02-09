@@ -15,6 +15,7 @@
 #include "GravitySource.h"
 #include "Bullet.h"
 #include "UI.h"
+#include "Particle.h"
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
@@ -31,6 +32,7 @@ public:
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);
 	void spawnPlayerBullet(Bullet bullet);
+	void spawnParticle(Particle particle);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 public:
 	Player* ThePlayer;
@@ -38,6 +40,7 @@ public:
 	List<Enemy*> Enemies;
 	List<Bullet> PlayerBullets;
 	List<GravitySource> GravitySources;
+	List<Particle> Particles;
 	KeyframeList<Color> BackgroundGradient;
 	EnemySpawner Spawner;
 	UIContainer GUIContainer;

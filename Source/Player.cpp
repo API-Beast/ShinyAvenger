@@ -40,6 +40,36 @@ Player::Player()
 	
 	BulletPrototype.Sprite = Image("Player/Bullet.png");
 	BulletPrototype.Glow = Image("Glow.png");
+	
+	ImpulseParticle.Sprite = Image("Player/Impulse.png");
+	ImpulseParticle.DrawMode = RenderContext::Additive;
+	ImpulseParticle.Lifetime = 0.2f;
+	ImpulseParticle.Drag = 10;
+	ImpulseParticle.Mass = 0.5f;
+	
+	ImpulseParticle.Animation.Alpha[0.0].insert(1.0f);
+	ImpulseParticle.Animation.Alpha[1.0].insert(0.0f);
+	
+	ImpulseParticle.Animation.Color[0.0].insert(Colors::Saturated::Orange);
+	ImpulseParticle.Animation.Color[1.0].insert(Colors::Saturated::Magenta);
+	
+	ImpulseParticle.Animation.Scale[0.0].insert(Vec2F(1.0f, 1.0f));
+	ImpulseParticle.Animation.Scale[0.3].insert(Vec2F(1.0f, 2.0f));
+	ImpulseParticle.Animation.Scale[1.0].insert(Vec2F(1.0f, 3.0f));
+	
+	ImpulseParticle.Animation.Rotation[0.0].insert(0.0f);
+	ImpulseParticle.Animation.Rotation[1.0].insert(0.0f);
+	
+	SparkParticle = ImpulseParticle;
+	SparkParticle.Sprite = Image("Player/Spark.png");
+	SparkParticle.Drag = 0;
+	SparkParticle.Mass = 5;
+	SparkParticle.Lifetime = 0.15f;
+	
+	SparkParticle.Animation.Alpha = KeyframeList<float>();
+	SparkParticle.Animation.Alpha[0.0].insert(0.0f);
+	SparkParticle.Animation.Alpha[0.2].insert(1.0f);
+	SparkParticle.Animation.Alpha[1.0].insert(0.0f);
 }
 
 void Player::draw(RenderContext r)
@@ -51,7 +81,33 @@ void Player::draw(RenderContext r)
 
 void Player::update(float t, PlaySpace* space)
 {	
-	Acceleration = Rotation.toDirection() * 400 * (1-Brakes);
+	if(Braking)
+		Acceleration = 0;
+	else
+	{
+		Acceleration = Rotation.toDirection() * 400;
+		ImpulseTimer -= t;
+		if(ImpulseTimer < 0)
+		{
+			ImpulseTimer = 0.05f;
+			Particle glow(ImpulseParticle);
+			glow.Rotation = Rotation;
+			glow.Position = Position + (Rotation+0.5).toDirection()*24;
+			glow.Speed = -Acceleration + Speed;
+			
+			space->spawnParticle(glow);
+			
+			for (int i = 0; i < 10; ++i)
+			{
+				Particle spark(SparkParticle);
+				spark.Rotation = Rotation;
+				spark.Position = Position + (Rotation+0.5).toDirection()*(14+RNG.generate()*10) + (Rotation+0.25).toDirection() * RNG.generate(-4.f, 4.f);
+				spark.Speed = -Acceleration + Speed + (Rotation+0.25).toDirection() * RNG.generate(-60.f, 60.f);
+				space->spawnParticle(spark);
+			}
+		}
+	}
+	
 	RotationSpeed += Steering * t;
 	RotationSpeed = Approach(RotationSpeed, 0.f, t/2);
 	Rotation += RotationSpeed * t;

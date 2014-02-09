@@ -52,6 +52,8 @@ void PlaySpace::draw()
 		obj.draw(r);
 	for(PhysicsObject* obj : Objects)
 		obj->draw(r);
+	for(Particle& particle : Particles)
+		particle.draw(r);
 	
 	GUIContainer.draw(&r);
 }
@@ -69,25 +71,36 @@ void PlaySpace::update(float time)
 			PlayerBullets.quickRemove(i--);
 	}
 	
+	for(int i = 0; i < Particles.UsedLength; ++i)
+	{
+		if(Particles[i].canBeDespawned())
+			Particles.quickRemove(i--);
+	}
+	
+	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
 	for(GravitySource& src : GravitySources)
 		src.update(time, this);
 	for(Bullet& obj : PlayerBullets)
 		obj.update(time, this);
+	for(Particle& particle : Particles)
+		particle.update(time, this);
 	
 	// Physics
 	for(PhysicsObject* obj : Objects)
 		applyPhysics(obj, time);
 	for(Bullet& obj : PlayerBullets)
 		applyPhysics(&obj, time);
+	for(Particle& particle : Particles)
+		applyPhysics(&particle, time);
 	
 	CameraPos = -(ScreenSize/2) + ThePlayer->Position;
 	
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;
 	ThePlayer->Steering = 0.0f;
-	ThePlayer->Brakes = 0.0f;
+	ThePlayer->Braking = 0.0f;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -105,7 +118,7 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
 {
 	if(down)
-		ThePlayer->Brakes = 1.0f;
+		ThePlayer->Braking = 1.0f;
 	if(right)
 		ThePlayer->Steering =  1.0f;
 	if(left)
@@ -124,4 +137,9 @@ void PlaySpace::onMouseHoldInput(Vec2F mousePos)
 void PlaySpace::spawnPlayerBullet(Bullet bullet)
 {
 	PlayerBullets.pushBack(bullet);
+}
+
+void PlaySpace::spawnParticle(Particle particle)
+{
+	Particles.pushBack(particle);
 }

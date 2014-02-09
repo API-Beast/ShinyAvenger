@@ -9,19 +9,28 @@
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
 #include "Bullet.h"
+#include "Particle.h"
+#include <Springbok/Procedural/RandomNumberGenerator.h>
 
 class Player : public PhysicsObject
 {
 public:
 	float Steering = 0.0f;
-	float Brakes = 0.0f;
+	float Braking = 0.0f;
 	
 	bool IsShooting = false;
 	float ShootTimer = 0.f;
 	
+	float ImpulseTimer = 0.f;
+	
 	Image Sprite = Image("Player/Sprite.png");
 	
 	Bullet BulletPrototype;
+	
+	RandomNumberGenerator RNG;
+	
+	Particle ImpulseParticle;
+	Particle SparkParticle;
 public:
 	Player();
 	virtual void update(float t, PlaySpace* space);
