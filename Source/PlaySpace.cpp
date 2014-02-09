@@ -8,7 +8,7 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
-PlaySpace::PlaySpace()
+PlaySpace::PlaySpace(GameSurface* surface)
 {
 	ThePlayer = new Player;
 	ThePlayer->Position = {200, 150};
@@ -37,6 +37,8 @@ PlaySpace::PlaySpace()
 	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
 	BackgroundGradient[5000].insert(Color(0.12f, 0.10f, 0.10f));
 	BackgroundGradient[9000].insert(Colors::Black);
+	
+	ScreenSize = surface->getSize();
 }
 
 PlaySpace::~PlaySpace()
@@ -86,7 +88,7 @@ void PlaySpace::update(float time)
 	for(Bullet& obj : PlayerBullets)
 		applyPhysics(&obj, time);
 	
-	CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
+	CameraPos = -(ScreenSize/2) + ThePlayer->Position;
 	
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;

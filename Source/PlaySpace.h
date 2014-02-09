@@ -16,11 +16,12 @@
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
+#include <Springbok/Platform/GameSurface.h>
 
 class PlaySpace : public Space
 {
 public:
-	PlaySpace();
+	PlaySpace(GameSurface* surface);
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
@@ -37,6 +38,7 @@ public:
 	KeyframeList<Color> BackgroundGradient;
 	
 	Vec2F CameraPos;
+	Vec2F ScreenSize;
 
 	float AirDrag = 0.0005f;
 	float GameTime = 0.0f;
