@@ -55,6 +55,6 @@ void GravitySource::influence(PhysicsObject* obj, float dt)
 	Vec2F difference = (Position - obj->Position);
 	float distance = difference.getLength();
 	Vec2F direction = difference.normalized();
-	obj->Speed += (direction * Gravity * obj->Mass) / Max((distance/Range)*(distance/Range), 1.0f);
+	obj->Speed += ((direction * Gravity * obj->Mass) / Max((distance/Range)*(distance/Range), 1.0f))*dt;
 }
 
