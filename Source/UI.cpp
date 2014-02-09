@@ -22,12 +22,13 @@ void EnemyArrow::draw(RenderContext* Context)
 		{		
 			//std::cout << Space->CameraPos.X << "|" << Space->CameraPos.Y << " ... " << TheEnemy->Position.X << "|" << TheEnemy->Position.Y << std::endl;
 			Vec2F Direction = TheEnemy->Position - Space->ThePlayer->Position;
-			//float Length = Direction.getLength();
+			float Length = Direction.getLength();
 			Vec2F Normalized = Direction.normalized();
 			
 			Context->Offset = (Space->ScreenSize / 2) + Normalized * (Space->ScreenSize.Y / 2.2f);
 			Context->Rotation = Direction.getAngle();
-			Context->setColor(ColorRGB(1, 1, 1), 0.3f);
+			float Opacity = Length / 15000.0;
+			Context->setColor(ColorRGB(1, 1, 1), Opacity);
 			ArrowImage.draw(*Context);
 		}
 	}
