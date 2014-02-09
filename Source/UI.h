@@ -21,7 +21,6 @@ protected:
 public:		
 	Vec2F Position;
 	Vec2F Size;
-	bool Visible = true;
 	
 	virtual void update(float Time) 
 	{ 
@@ -36,11 +35,8 @@ public:
 	
 		for (int i = 0; i < Children.UsedLength; ++i)
 		{	
-			if (Children[i]->Visible)
-			{
-				Context->Offset = Children[i]->Position;
-				Children[i]->draw(Context);
-			}
+			Context->Offset = Children[i]->Position;
+			Children[i]->draw(Context);
 		}
 	}
 	
@@ -73,5 +69,5 @@ public:
 		Size = ArrowImage.getSize();
 	}
 	
-	void draw(RenderContext *Context);	
+	void draw(RenderContext *Context);
 };

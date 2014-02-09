@@ -21,8 +21,9 @@ private:
 public:
 	Angle TargetDirection = 0;
 public:
-	Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) {};
+	Enemy(EnemyBehavior* b = NULL) : Sprite("Enemy/Enemy01.png"), Behavior(b) { };
 	void update(float t, PlaySpace*);
 	virtual void draw(RenderContext r);
+	Vec2I getSize() { return Sprite.getSize(); }
 };
 
