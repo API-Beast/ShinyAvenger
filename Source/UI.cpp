@@ -14,22 +14,20 @@ void EnemyArrow::draw(RenderContext* Context)
 	{
 		Enemy *TheEnemy = Space->Enemies[i];
 		Vec2F EnemyPosition = TheEnemy->Position;
-		
-		Rect<float> Screen = Rect<float>(Space->CameraPos, Space->ScreenSize);
-		
-		// Only draw the arrow if the enemy is on screen
-		//if (Screen.isInside(TheEnemy->Position))
-		{		
-			//std::cout << Space->CameraPos.X << "|" << Space->CameraPos.Y << " ... " << TheEnemy->Position.X << "|" << TheEnemy->Position.Y << std::endl;
-			Vec2F Direction = TheEnemy->Position - Space->ThePlayer->Position;
-			float Length = Direction.getLength();
-			Vec2F Normalized = Direction.normalized();
+		Vec2F Direction = TheEnemy->Position - Space->ThePlayer->Position;
+		float Length = Direction.getLength();
+		Vec2F Normalized = Direction.normalized();
 			
-			Context->Offset = (Space->ScreenSize / 2) + Normalized * (Space->ScreenSize.Y / 2.2f);
-			Context->Rotation = Direction.getAngle();
-			float Opacity = Length / 15000.0;
-			Context->setColor(ColorRGB(1, 1, 1), Opacity);
-			ArrowImage.draw(*Context);
+		Context->Offset = (Space->ScreenSize / 2) + Normalized * (Space->ScreenSize.Y / 2.2f);
+		Context->Rotation = Direction.getAngle();
+		float Opacity = 500.0 / Length;
+			
+		if (Length < Space->ScreenSize.X / 1.5f) {
+			Opacity = 0;
 		}
+			
+		Context->setColor(ColorRGB(1, 1, 1), Opacity);
+		ArrowImage.draw(*Context);
+		
 	}
 }
