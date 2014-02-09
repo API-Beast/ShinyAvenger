@@ -67,6 +67,8 @@ void PlaySpace::update(float time)
 {
 	GameTime += time;
 	
+	Spawner.update(time, this);
+	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
 	for(GravitySource& src : GravitySources)

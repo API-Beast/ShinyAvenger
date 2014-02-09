@@ -10,6 +10,7 @@
 #include "Space.h"
 #include "Enemy.h"
 #include "EnemyBehavior.h"
+#include "EnemySpawner.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
@@ -35,6 +36,7 @@ public:
 	List<Bullet> PlayerBullets;
 	List<GravitySource> GravitySources;
 	KeyframeList<Color> BackgroundGradient;
+	EnemySpawner Spawner;
 	
 	Vec2F CameraPos;
 
