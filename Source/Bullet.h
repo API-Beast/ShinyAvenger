@@ -16,8 +16,15 @@ struct Bullet : public PhysicsObject
 	float TimeSinceSpawn = 0.f;
 	float Lifetime = 2.f;
 	
+	KeyframeList<float> AlphaAnimation;
+	KeyframeList<Color> ColorAnimation;
+	KeyframeList<Vec2F> ScaleAnimation;
+	
+	Bullet();
+	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
 	bool canBeDespawned(){ return TimeSinceSpawn > Lifetime; };
+	float normalizedAge(){ return TimeSinceSpawn / Lifetime; };
 };
 

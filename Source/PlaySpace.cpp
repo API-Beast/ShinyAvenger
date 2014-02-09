@@ -57,15 +57,21 @@ void PlaySpace::draw()
 		src.draw(r);
 	
 	r.setColor(Colors::White);
-	for(PhysicsObject* obj : Objects)
-		obj->draw(r);
 	for(Bullet& obj : PlayerBullets)
 		obj.draw(r);
+	for(PhysicsObject* obj : Objects)
+		obj->draw(r);
 }
 
 void PlaySpace::update(float time)
 {
 	GameTime += time;
+	
+	for(int i = 0; i < PlayerBullets.UsedLength; ++i)
+	{
+		if(PlayerBullets[i].canBeDespawned())
+			PlayerBullets.quickRemove(i--);
+	}
 	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
