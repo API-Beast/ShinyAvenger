@@ -66,14 +66,12 @@ class EnemyArrow : public UIContainer
 {
 private:
 	Angle Rotation;
-	Enemy *TheEnemy;
 	PlaySpace *Space;
 	Image ArrowImage = Image("UI/Arrow.png");
 public:
-	EnemyArrow(Enemy* TheEnemy, PlaySpace *TheSpace) : TheEnemy(TheEnemy), Space(TheSpace) { 
+	EnemyArrow(PlaySpace *TheSpace) : Space(TheSpace) { 
 		Size = ArrowImage.getSize();
 	}
 	
 	void draw(RenderContext *Context);	
-	void update(float Time);
 };

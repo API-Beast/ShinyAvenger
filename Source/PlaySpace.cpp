@@ -25,6 +25,9 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
+	
+	EnemyArrow *Arrow = new EnemyArrow(this);
+	GUIContainer.append(Arrow);
 }
 
 PlaySpace::~PlaySpace()

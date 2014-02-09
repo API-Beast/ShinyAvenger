@@ -47,8 +47,4 @@ void spawnEnemy(PlaySpace *Space, const float &groupX, const float &groupY)
 	
 	Space->Enemies.pushBack(TheEnemy);
 	Space->Objects.pushBack(TheEnemy);
-	
-	// Add UI
-	EnemyArrow *Arrow = new EnemyArrow(TheEnemy, Space);
-	Space->GUIContainer.append(Arrow);
 }
