@@ -14,6 +14,7 @@
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
+#include "UI.h"
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
@@ -38,6 +39,7 @@ public:
 	List<GravitySource> GravitySources;
 	KeyframeList<Color> BackgroundGradient;
 	EnemySpawner Spawner;
+	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;
 	Vec2F ScreenSize;

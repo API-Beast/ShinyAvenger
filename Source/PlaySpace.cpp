@@ -16,7 +16,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	srand( time( NULL ) );
 	
-	GravitySources.pushBack({Vec2F(0,0), 0.3f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
+	GravitySources.pushBack({Vec2F(0,0), 200.0f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
 	BackgroundGradient[0].insert(Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
@@ -49,6 +49,8 @@ void PlaySpace::draw()
 		obj.draw(r);
 	for(PhysicsObject* obj : Objects)
 		obj->draw(r);
+	
+	GUIContainer.draw(&r);
 }
 
 void PlaySpace::update(float time)
@@ -56,6 +58,8 @@ void PlaySpace::update(float time)
 	GameTime += time;
 	
 	Spawner.update(time, this);
+	GUIContainer.update(time);
+	
 	for(int i = 0; i < PlayerBullets.UsedLength; ++i)
 	{
 		if(PlayerBullets[i].canBeDespawned())

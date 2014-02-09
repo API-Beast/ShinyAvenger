@@ -14,7 +14,7 @@
 
 Player::Player()
 {
-	BulletPrototype.Mass = 3;
+	BulletPrototype.Mass = 2;
 	BulletPrototype.Drag = 5;
 	BulletPrototype.Lifetime = 1.f;
 	
