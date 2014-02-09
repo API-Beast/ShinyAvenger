@@ -21,7 +21,7 @@ void EnemySpawner::update(float delta, PlaySpace *Space)
 
 void spawnGroup(PlaySpace *Space, const float &Interval)
 {
-	const int GROUP_SIZE = 2 + (Space->GameTime / Interval) / 2.0f;
+	const int GROUP_SIZE = 2 + (Space->GameTime / Interval) / 10.0f;
 	
 	float x = rand() % (Space->Size.X) - Space->Size.X / 2.0f;
 	float y = rand() % (Space->Size.Y) - Space->Size.Y / 2.0f;
@@ -34,12 +34,12 @@ void spawnGroup(PlaySpace *Space, const float &Interval)
 
 void spawnEnemy(PlaySpace *Space, const float &groupX, const float &groupY)
 {
-	const int SPRAY_FACTOR = 250.0;
+	const int SPRAY_FACTOR = 300.0;
 	
 	float x = groupX + rand() % SPRAY_FACTOR - SPRAY_FACTOR / 2.0f;
 	float y = groupY + rand() % SPRAY_FACTOR - SPRAY_FACTOR / 2.0f;
 	
-	const double ShipSpeed = rand() % 100 + 200.0;
+	const double ShipSpeed = rand() % 50 + 100.0;
 	EnemyBehavior *behavior = new TrackingBehavior(Space->ThePlayer, ShipSpeed);
 	Enemy *TheEnemy = new Enemy(behavior);
 	TheEnemy->Position.X = x;
