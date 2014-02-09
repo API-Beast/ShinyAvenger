@@ -46,9 +46,8 @@ void GravitySource::draw(RenderContext r)
 	r.Rotation = TimeSinceSpawn*0.40f;
 	r.Scale = CenterSize;
 	r.setColor(HighlightColor);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	r.setBlendingMode(RenderContext::Additive);
 	HighlightGraphics.draw(r);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GravitySource::influence(PhysicsObject* obj, float dt)

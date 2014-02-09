@@ -31,7 +31,7 @@ public:
 	float TimeSinceSpawn = 0.0f;
 	float CenterSize = 1.0f;
 	
-	Image GlowSprite = Image("Glow.png");
+	Image GlowSprite = Image("GravityCloud.png");
 	Image Graphics = Image("GravitySource.png");
 	Image HighlightGraphics = Image("GravitySourceHighlight.png");
 };

@@ -8,6 +8,7 @@
 #include <Springbok/Geometry/Angle.h>
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
+#include "Bullet.h"
 
 class Player : public PhysicsObject
 {
@@ -21,7 +22,10 @@ public:
 	float ShootTimer = 0.f;
 	
 	Image Sprite = Image("Player/Sprite.png");
+	
+	Bullet BulletPrototype;
 public:
+	Player();
 	virtual void update(float t, PlaySpace* space);
 	virtual void draw(RenderContext r);
 };

@@ -13,6 +13,8 @@
 struct Bullet : public PhysicsObject
 {
 	Image Sprite;
+	Image Glow;
+	
 	float TimeSinceSpawn = 0.f;
 	float Lifetime = 2.f;
 	
@@ -20,7 +22,8 @@ struct Bullet : public PhysicsObject
 	KeyframeList<Color> ColorAnimation;
 	KeyframeList<Vec2F> ScaleAnimation;
 	
-	Bullet();
+	KeyframeList<Color> GlowColorAnimation;
+	KeyframeList<Vec2F> GlowScaleAnimation;
 	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
