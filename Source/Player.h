@@ -14,7 +14,7 @@ class Player : public PhysicsObject
 {
 public:
 	float Steering = 0.0f;
-	float AcclerateFactor = 0.0f;
+	float Brakes = 0.0f;
 	
 	bool IsShooting = false;
 	float ShootTimer = 0.f;

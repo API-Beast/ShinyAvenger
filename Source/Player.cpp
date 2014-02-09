@@ -51,7 +51,7 @@ void Player::draw(RenderContext r)
 
 void Player::update(float t, PlaySpace* space)
 {	
-	Acceleration = Rotation.toDirection() * 400;
+	Acceleration = Rotation.toDirection() * 400 * (1-Brakes);
 	RotationSpeed += Steering * t;
 	RotationSpeed = Approach(RotationSpeed, 0.f, t/2);
 	Rotation += RotationSpeed * t;
