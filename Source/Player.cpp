@@ -34,13 +34,14 @@ void Player::update(float t, PlaySpace* space)
 		ShootTimer -= t;
 		if(ShootTimer < 0)
 		{
-			ShootTimer = 0.1f;
+			ShootTimer = 0.05f;
 			Bullet bullet;
 			bullet.Sprite = Image("Player/Bullet.png");
 			bullet.Position = Position;
-			bullet.Speed = ShootingDirection.toDirection()*800 + Speed / 2;
+			bullet.Speed = ShootingDirection.toDirection()*600 + Speed *0.8;
 			bullet.Mass = 3;
 			bullet.Drag = 0;
+			bullet.Lifetime = 1.f;
 			space->spawnPlayerBullet(bullet);
 		}
 	}

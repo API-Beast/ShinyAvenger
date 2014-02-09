@@ -7,16 +7,44 @@
 #include "EnemySpawner.h"
 #include "PlaySpace.h"
 
-#include <iostream>
+void spawnGroup(PlaySpace*, const float&);
+void spawnEnemy(PlaySpace*, const float&, const float&);
 
 void EnemySpawner::update(float delta, PlaySpace *Space)
-{	
-	TotalTime += delta;
-	Time += delta;
-	
-	if (Time > Interval)
+{
+	if ((Time += delta) > Interval)
 	{
 		Time = Time - Interval;
-		std::cout << "Spawn enemies!" << std::endl;
+		spawnGroup(Space, Interval);
 	}
+}
+
+void spawnGroup(PlaySpace *Space, const float &Interval)
+{
+	const int GROUP_SIZE = 2 + (Space->GameTime / Interval) / 2.0f;
+	
+	float x = rand() % (Space->Size.X) - Space->Size.X / 2.0f;
+	float y = rand() % (Space->Size.Y) - Space->Size.Y / 2.0f;
+	
+	for (int i = 0; i < GROUP_SIZE; ++i)
+	{
+		spawnEnemy(Space, x, y);
+	}
+}
+
+void spawnEnemy(PlaySpace *Space, const float &groupX, const float &groupY)
+{
+	const int SPRAY_FACTOR = 250.0;
+	
+	float x = groupX + rand() % SPRAY_FACTOR - SPRAY_FACTOR / 2.0f;
+	float y = groupY + rand() % SPRAY_FACTOR - SPRAY_FACTOR / 2.0f;
+	
+	const double ShipSpeed = rand() % 100 + 200.0;
+	EnemyBehavior *behavior = new TrackingBehavior(Space->ThePlayer, ShipSpeed);
+	Enemy *TheEnemy = new Enemy(behavior);
+	TheEnemy->Position.X = x;
+	TheEnemy->Position.Y = y;
+	
+	Space->Enemies.pushBack(TheEnemy);
+	Space->Objects.pushBack(TheEnemy);
 }

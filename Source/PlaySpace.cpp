@@ -8,28 +8,13 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
-PlaySpace::PlaySpace()
+PlaySpace::PlaySpace(GameSurface* surface)
 {
 	ThePlayer = new Player;
 	ThePlayer->Position = {200, 150};
 	Objects.pushBack(ThePlayer);
 	
-	// Add enemies
-	const int ENEMY_COUNT = 30;
-	const int ENEMY_RANGE = 500;
-	
 	srand( time( NULL ) );
-	
-	for (int i = 0; i < ENEMY_COUNT; ++i)
-	{
-		const double ShipSpeed = rand() % 100 + 200.0;
-		EnemyBehavior *behavior = new TrackingBehavior(ThePlayer, ShipSpeed);
-		Enemy *enemy = new Enemy(behavior);
-		enemy->Position.X = rand() % 4000 - 2000;
-		enemy->Position.Y = rand() % 4000 - 2000;
-		Enemies.pushBack(enemy);
-		Objects.pushBack(enemy);
-	}
 	
 	GravitySources.pushBack({Vec2F(0,0), 0.3f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
@@ -37,6 +22,9 @@ PlaySpace::PlaySpace()
 	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
 	BackgroundGradient[5000].insert(Color(0.12f, 0.10f, 0.10f));
 	BackgroundGradient[9000].insert(Colors::Black);
+	
+	ScreenSize = surface->getSize();
+	Size = Vec2I(5000, 5000);
 }
 
 PlaySpace::~PlaySpace()
@@ -57,10 +45,10 @@ void PlaySpace::draw()
 		src.draw(r);
 	
 	r.setColor(Colors::White);
-	for(PhysicsObject* obj : Objects)
-		obj->draw(r);
 	for(Bullet& obj : PlayerBullets)
 		obj.draw(r);
+	for(PhysicsObject* obj : Objects)
+		obj->draw(r);
 }
 
 void PlaySpace::update(float time)
@@ -68,6 +56,11 @@ void PlaySpace::update(float time)
 	GameTime += time;
 	
 	Spawner.update(time, this);
+	for(int i = 0; i < PlayerBullets.UsedLength; ++i)
+	{
+		if(PlayerBullets[i].canBeDespawned())
+			PlayerBullets.quickRemove(i--);
+	}
 	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
@@ -82,7 +75,7 @@ void PlaySpace::update(float time)
 	for(Bullet& obj : PlayerBullets)
 		applyPhysics(&obj, time);
 	
-	CameraPos = Vec2F(-400, -300) + ThePlayer->Position;
+	CameraPos = -(ScreenSize/2) + ThePlayer->Position;
 	
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;

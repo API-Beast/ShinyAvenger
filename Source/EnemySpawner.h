@@ -11,7 +11,7 @@ class PlaySpace;
 class EnemySpawner
 {
 private:
-	float Time, totalTime;
+	float Time;
 	float Interval;
 public:
 	EnemySpawner() : Time(0), Interval(5.0) { }

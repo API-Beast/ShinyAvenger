@@ -9,10 +9,10 @@
 
 Game::Game(int argc, char** argv)
 {
-	Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed);
+	Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {1024, 768});
 	Input   = new InputMonitor(Surface);
 	Clock   = new PreciseClock();
-	Playfield = new PlaySpace;
+	Playfield = new PlaySpace(Surface);
 	RenderContext::Setup2DEnvironment();
 }
 
