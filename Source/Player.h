@@ -13,11 +13,9 @@
 class Player : public PhysicsObject
 {
 public:
-	Angle MovementDirection = 0;
-	Angle TargetDirection = 0;
-	float AcclerateFactor = 0.0f;
+	float Steering = 0.0f;
+	float Brakes = 0.0f;
 	
-	Angle ShootingDirection = 0;
 	bool IsShooting = false;
 	float ShootTimer = 0.f;
 	

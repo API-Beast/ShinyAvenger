@@ -16,7 +16,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	srand( time( NULL ) );
 	
-	GravitySources.pushBack({Vec2F(0,0), 200.0f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
+	GravitySources.pushBack({Vec2F(0,0), 200.f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
 	BackgroundGradient[0].insert(Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
@@ -83,6 +83,8 @@ void PlaySpace::update(float time)
 	
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;
+	ThePlayer->Steering = 0.0f;
+	ThePlayer->Brakes = 0.0f;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -97,16 +99,23 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	obj->Position += obj->Speed * dt;
 }
 
-void PlaySpace::onMovementInput(Angle angle, float time)
+void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
 {
-	ThePlayer->TargetDirection = Approach(ThePlayer->TargetDirection, angle, time);
-	ThePlayer->AcclerateFactor = 1.0f;
+	if(down)
+		ThePlayer->Brakes = 1.0f;
+	if(right)
+		ThePlayer->Steering =  1.0f;
+	if(left)
+		ThePlayer->Steering = -1.0f;
+}
+
+void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
+{
+	ThePlayer->IsShooting = true;
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)
 {
-	ThePlayer->ShootingDirection = ((mousePos + CameraPos) - ThePlayer->Position).getAngle();
-	ThePlayer->IsShooting = true;
 }
 
 void PlaySpace::spawnPlayerBullet(Bullet bullet)

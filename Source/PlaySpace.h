@@ -28,9 +28,10 @@ public:
 	virtual void update(float time);
 	virtual void draw();
 	void applyPhysics(PhysicsObject* obj, float dt);
-	void onMovementInput(Angle angle, float time);
+	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);
 	void spawnPlayerBullet(Bullet bullet);
+	void onActionInput(bool actionA, bool actionB, bool actionC);
 public:
 	Player* ThePlayer;
 	List<PhysicsObject*> Objects;

@@ -14,7 +14,7 @@
 
 Player::Player()
 {
-	BulletPrototype.Mass = 2;
+	BulletPrototype.Mass = 5;
 	BulletPrototype.Drag = 5;
 	BulletPrototype.Lifetime = 1.f;
 	
@@ -45,29 +45,28 @@ Player::Player()
 void Player::draw(RenderContext r)
 {
 	r.Offset = Position;
-	r.Rotation = MovementDirection;
+	r.Rotation = Rotation;
 	Sprite.draw(r);
 }
 
 void Player::update(float t, PlaySpace* space)
 {	
-	Acceleration = MovementDirection.toDirection() * 400 * AcclerateFactor;
-	MovementDirection = Approach<Angle>(MovementDirection, TargetDirection, t);
-	
-	if(Abs(TargetDirection.difference(Speed.getAngle())) > 0.01) {
-	  TargetDirection = Approach<Angle>(TargetDirection, Speed.getAngle(), (1-(AcclerateFactor*AcclerateFactor))*t);
-	}
-	AcclerateFactor = Approach(AcclerateFactor, 0.0f, t);
+	Acceleration = Rotation.toDirection() * 400 * (1-Brakes);
+	RotationSpeed += Steering * t;
+	RotationSpeed = Approach(RotationSpeed, 0.f, t/2);
+	Rotation += RotationSpeed * t;
 	
 	if(IsShooting)
 	{
 		ShootTimer -= t;
 		if(ShootTimer < 0)
 		{
-			ShootTimer = 0.1f;
+			ShootTimer = 0.2f;
 			Bullet bullet(BulletPrototype);
-			bullet.Position = Position;
-			bullet.Speed = ShootingDirection.toDirection()*1000 + Speed *0.8;
+			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
+			bullet.Position = Position + (Rotation+0.25f).toDirection()*10;
+			space->spawnPlayerBullet(bullet);
+			bullet.Position = Position - (Rotation+0.25f).toDirection()*10;
 			space->spawnPlayerBullet(bullet);
 		}
 	}
