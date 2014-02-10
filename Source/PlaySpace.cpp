@@ -112,6 +112,10 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	for(GravitySource& src : GravitySources)
 		src.influence(obj, dt);
 	
+	obj->Rotation += obj->RotationSpeed * dt;
+	obj->RotationSpeed += (1 - obj->Speed.normalized().dot(obj->Rotation.toDirection())) * 0.12f * dt;
+	obj->RotationSpeed -= (AirDrag * obj->Drag * dt * 40) * obj->RotationSpeed;
+	
 	obj->Position += obj->Speed * dt;
 }
 
