@@ -81,7 +81,7 @@ void Player::draw(RenderContext r)
 
 void Player::update(float t, PlaySpace* space)
 {	
-	if(Braking)
+	if(IsBraking)
 		Acceleration = 0;
 	else
 	{

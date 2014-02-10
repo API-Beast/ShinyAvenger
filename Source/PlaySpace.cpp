@@ -99,8 +99,8 @@ void PlaySpace::update(float time)
 	
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;
+	ThePlayer->IsBraking = false;
 	ThePlayer->Steering = 0.0f;
-	ThePlayer->Braking = 0.0f;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -122,7 +122,7 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
 {
 	if(down)
-		ThePlayer->Braking = 1.0f;
+		ThePlayer->IsBraking = true;
 	if(right)
 		ThePlayer->Steering =  1.0f;
 	if(left)

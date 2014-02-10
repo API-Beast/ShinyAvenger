@@ -16,11 +16,11 @@ class Player : public PhysicsObject
 {
 public:
 	float Steering = 0.0f;
-	float Braking = 0.0f;
 	
+	bool IsBraking = false;
 	bool IsShooting = false;
-	float ShootTimer = 0.f;
 	
+	float ShootTimer = 0.f;
 	float ImpulseTimer = 0.f;
 	
 	Image Sprite = Image("Player/Sprite.png");
