@@ -14,7 +14,7 @@ void Bullet::update(float dt, PlaySpace* space)
 void Bullet::draw(RenderContext r)
 {
 	r.Offset = Position;
-	r.Rotation = Speed.getAngle();
+	r.Rotation = Rotation;
 	
 	float age = normalizedAge();
 

@@ -119,6 +119,7 @@ void Player::update(float t, PlaySpace* space)
 		{
 			ShootTimer = 0.2f;
 			Bullet bullet(BulletPrototype);
+			bullet.Rotation = Rotation;
 			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
 			bullet.Position = Position + (Rotation+0.25f).toDirection()*10;
 			space->spawnPlayerBullet(bullet);
