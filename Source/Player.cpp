@@ -92,7 +92,7 @@ void Player::update(float t, PlaySpace* space)
 			ImpulseTimer = 0.05f;
 			Particle glow(ImpulseParticle);
 			glow.Rotation = Rotation;
-			glow.Position = Position + (Rotation+0.5).toDirection()*24;
+			glow.Position = Position + (Rotation+0.5f).toDirection()*24;
 			glow.Speed = -Acceleration + Speed;
 			
 			space->spawnParticle(glow);
@@ -101,8 +101,8 @@ void Player::update(float t, PlaySpace* space)
 			{
 				Particle spark(SparkParticle);
 				spark.Rotation = Rotation;
-				spark.Position = Position + (Rotation+0.5).toDirection()*(14+RNG.generate()*10) + (Rotation+0.25).toDirection() * RNG.generate(-4.f, 4.f);
-				spark.Speed = -Acceleration + Speed + (Rotation+0.25).toDirection() * RNG.generate(-60.f, 60.f);
+				spark.Position = Position + (Rotation+0.5f).toDirection()*(14+RNG.generate()*10) + (Rotation+0.25f).toDirection() * RNG.generate(-4.f, 4.f);
+				spark.Speed = -Acceleration + Speed + (Rotation+0.25f).toDirection() * RNG.generate(-60.f, 60.f);
 				space->spawnParticle(spark);
 			}
 		}
