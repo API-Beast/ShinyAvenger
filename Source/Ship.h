@@ -35,7 +35,7 @@ public:
 	ColorRGB FractionColor;
 	
 public:
-	Ship(Movement *TheMovement, ColorRGB FractionColor, Behavior *TheBehavior = NULL) : FractionColor(FractionColor), Behavior(TheBehavior) { }
+	Ship(Movement*, ColorRGB, Behavior *TheBehavior = NULL);
 	
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);

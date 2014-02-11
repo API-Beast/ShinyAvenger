@@ -11,7 +11,9 @@ class Weapon
 public:
 	Bullet BulletPrototype;	
 	bool isShooting = false;
-
+	float ShootTimer = 0.f;
 public:
 	Weapon();
+	
+	void update(float, PlaySpace*, Ship*);
 };
