@@ -4,8 +4,10 @@
 //  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
+#include "Ship.h"
 #include "Weapon.h"
 #include <Springbok/Graphics/Image.h>
+#include "PlaySpace.h"
 
 Weapon::Weapon()
 {
@@ -41,7 +43,7 @@ void Weapon::update(float Time, PlaySpace* Space, Ship* TheShip)
 {
 	if(isShooting)
 	{
-		ShootTimer -= t;
+		ShootTimer -= Time;
 		if(ShootTimer < 0)
 		{
 			ShootTimer = 0.2f;

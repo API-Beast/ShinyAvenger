@@ -7,8 +7,8 @@
 #include "Ship.h"
 #include "Behavior.h"
 
-Ship::Ship(ColorRGB FractionColor, Movement TheMovement, Behavior TheBehavior)
-: FractionColor(FractionColor), Behavior(TheBehavior), TheMovement(TheMovement)
+Ship::Ship(ColorRGB FractionColor, Movement *TheMovement, Behavior *TheBehavior)
+: FractionColor(FractionColor), TheBehavior(TheBehavior), TheMovement(TheMovement)
 {
 	ImpulseParticle.Sprite = Image("Player/Impulse.png");
 	ImpulseParticle.DrawMode = RenderContext::Additive;
@@ -43,13 +43,13 @@ Ship::Ship(ColorRGB FractionColor, Movement TheMovement, Behavior TheBehavior)
 
 void Ship::update(float t, PlaySpace* space)
 {	
-	if (Behavior != NULL)
+	if (TheBehavior != NULL)
 	{
-		Behavior->update(t, this);
+		TheBehavior->update(t, this);
 	}	
 	
 	TheMovement->update(t, this, space);	
-	TheWeapon->update(t, space, this);	
+	TheWeapon.update(t, space, this);	
 }
 
 void Ship::draw(RenderContext r)

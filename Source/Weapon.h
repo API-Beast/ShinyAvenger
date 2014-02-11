@@ -6,6 +6,11 @@
 
 #pragma once
 
+#include "Bullet.h"
+
+class Ship;
+class PlaySpace;
+
 class Weapon
 {
 public:

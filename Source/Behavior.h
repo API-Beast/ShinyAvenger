@@ -9,6 +9,9 @@
 #include "PhysicsObject.h"
 #include <iostream>
 #include <Springbok/Animation/Interpolation.h>
+#include "Ship.h"
+
+class Ship;
 
 class Behavior
 {
@@ -16,20 +19,20 @@ public:
 	virtual void update(float t, Ship* const) = 0;
 };
 
-class TrackingBehavior : public Behavior
+class StupidTrackingBehavior : public Behavior
 {
 public:
 	PhysicsObject *Target;
 	double Speed;
 
-	TrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
+	StupidTrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
 
 	void update(float t, Ship *const TheShip)
 	{
 		Vec2F Distance = Target->Position - TheShip->Position;
 		if (Distance.getLength() < 1000.0) {
-			TheShip->TargetDirection = Approach<Angle, float>(TheShip->TargetDirection, Distance.getAngle(), t / 2.0f);		
-			TheShip->Acceleration = TheShip->TargetDirection.toDirection() * Speed;
+			TheShip->Rotation = Approach<Angle, float>(TheShip->Rotation, Distance.getAngle(), t / 2.0f);		
+			TheShip->Acceleration = TheShip->Rotation.toDirection() * Speed;
 		}		
 	}
 };

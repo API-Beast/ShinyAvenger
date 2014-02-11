@@ -6,18 +6,20 @@
 
 #pragma once
 
-#include "PhysicsObject.h"
 #include <Springbok/Geometry/Angle.h>
 #include <Springbok/Graphics/Image.h>
+#include <Springbok/Procedural/RandomNumberGenerator.h>
+#include <Springbok/Animation/Interpolation.h>
+
+#include "PhysicsObject.h"
 #include "PhysicsObject.h"
 #include "Bullet.h"
 #include "Particle.h"
-#include <Springbok/Procedural/RandomNumberGenerator.h>
-
-class Weapon;
+#include "PlaySpace.h"
+#include "Weapon.h"
 
 class Movement;
-class ControlledMovement;
+class Behavior;
 
 class Ship : public PhysicsObject
 {
@@ -31,14 +33,14 @@ public:
 	Particle ImpulseParticle;
 	Particle SparkParticle;
 
-	Movement TheMovement;
+	Movement *TheMovement;
 	
-	Behavior Behavior;
+	Behavior *TheBehavior;
 	
 	ColorRGB FractionColor;
 	
 public:
-	Ship(ColorRGB, Movement TheMovement = ControlledMovement, Behavior= NULL);
+	Ship(ColorRGB, Movement*, Behavior* = NULL);
 	
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);
@@ -46,6 +48,7 @@ public:
 
 class Movement
 {
+public:
 	virtual void update(float t, Ship*, PlaySpace*);
 };
 
@@ -54,6 +57,7 @@ class ControlledMovement : public Movement
 public:
 	float Steering = 0.0f;
 	bool isBraking = false;
+	RandomNumberGenerator RNG;
 	
 public:
 	void update(float Time, Ship *TheShip, PlaySpace *Space)
@@ -85,7 +89,7 @@ public:
 			}
 		}
 		
-		TheShip->RotationSpeed += Steering * t;
+		TheShip->RotationSpeed += Steering * Time;
 	}
 };
 
@@ -95,4 +99,4 @@ class DestinationMovement : public Movement
 	{
 		
 	}
-}
+};
