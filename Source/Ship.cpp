@@ -7,8 +7,8 @@
 #include "Ship.h"
 #include "Behavior.h"
 
-Ship::Ship(Movement *TheMovement, ColorRGB FractionColor, Behavior *TheBehavior)
-: FractionColor(FractionColor), Behavior(TheBehavior)
+Ship::Ship(ColorRGB FractionColor, Movement TheMovement, Behavior TheBehavior)
+: FractionColor(FractionColor), Behavior(TheBehavior), TheMovement(TheMovement)
 {
 	ImpulseParticle.Sprite = Image("Player/Impulse.png");
 	ImpulseParticle.DrawMode = RenderContext::Additive;

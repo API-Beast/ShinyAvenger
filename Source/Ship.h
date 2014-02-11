@@ -16,6 +16,9 @@
 
 class Weapon;
 
+class Movement;
+class ControlledMovement;
+
 class Ship : public PhysicsObject
 {
 public:
@@ -28,14 +31,14 @@ public:
 	Particle ImpulseParticle;
 	Particle SparkParticle;
 
-	Movement *TheMovement;
+	Movement TheMovement;
 	
-	Behavior *Behavior;
+	Behavior Behavior;
 	
 	ColorRGB FractionColor;
 	
 public:
-	Ship(Movement*, ColorRGB, Behavior *TheBehavior = NULL);
+	Ship(ColorRGB, Movement TheMovement = ControlledMovement, Behavior= NULL);
 	
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);
