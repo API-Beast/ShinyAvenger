@@ -8,5 +8,10 @@
 
 class Weapon
 {
-	Bullet BulletPrototype;
+public:
+	Bullet BulletPrototype;	
+	bool isShooting = false;
+
+public:
+	Weapon();
 };

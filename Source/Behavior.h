@@ -1,0 +1,35 @@
+//  Copyright (C) 2014 Miguel Gonzalez <miguel-gonzalez@gmx.com>
+//  Licensed under the terms of the WTFPL.
+//
+//  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+//  0. You just DO WHAT THE FUCK YOU WANT TO.
+
+#pragma once
+
+#include "PhysicsObject.h"
+#include <iostream>
+#include <Springbok/Animation/Interpolation.h>
+
+class Behavior
+{
+public:
+	virtual void update(float t, Ship* const) = 0;
+};
+
+class TrackingBehavior : public Behavior
+{
+public:
+	PhysicsObject *Target;
+	double Speed;
+
+	TrackingBehavior(PhysicsObject *PhysicsTarget, const double s = 100.0) : Target(PhysicsTarget), Speed(s) {}
+
+	void update(float t, Ship *const TheShip)
+	{
+		Vec2F Distance = Target->Position - TheShip->Position;
+		if (Distance.getLength() < 1000.0) {
+			TheShip->TargetDirection = Approach<Angle, float>(TheShip->TargetDirection, Distance.getAngle(), t / 2.0f);		
+			TheShip->Acceleration = TheShip->TargetDirection.toDirection() * Speed;
+		}		
+	}
+};
