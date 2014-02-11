@@ -13,7 +13,7 @@
 void Enemy::draw(RenderContext r)
 {
 	r.Offset = Position;
-	r.Rotation = Acceleration.getAngle();
+	r.Rotation = Rotation;
 	Sprite.draw(r);
 }
 

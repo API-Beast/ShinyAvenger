@@ -113,8 +113,14 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 		src.influence(obj, dt);
 	
 	obj->Rotation += obj->RotationSpeed * dt;
-	obj->RotationSpeed += (1 - obj->Speed.normalized().dot(obj->Rotation.toDirection())) * 0.12f * dt;
-	obj->RotationSpeed -= (AirDrag * obj->Drag * dt * 40) * obj->RotationSpeed;
+	
+	Angle targetRotation = obj->Speed.getAngle();
+	int sign = 1;
+	if(targetRotation < obj->Rotation)
+		sign = -1;
+	if(Abs(targetRotation.difference(obj->Rotation)) > 0.05f)
+		obj->Rotation += sign * (1 - obj->Speed.normalized().dot(obj->Rotation.toDirection())) * obj->Flow * obj->Speed.getLength() / 100 * dt;
+	obj->RotationSpeed -= (AirDrag * obj->Drag * dt) * obj->RotationSpeed;
 	
 	obj->Position += obj->Speed * dt;
 }

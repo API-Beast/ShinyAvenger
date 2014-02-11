@@ -15,7 +15,8 @@
 Player::Player()
 {
 	BulletPrototype.Mass = 5;
-	BulletPrototype.Drag = 5;
+	BulletPrototype.Drag = 0;
+	BulletPrototype.Flow = 5;
 	BulletPrototype.Lifetime = 1.f;
 	
 	BulletPrototype.ColorAnimation[0.0].insert(Colors::White);
