@@ -111,6 +111,7 @@ void Player::update(float t, PlaySpace* space)
 	}
 	
 	RotationSpeed += Steering * t;
+	Flow = 1-Abs(Steering);
 	
 	if(IsShooting)
 	{
