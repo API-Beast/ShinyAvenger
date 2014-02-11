@@ -11,7 +11,7 @@ if(SPRINGBOK_INCLUDE_DIR)
 endif(SPRINGBOK_INCLUDE_DIR)
 
 find_path(SPRINGBOK_INCLUDE_DIR Springbok/Config.h)
-find_library(SPRINGBOK_LIBRARY NAMES libSpringbok.so springbok)
+find_library(SPRINGBOK_LIBRARY NAMES libSpringbok.a libSpringbok.so springbok)
 
 # Handle the QUIETLY and REQUIRED arguments and set SPRINGBOK_FOUND to TRUE if
 # all listed variables are TRUE.
