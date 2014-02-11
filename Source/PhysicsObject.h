@@ -18,7 +18,9 @@ struct PhysicsObject
 	Vec2F Acceleration = 0;
 	Vec2F Drag = 1;
 	Vec2F Mass = 1;
-	Vec2F Flow = 1;
+	
+	float Flow = 1;
+	float Stabilizer = 0;
 	
 	Angle Rotation = 0;
 	float RotationSpeed = 0.0f;

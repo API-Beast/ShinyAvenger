@@ -19,6 +19,7 @@ public:
 	
 	bool IsBraking = false;
 	bool IsShooting = false;
+	bool IsStabilizing = false;
 	
 	float ShootTimer = 0.f;
 	float ImpulseTimer = 0.f;

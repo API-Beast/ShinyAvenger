@@ -100,6 +100,7 @@ void PlaySpace::update(float time)
 	// Will be reset to true before next PlaySpace::update
 	ThePlayer->IsShooting = false;
 	ThePlayer->IsBraking = false;
+	ThePlayer->IsStabilizing = false;
 	ThePlayer->Steering = 0.0f;
 }
 
@@ -115,8 +116,8 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	obj->Rotation += obj->RotationSpeed * dt;
 	
 	float diff = obj->Rotation.difference(obj->Speed.getAngle());
-	obj->Rotation += diff * obj->Flow * obj->Speed.getLength() / 400 * dt;
-	obj->RotationSpeed -= (AirDrag * obj->Flow * dt) * obj->RotationSpeed;
+	obj->Rotation += MinAbs(diff * obj->Flow * (obj->Speed.getLength() / 400 + obj->Stabilizer) * dt, diff);
+	obj->RotationSpeed -= MinAbs(((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt)) * obj->RotationSpeed, obj->RotationSpeed);
 	
 	obj->Position += obj->Speed * dt;
 }
@@ -125,6 +126,8 @@ void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float
 {
 	if(down)
 		ThePlayer->IsBraking = true;
+	if(up)
+		ThePlayer->IsStabilizing = true;
 	if(right)
 		ThePlayer->Steering =  1.0f;
 	if(left)
