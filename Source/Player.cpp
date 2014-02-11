@@ -46,6 +46,7 @@ Player::Player()
 	ImpulseParticle.DrawMode = RenderContext::Additive;
 	ImpulseParticle.Lifetime = 0.2f;
 	ImpulseParticle.Drag = 10;
+	ImpulseParticle.Flow = 0;
 	ImpulseParticle.Mass = 0.5f;
 	
 	ImpulseParticle.Animation.Alpha[0.0].insert(1.0f);
