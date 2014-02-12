@@ -6,15 +6,21 @@
 
 #pragma once
 
+#include "Ship.h"
+
 class PlaySpace;
 
-class EnemySpawner
+class ShipSpawner
 {
-private:
+public:
 	float Time;
 	float Interval;
+	Ship Prototype;
+	RandomNumberGenerator RNG;
 public:
-	EnemySpawner() : Time(0), Interval(5.0) { }
+	ShipSpawner() : Time(0), Interval(5.0) { }
 	
-	void update(float, PlaySpace*);
+	void update(float delta, PlaySpace* space);
+	void spawnGroup(PlaySpace*);
+	void spawnShip(PlaySpace*, Vec2F pos);
 };

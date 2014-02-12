@@ -9,94 +9,59 @@
 #include <Springbok/Geometry/Angle.h>
 #include <Springbok/Graphics/Image.h>
 #include <Springbok/Procedural/RandomNumberGenerator.h>
-#include <Springbok/Animation/Interpolation.h>
 
-#include "PhysicsObject.h"
 #include "PhysicsObject.h"
 #include "Bullet.h"
 #include "Particle.h"
-#include "PlaySpace.h"
-#include "Weapon.h"
 
-class Movement;
+class PlaySpace;
 class Behavior;
 
 class Ship : public PhysicsObject
 {
 public:
-	Weapon TheWeapon;
-	
+	// General
 	Image Sprite;
+	float EngineAccleration = 400;
 	
-	float ImpulseTimer = 0.f;
-	
+	// Particle Effects
+	RandomNumberGenerator RNG;
 	Particle ImpulseParticle;
 	Particle SparkParticle;
-
-	Movement *TheMovement;
+	float ImpulseFXTimer = 0.f;
 	
-	Behavior *TheBehavior;
+	// Diplomacy
+	int Fraction = -1;
+	ColorRGB FractionColor = Colors::White;
 	
-	ColorRGB FractionColor;
+	// Controls
+	float Steering = 0.0f;
+	bool IsBraking = false;
+	bool IsShooting = false;
+	bool IsStabilizing = false;
 	
+	enum WeaponType
+	{
+		DoubleShot
+	};
+	// Weapon
+	struct _Weapon
+	{
+		float ShotDelay = 0.15f;
+		float ShotTimer = 0.0f;
+		WeaponType Type = Ship::DoubleShot;
+		Bullet BulletPrototype;
+	} Weapon;
+	
+	// AI
+	Behavior* AI = nullptr;
 public:
-	Ship(ColorRGB, Movement*, Behavior* = NULL);
-	
+	Ship();
+	virtual ~Ship();
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);
-};
-
-class Movement
-{
-public:
-	virtual void update(float t, Ship*, PlaySpace*);
-};
-
-class ControlledMovement : public Movement
-{
-public:
-	float Steering = 0.0f;
-	bool isBraking = false;
-	RandomNumberGenerator RNG;
 	
-public:
-	void update(float Time, Ship *TheShip, PlaySpace *Space)
-	{
-		if(isBraking)
-			TheShip->Acceleration = 0;
-		else
-		{
-			TheShip->Acceleration = TheShip->Rotation.toDirection() * 400;
-			TheShip->ImpulseTimer -= Time;
-			if(TheShip->ImpulseTimer < 0)
-			{
-				TheShip->ImpulseTimer = 0.05f;
-				Particle glow(TheShip->ImpulseParticle);
-				glow.Rotation = TheShip->Rotation;
-				glow.Position = TheShip->Position + (TheShip->Rotation+0.5f).toDirection()*24;
-				glow.Speed = -TheShip->Acceleration + TheShip->Speed;
-				
-				Space->spawnParticle(glow);
-				
-				for (int i = 0; i < 10; ++i)
-				{
-					Particle spark(TheShip->SparkParticle);
-					spark.Rotation = TheShip->Rotation;
-					spark.Position =TheShip-> Position + (TheShip->Rotation+0.5f).toDirection()*(14+RNG.generate()*10) + (TheShip->Rotation+0.25f).toDirection() * RNG.generate(-4.f, 4.f);
-					spark.Speed = -TheShip->Acceleration + TheShip->Speed + (TheShip->Rotation+0.25f).toDirection() * RNG.generate(-60.f, 60.f);
-					Space->spawnParticle(spark);
-				}
-			}
-		}
-		
-		TheShip->RotationSpeed += Steering * Time;
-	}
-};
-
-class DestinationMovement : public Movement
-{
-	void update(float Time, Ship *TheShip, PlaySpace *Space)
-	{
-		
-	}
+	void updateControls(float t, PlaySpace* space);
+	void updateWeapon(float t, PlaySpace* space);
+	void updateFX(float t, PlaySpace* space);
 };

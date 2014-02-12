@@ -6,20 +6,20 @@
 
 #pragma once
 
-#include "Player.h"
 #include "Space.h"
-#include "Enemy.h"
-#include "EnemyBehavior.h"
-#include "EnemySpawner.h"
+#include "ShipSpawner.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
 #include "UI.h"
 #include "Particle.h"
+#include "Ship.h"
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
+
+class Ship;
 
 class PlaySpace : public Space
 {
@@ -35,14 +35,14 @@ public:
 	void spawnParticle(Particle particle);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 public:
-	Player* ThePlayer;
+	Ship* Player;
 	List<PhysicsObject*> Objects;
-	List<Enemy*> Enemies;
 	List<Bullet> PlayerBullets;
 	List<GravitySource> GravitySources;
 	List<Particle> Particles;
+	List<Ship*> Ships;
 	KeyframeList<Color> BackgroundGradient;
-	EnemySpawner Spawner;
+	ShipSpawner Spawner;
 	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;

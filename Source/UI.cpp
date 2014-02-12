@@ -10,11 +10,10 @@
 
 void EnemyArrow::draw(RenderContext* Context)
 {
-	for (int i = 0; i < Space->Enemies.UsedLength; ++i)
+	for(Ship* ship : Space->Ships)
 	{
-		Enemy *TheEnemy = Space->Enemies[i];
-		Vec2F EnemyPosition = TheEnemy->Position;
-		Vec2F Direction = TheEnemy->Position - Space->ThePlayer->Position;
+		Vec2F EnemyPosition = ship->Position;
+		Vec2F Direction = ship->Position - Space->Player->Position;
 		float Length = Direction.getLength();
 		Vec2F Normalized = Direction.normalized();
 			

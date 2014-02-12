@@ -10,11 +10,43 @@
 
 PlaySpace::PlaySpace(GameSurface* surface)
 {
-	ThePlayer = new Player;
-	ThePlayer->Position = {200, 150};
-	Objects.pushBack(ThePlayer);
+	Player = new Ship;
+	Player->Sprite = Image("Player/Sprite.png");
+	Player->Position = Vec2F{200, 150};
 	
-	srand( time( NULL ) );
+	Bullet& b = Player->Weapon.BulletPrototype;
+	b.Mass = 5;
+	b.Drag = 0;
+	b.Flow = 5;
+	b.Lifetime = 1.f;
+
+	b.ColorAnimation[0.0].insert(Colors::White);
+	b.ColorAnimation[0.5].insert(Colors::Saturated::Orange);
+	b.ColorAnimation[1.0].insert(Colors::Saturated::Red);
+
+	b.GlowColorAnimation[0.0].insert(Colors::Saturated::Yellow);
+	b.GlowColorAnimation[0.5].insert(Colors::Saturated::Orange);
+	b.GlowColorAnimation[1.0].insert(Colors::Saturated::Red);
+
+	b.AlphaAnimation[0.0].insert(1.f);
+	b.AlphaAnimation[0.8].insert(1.f);
+	b.AlphaAnimation[1.0].insert(0.f);
+
+	b.ScaleAnimation[0.0].insert(1.f);
+	b.ScaleAnimation[0.2].insert(Vec2F(1.f, 4.f));
+	b.ScaleAnimation[0.8].insert(Vec2F(1.5f, 3.f));
+	b.ScaleAnimation[1.0].insert(Vec2F(0.5f, 4.f));
+
+	b.GlowScaleAnimation[0.0].insert(2.f);
+	b.GlowScaleAnimation[1.0].insert(2.f);
+
+	b.Sprite = Image("Player/Bullet.png");
+	b.Glow = Image("Glow.png");
+	
+	Spawner.Prototype.Sprite = Image("Enemy/Enemy01.png");
+	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
+	
+	Objects.pushBack(Player);
 	
 	GravitySources.pushBack({Vec2F(0,0), 200.f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
@@ -38,7 +70,7 @@ PlaySpace::~PlaySpace()
 
 void PlaySpace::draw()
 {
-	Color bgColor = BackgroundGradient[ThePlayer->Position.getLength()];
+	Color bgColor = BackgroundGradient[Player->Position.getLength()];
 	glClearColor(bgColor.Red, bgColor.Green, bgColor.Blue, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	RenderContext r;
@@ -95,13 +127,13 @@ void PlaySpace::update(float time)
 	for(Particle& particle : Particles)
 		applyPhysics(&particle, time);
 	
-	CameraPos = -(ScreenSize/2) + ThePlayer->Position;
+	CameraPos = -(ScreenSize/2) + Player->Position;
 	
 	// Will be reset to true before next PlaySpace::update
-	ThePlayer->IsShooting = false;
-	ThePlayer->IsBraking = false;
-	ThePlayer->IsStabilizing = false;
-	ThePlayer->Steering = 0.0f;
+	Player->IsShooting = false;
+	Player->IsBraking = false;
+	Player->IsStabilizing = false;
+	Player->Steering = 0.0f;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -125,18 +157,18 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
 {
 	if(down)
-		ThePlayer->IsBraking = true;
+		Player->IsBraking = true;
 	if(up)
-		ThePlayer->IsStabilizing = true;
+		Player->IsStabilizing = true;
 	if(right)
-		ThePlayer->Steering =  1.0f;
+		Player->Steering =  1.0f;
 	if(left)
-		ThePlayer->Steering = -1.0f;
+		Player->Steering = -1.0f;
 }
 
 void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
 {
-	ThePlayer->IsShooting = true;
+	Player->IsShooting = true;
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)
