@@ -15,12 +15,11 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 	float distance = delta.getLength();
 	
 	Angle targetRotation = Angle(delta);
-	Angle angleDelta = targetRotation - ship->Rotation;
+	Angle angleDelta = ship->Rotation - targetRotation;
 	
-	// TODO: Something is really weird here. More bugs in the Angle class?
-	if(Abs(angleDelta) > 0.1f)
+	if(Abs(angleDelta) > 0.1_turn)
 	{
-		if(angleDelta < 0)
+		if(angleDelta > 0)
 			ship->Steering = -1;
 		else
 			ship->Steering =  1;
@@ -28,12 +27,12 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 	else
 		ship->Steering = 0;
 	
-	if(Abs(angleDelta) < 0.01f && distance < 750)
+	if(Abs(angleDelta) < 0.1_turn && distance < 750)
 		ship->IsShooting = 1;
 	else
 		ship->IsShooting = false;
 	
-	if(Abs(targetRotation - Angle(ship->Speed)) < 0.01f || angleDelta > 0.25f)
+	if(Abs(targetRotation - Angle(ship->Speed)) < 0.1_turn || Abs(angleDelta) > 0.25_turn)
 		ship->IsBraking = true;
 	else
 		ship->IsBraking = false;

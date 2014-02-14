@@ -58,7 +58,7 @@ void Ship::updateControls(float t, PlaySpace* space)
 	else
 		Acceleration = Rotation.toDirection() * EngineAccleration;
 	
-	RotationSpeed += Steering * t * 0.5f;
+	RotationSpeed += Steering * 2 * t;
 	Flow = 1-Abs(Steering);
 	Stabilizer = IsStabilizing;
 }
