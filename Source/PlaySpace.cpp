@@ -8,6 +8,8 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
+#include <iostream>
+
 PlaySpace::PlaySpace(GameSurface* surface)
 {
 	Player = new Ship;
@@ -45,6 +47,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	Spawner.Prototype.Sprite = Image("Enemy/Enemy01.png");
 	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
+	Spawner.spawnShip(this, Vec2F(500, 500));
 	
 	Objects.pushBack(Player);
 	
@@ -94,7 +97,7 @@ void PlaySpace::update(float time)
 {
 	GameTime += time;
 	
-	Spawner.update(time, this);
+	//Spawner.update(time, this);
 	GUIContainer.update(time);
 	
 	for(int i = 0; i < PlayerBullets.UsedLength; ++i)
@@ -147,8 +150,8 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	
 	obj->Rotation += Angle(obj->RotationSpeed * dt);
 	
-	Angle diff = obj->Rotation - obj->Speed.getAngle();
-	obj->Rotation += Angle(MinAbs(diff * obj->Flow * (obj->Speed.getLength() / 400 + obj->Stabilizer) * dt, diff));
+	Angle diff = Angle(obj->Speed) - obj->Rotation;
+	obj->Rotation += Angle(MinAbs(diff * obj->Flow * (obj->Speed.getLength() / 200 + obj->Stabilizer) * dt, diff));
 	obj->RotationSpeed -= MinAbs(((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt)) * obj->RotationSpeed, obj->RotationSpeed);
 	
 	obj->Position += obj->Speed * dt;

@@ -30,6 +30,7 @@ void Game::execute()
 	while(!Surface->closeRequested())
 	{
 		float dt = 0.0f;
+		//while(Clock->elapsed() < 0.1);
 		dt = Clock->elapsed();
 		Clock->start();
 		
