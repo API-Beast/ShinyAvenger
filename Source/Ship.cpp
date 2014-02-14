@@ -26,8 +26,8 @@ Ship::Ship()
 	ImpulseParticle.Animation.Scale[0.3].insert(Vec2F(1.0f, 2.0f));
 	ImpulseParticle.Animation.Scale[1.0].insert(Vec2F(1.0f, 3.0f));
 	
-	ImpulseParticle.Animation.Rotation[0.0].insert(0.0f);
-	ImpulseParticle.Animation.Rotation[1.0].insert(0.0f);
+	ImpulseParticle.Animation.Rotation[0.0].insert(0.0_turn);
+	ImpulseParticle.Animation.Rotation[1.0].insert(0.0_turn);
 	
 	SparkParticle = ImpulseParticle;
 	SparkParticle.Sprite = Image("Player/Spark.png");
@@ -75,7 +75,7 @@ void Ship::updateFX(float t, PlaySpace* space)
 	// Spawn glow
 	Particle glow(ImpulseParticle);
 	glow.Rotation = Rotation;
-	glow.Position = Position + (Rotation+0.5f).toDirection()*24;
+	glow.Position = Position - Rotation.toDirection()*24;
 	glow.Speed = -Acceleration + Speed;
 	space->spawnParticle(glow);
 	// Spawn sparks
@@ -83,8 +83,8 @@ void Ship::updateFX(float t, PlaySpace* space)
 	{
 		Particle spark(SparkParticle);
 		spark.Rotation = Rotation;
-		spark.Position = Position + (Rotation+0.5f).toDirection()*(14+RNG.generate()*10) + (Rotation+0.25f).toDirection() * RNG.generate(-4.f, 4.f);
-		spark.Speed = -Acceleration + Speed + (Rotation+0.25f).toDirection() * RNG.generate(-60.f, 60.f);
+		spark.Position = Position - Rotation.toDirection()*(14+RNG.generate()*10) + (Rotation+0.25_turn).toDirection() * RNG.generate(-4.f, 4.f);
+		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * RNG.generate(-60.f, 60.f);
 		space->spawnParticle(spark);
 	}
 }
@@ -101,9 +101,9 @@ void Ship::updateWeapon(float t, PlaySpace* space)
 			Bullet bullet(Weapon.BulletPrototype);
 			bullet.Rotation = Rotation;
 			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
-			bullet.Position = Position + (Rotation+0.25f).toDirection()*10;
+			bullet.Position = Position + (Rotation+0.25_turn).toDirection()*10;
 			space->spawnPlayerBullet(bullet);
-			bullet.Position = Position - (Rotation+0.25f).toDirection()*10;
+			bullet.Position = Position - (Rotation+0.25_turn).toDirection()*10;
 			space->spawnPlayerBullet(bullet);
 		}
 	}

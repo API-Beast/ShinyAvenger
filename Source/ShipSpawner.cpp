@@ -21,7 +21,7 @@ void ShipSpawner::spawnGroup(PlaySpace *space)
 {
 	const int GROUP_SIZE = 2 + (space->GameTime / Interval) / 10.0f;
 	
-	Vec2F pos = RNG.generate(-space->Size/2, space->Size/2);
+	Vec2F pos = RNG.generateVec2(-space->Size/2, space->Size/2);
 	
 	for(int i = 0; i < GROUP_SIZE; ++i)
 	{

@@ -22,7 +22,7 @@ struct PhysicsObject
 	float Flow = 1;
 	float Stabilizer = 0;
 	
-	Angle Rotation = 0;
+	Angle Rotation = 0_turn;
 	float RotationSpeed = 0.0f;
 public:
 	virtual void draw(RenderContext r){};
