@@ -11,7 +11,7 @@
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
-	Vec2F delta = ((Target->Position) - ship->Position);
+	Vec2F delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + Target->Position * 0.1));
 	float distance = delta.getLength();
 	
 	Angle targetRotation = Angle(delta);
@@ -19,20 +19,24 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 	
 	if(Abs(angleDelta) > 0.1_turn)
 	{
-		if(angleDelta > 0)
+		ship->IsStabilizing = 0;
+		if(angleDelta > 0_turn)
 			ship->Steering = -1;
 		else
 			ship->Steering =  1;
 	}
 	else
+	{
 		ship->Steering = 0;
+		ship->IsStabilizing = 1;
+	}
 	
-	if(Abs(angleDelta) < 0.1_turn && distance < 750)
+	if(Abs(angleDelta) < 0.05_turn && distance < 750)
 		ship->IsShooting = 1;
 	else
 		ship->IsShooting = false;
 	
-	if(Abs(targetRotation - Angle(ship->Speed)) < 0.1_turn || Abs(angleDelta) > 0.25_turn)
+	if(Abs(angleDelta) > 0.25_turn)
 		ship->IsBraking = true;
 	else
 		ship->IsBraking = false;
