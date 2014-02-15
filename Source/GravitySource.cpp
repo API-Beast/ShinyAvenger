@@ -19,31 +19,31 @@ void GravitySource::draw(RenderContext r)
 	r.Offset = Position;
 	
 	// Background 1
-	r.Rotation = TimeSinceSpawn * 0.15_turn;
+	r.Rotation = TimeSinceSpawn * 0.040_turn;
 	r.Scale = 1.2f;
 	r.setColor(Colors::Black, 0.4f);
 	GlowSprite.drawStretched(Range*2, r);
 	
 	// Background 2
-	r.Rotation = TimeSinceSpawn * 0.32_turn;
+	r.Rotation = TimeSinceSpawn * 0.070_turn;
 	r.Scale = 1.0f;
 	r.setColor(Colors::Black, 0.6f);
 	GlowSprite.drawStretched(Range*2, r);
 	
 	// Background Center 1
-	r.Rotation = TimeSinceSpawn * 0.21_turn;
+	r.Rotation = TimeSinceSpawn * 0.060_turn;
 	r.Scale = CenterSize * 1.5f;
 	r.setColor(CenterColor, 0.7f);
 	Graphics.draw(r);
 	
 	// Background Center 2
-	r.Rotation = TimeSinceSpawn * 0.36_turn;
+	r.Rotation = TimeSinceSpawn * 0.070_turn;
 	r.Scale = CenterSize * 1.1f;
 	r.setColor(CenterColor);
 	Graphics.draw(r);
 	
 	// Background Center Highlight
-	r.Rotation = TimeSinceSpawn * 0.40_turn;
+	r.Rotation = TimeSinceSpawn * 0.080_turn;
 	r.Scale = CenterSize;
 	r.setColor(HighlightColor);
 	r.setBlendingMode(RenderContext::Additive);
