@@ -8,6 +8,7 @@
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Graphics/RenderContext.h>
+#include <Springbok/Geometry/BoundingShapes.h>
 
 class PlaySpace;
 
@@ -21,10 +22,15 @@ struct PhysicsObject
 	
 	float Flow = 1;
 	float Stabilizer = 0;
+	float NegativeForce = 0;
 	
 	Angle Rotation = 0_turn;
 	float RotationSpeed = 0.0f;
+	
+	Vec2F BoundsOffset = 0;
+	BoundingRect Bounds = BoundingRect{0, 16}; // Position updated every frame
 public:
 	virtual void draw(RenderContext r){};
 	virtual void update(float dt, PlaySpace* space){};
+	virtual void updateBounds(){ Bounds.setCenter(Position - BoundsOffset); };
 };

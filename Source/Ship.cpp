@@ -8,8 +8,8 @@
 #include "Behavior.h"
 #include "PlaySpace.h"
 
-Ship::Ship()
-{
+Ship::Ship(const Image& img) : Sprite(img)
+{	
 	ImpulseParticle.Sprite = Image("Player/Impulse.png");
 	ImpulseParticle.DrawMode = RenderContext::Additive;
 	ImpulseParticle.Lifetime = 0.2f;
@@ -61,6 +61,7 @@ void Ship::updateControls(float t, PlaySpace* space)
 	RotationSpeed += Steering * 2 * t;
 	Flow = 1-Abs(Steering);
 	Stabilizer = IsStabilizing;
+	NegativeForce = (IsStabilizing && IsBraking) * 0.001f;
 }
 
 void Ship::updateFX(float t, PlaySpace* space)
@@ -115,6 +116,12 @@ void Ship::draw(RenderContext r)
 	r.Offset = Position;
 	r.Rotation = Rotation;
 	Sprite.draw(r);
+}
+
+void Ship::updateBounds()
+{
+	Bounds.Size = Sprite.getSize();
+	PhysicsObject::updateBounds();
 }
 
 Ship::~Ship()
