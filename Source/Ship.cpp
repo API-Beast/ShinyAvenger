@@ -39,6 +39,24 @@ Ship::Ship(const Image& img) : Sprite(img)
 	SparkParticle.Animation.Alpha[0.0].insert(0.0f);
 	SparkParticle.Animation.Alpha[0.2].insert(1.0f);
 	SparkParticle.Animation.Alpha[1.0].insert(0.0f);
+	
+	ShieldParticle.Sprite = Image("Ship/Shield.png");
+	ShieldParticle.DrawMode = RenderContext::Additive;
+	ShieldParticle.Lifetime = 0.2f;
+	ShieldParticle.Drag = 0.f;
+	
+	ShieldParticle.Animation.Alpha[0.0].insert(1.0f);
+	ShieldParticle.Animation.Alpha[0.5].insert(0.2f);
+	ShieldParticle.Animation.Alpha[1.0].insert(0.0f);
+	
+	ShieldParticle.Animation.Color[0.0].insert(Colors::White);
+	ShieldParticle.Animation.Color[1.0].insert(Color(0.0f, 0.0f, 0.4f));
+	
+	ShieldParticle.Animation.Scale[0.0].insert(Vec2F(0.75f, 0.75f));
+	ShieldParticle.Animation.Scale[1.0].insert(Vec2F(0.75f, 0.75f));
+	
+	ShieldParticle.Animation.Rotation[0.0].insert(0.0_turn);
+	ShieldParticle.Animation.Rotation[1.0].insert(0.0_turn);
 }
 
 void Ship::update(float t, PlaySpace* space)
@@ -61,7 +79,6 @@ void Ship::updateControls(float t, PlaySpace* space)
 	RotationSpeed += Steering * 2 * t;
 	Flow = 1-Abs(Steering);
 	Stabilizer = IsStabilizing;
-	NegativeForce = (IsStabilizing && IsBraking) * 0.001f;
 }
 
 void Ship::updateFX(float t, PlaySpace* space)
@@ -100,6 +117,7 @@ void Ship::updateWeapon(float t, PlaySpace* space)
 			Weapon.ShotTimer = Weapon.ShotDelay;
 			
 			Bullet bullet(Weapon.BulletPrototype);
+			bullet.Faction = Faction;
 			bullet.Rotation = Rotation;
 			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
 			bullet.Position = Position + (Rotation+0.25_turn).toDirection()*10;
@@ -108,6 +126,18 @@ void Ship::updateWeapon(float t, PlaySpace* space)
 			space->spawnPlayerBullet(bullet);
 		}
 	}
+}
+
+void Ship::onHit(Bullet* bullet, PlaySpace* space)
+{
+	Particle p(ShieldParticle);
+	reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
+	p.Rotation = Angle(bullet->Position - Position);
+	p.RotationSpeed = 0;
+	p.Drag = 0;
+	p.Flow = 0;
+	p.Stabilizer = 0;
+	space->spawnParticle(p);
 }
 
 void Ship::draw(RenderContext r)

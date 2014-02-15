@@ -10,7 +10,7 @@ void Particle::draw(RenderContext r)
 {
 	float age = normalizedAge();
 	r.Offset = Position;
-	r.Rotation = Rotation;
+	r.Rotation = Rotation + Animation.Rotation[age];
 	r.Scale = Animation.Scale[age];
 	r.setColor(Animation.Color[age], Animation.Alpha[age]);
 	r.setBlendingMode(DrawMode);

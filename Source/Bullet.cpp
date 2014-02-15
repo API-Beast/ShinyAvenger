@@ -5,6 +5,7 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Bullet.h"
+#include "Ship.h"
 
 void Bullet::update(float dt, PlaySpace* space)
 {
@@ -26,4 +27,9 @@ void Bullet::draw(RenderContext r)
 	r.Scale = GlowScaleAnimation[age];
 	r.setBlendingMode(RenderContext::Additive);
 	Glow.draw(r);
+}
+
+void Bullet::onHit(Ship* which, PlaySpace* space)
+{
+	HitObject = true;
 }

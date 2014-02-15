@@ -12,9 +12,10 @@
 
 PlaySpace::PlaySpace(GameSurface* surface)
 {
-	Player = new Ship;
-	Player->Sprite = Image("Player/Sprite.png");
+	Player = new Ship(Image("Player/Sprite.png"));
 	Player->Position = Vec2F{200, 150};
+	Player->Faction = 0;
+	Ships.pushBack(Player);
 	
 	Bullet& b = Player->Weapon.BulletPrototype;
 	b.Mass = 5;
@@ -47,11 +48,12 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	Spawner.Prototype.Sprite = Image("Enemy/Enemy01.png");
 	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
+	Spawner.Prototype.Faction = 2;
 	Spawner.spawnShip(this, Vec2F(500, 500));
 	
 	Objects.pushBack(Player);
 	
-	GravitySources.pushBack({Vec2F(0,0), 200.f, 1500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
+	GravitySources.pushBack({Vec2F(0,0), 100.f, 2500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
 	BackgroundGradient[0].insert(Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
@@ -83,7 +85,7 @@ void PlaySpace::draw()
 		src.draw(r);
 	
 	r.setColor(Colors::White);
-	for(Bullet& obj : PlayerBullets)
+	for(Bullet& obj : Bullets)
 		obj.draw(r);
 	for(PhysicsObject* obj : Objects)
 		obj->draw(r);
@@ -97,13 +99,13 @@ void PlaySpace::update(float time)
 {
 	GameTime += time;
 	
-	//Spawner.update(time, this);
+	Spawner.update(time, this);
 	GUIContainer.update(time);
 	
-	for(int i = 0; i < PlayerBullets.UsedLength; ++i)
+	for(int i = 0; i < Bullets.UsedLength; ++i)
 	{
-		if(PlayerBullets[i].canBeDespawned())
-			PlayerBullets.quickRemove(i--);
+		if(Bullets[i].canBeDespawned())
+			Bullets.quickRemove(i--);
 	}
 	
 	for(int i = 0; i < Particles.UsedLength; ++i)
@@ -117,7 +119,7 @@ void PlaySpace::update(float time)
 		obj->update(time, this);
 	for(GravitySource& src : GravitySources)
 		src.update(time, this);
-	for(Bullet& obj : PlayerBullets)
+	for(Bullet& obj : Bullets)
 		obj.update(time, this);
 	for(Particle& particle : Particles)
 		particle.update(time, this);
@@ -125,10 +127,19 @@ void PlaySpace::update(float time)
 	// Physics
 	for(PhysicsObject* obj : Objects)
 		applyPhysics(obj, time);
-	for(Bullet& obj : PlayerBullets)
+	for(Bullet& obj : Bullets)
 		applyPhysics(&obj, time);
 	for(Particle& particle : Particles)
 		applyPhysics(&particle, time);
+	
+	for(Bullet& bullet : Bullets)
+		for(Ship* ship : Ships)
+			if(ship->Faction != bullet.Faction)
+				if(IsIntersecting(bullet.Bounds, ship->Bounds))
+				{
+					bullet.onHit(ship, this);
+					ship->onHit(&bullet, this);
+				}
 	
 	CameraPos = -(ScreenSize/2) + Player->Position;
 	
@@ -142,7 +153,7 @@ void PlaySpace::update(float time)
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 {
 	obj->Speed += obj->Acceleration * dt;
-	obj->Speed -= obj->Speed * (AirDrag * obj->Drag * dt) * obj->Speed.getLength();
+	obj->Speed -= obj->Speed * ((AirDrag * obj->Drag * dt) + (obj->NegativeForce * dt)) * obj->Speed.getLength();
 	
 	// Add gravity
 	for(GravitySource& src : GravitySources)
@@ -152,9 +163,10 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	
 	Angle diff = Angle(obj->Speed) - obj->Rotation;
 	obj->Rotation += Angle(diff * obj->Flow * (obj->Speed.getLength() / 500 + obj->Stabilizer) * dt);
-	obj->RotationSpeed -= MinAbs(((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt)) * obj->RotationSpeed, obj->RotationSpeed);
+	obj->RotationSpeed -= (((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt))) * obj->RotationSpeed;
 	
 	obj->Position += obj->Speed * dt;
+	obj->updateBounds();
 }
 
 void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
@@ -180,7 +192,7 @@ void PlaySpace::onMouseHoldInput(Vec2F mousePos)
 
 void PlaySpace::spawnPlayerBullet(Bullet bullet)
 {
-	PlayerBullets.pushBack(bullet);
+	Bullets.pushBack(bullet);
 }
 
 void PlaySpace::spawnParticle(Particle particle)

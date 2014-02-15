@@ -37,7 +37,7 @@ public:
 public:
 	Ship* Player;
 	List<PhysicsObject*> Objects;
-	List<Bullet> PlayerBullets;
+	List<Bullet> Bullets;
 	List<GravitySource> GravitySources;
 	List<Particle> Particles;
 	List<Ship*> Ships;

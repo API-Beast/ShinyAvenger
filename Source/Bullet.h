@@ -10,13 +10,19 @@
 #include <Springbok/Graphics/Image.h>
 #include <Springbok/Animation/KeyframeList.h>
 
+class Ship;
+
 struct Bullet : public PhysicsObject
 {
+	int Faction = -1;
+	
 	Image Sprite;
 	Image Glow;
 	
 	float TimeSinceSpawn = 0.f;
 	float Lifetime = 2.f;
+	
+	bool HitObject = false;
 	
 	KeyframeList<float> AlphaAnimation;
 	KeyframeList<Color> ColorAnimation;
@@ -27,7 +33,8 @@ struct Bullet : public PhysicsObject
 	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
-	bool canBeDespawned(){ return TimeSinceSpawn > Lifetime; };
+	bool canBeDespawned(){ return TimeSinceSpawn > Lifetime || HitObject; };
 	float normalizedAge(){ return TimeSinceSpawn / Lifetime; };
+	void onHit(Ship* which, PlaySpace* space);
 };
 

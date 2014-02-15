@@ -20,9 +20,17 @@ class Behavior;
 class Ship : public PhysicsObject
 {
 public:
+	enum ShipState
+	{
+		Okay,        // All systems intact
+		Compromised, // Systems broken, but may malfunction
+		Destroyed    // Lifeless
+	};
+	
 	// General
 	Image Sprite;
 	float EngineAccleration = 400;
+	float ShieldEnergy = 100;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;
@@ -31,7 +39,7 @@ public:
 	float ImpulseFXTimer = 0.f;
 	
 	// Diplomacy
-	int Fraction = -1;
+	int Faction = -1;
 	ColorRGB FractionColor = Colors::White;
 	
 	// Controls
@@ -55,13 +63,16 @@ public:
 	
 	// AI
 	Behavior* AI = nullptr;
+    Particle ShieldParticle;
 public:
-	Ship();
+	Ship(const Image& img);
 	virtual ~Ship();
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);
+	virtual void updateBounds();
 	
 	void updateControls(float t, PlaySpace* space);
 	void updateWeapon(float t, PlaySpace* space);
 	void updateFX(float t, PlaySpace* space);
+	void onHit(Bullet* bullet, PlaySpace* space);
 };

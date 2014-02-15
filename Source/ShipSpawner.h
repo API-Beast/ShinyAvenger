@@ -18,7 +18,7 @@ public:
 	Ship Prototype;
 	RandomNumberGenerator RNG;
 public:
-	ShipSpawner() : Time(0), Interval(5.0) { }
+	ShipSpawner() : Time(0), Interval(5.0), Prototype(Image("Null.png")) { }
 	
 	void update(float delta, PlaySpace* space);
 	void spawnGroup(PlaySpace*);
