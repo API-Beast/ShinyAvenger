@@ -158,7 +158,7 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	obj->Rotation += Angle(obj->RotationSpeed * dt);
 	
 	Angle diff = Angle(obj->Speed) - obj->Rotation;
-	obj->Rotation += Angle(diff * obj->Flow * (obj->Speed.getLength() / 500 + obj->Stabilizer) * dt);
+	obj->Rotation += diff * obj->Flow * (obj->Speed.getLength() / 500) * dt;
 	obj->RotationSpeed -= ((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt)) * obj->RotationSpeed;
 
 	obj->Position += obj->Speed * dt;
@@ -169,8 +169,7 @@ void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float
 {
 	if(down)
 		Player->IsBraking = true;
-	if(up)
-		Player->IsStabilizing = true;
+	if(up);
 	if(right)
 		Player->Steering =  1.0f;
 	if(left)
