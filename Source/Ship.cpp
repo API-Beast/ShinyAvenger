@@ -91,47 +91,75 @@ void Ship::updateControls(float t, PlaySpace* space)
 
 void Ship::updateFX(float t, PlaySpace* space)
 {
-	ImpulseFXTimer -= t;
 	if(IsBraking)
 		return;
-	if(ImpulseFXTimer > 0)
-		return;
+	ImpulseTimer -= t;
+	ImpulseSparkTimer -= t;
 	
-	ImpulseFXTimer = 0.05f;
-	// Spawn glow
-	Particle glow(ImpulseParticle);
-	glow.Rotation = Rotation;
-	glow.Position = Position - Rotation.toDirection()*24;
-	glow.Speed = -Acceleration + Speed;
-	space->spawnParticle(glow);
-	// Spawn sparks
-	for(int i = 0; i < 10; ++i)
+	while(ImpulseTimer < 0)
 	{
+		// Spawn glow
+		float supplementT = -ImpulseTimer;
+		if(supplementT < 0)
+			supplementT = 0;
+		
+		Particle glow(ImpulseParticle);
+		glow.Rotation = Rotation;
+		glow.Position = Position - Rotation.toDirection()*24;
+		glow.Speed = -Acceleration + Speed;
+		
+		glow.update(supplementT, space);
+		space->applyPhysics(&glow, supplementT);
+		space->spawnParticle(glow);
+		ImpulseTimer += 0.050f;
+	}
+	
+	while(ImpulseSparkTimer < 0)
+	{
+		// Spawn sparks
+		float supplementT = -ImpulseSparkTimer;
+		if(supplementT < 0)
+			supplementT = 0;
+		
 		Particle spark(SparkParticle);
 		spark.Rotation = Rotation;
-		spark.Position = Position - Rotation.toDirection()*(14+RNG.generate()*10) + (Rotation+0.25_turn).toDirection() * RNG.generate(-4.f, 4.f);
+		spark.Position = Position - Rotation.toDirection()*(16+RNG.generate()*8) + (Rotation+0.25_turn).toDirection() * RNG.generate(-4.f, 4.f);
 		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * RNG.generate(-60.f, 60.f);
+		spark.Lifetime = 0.15f + 0.10f * (RNG.generate()-0.5);
+		
+		spark.update(supplementT, space);
+		space->applyPhysics(&spark, supplementT);
 		space->spawnParticle(spark);
+		ImpulseSparkTimer += 0.005f;
 	}
 }
 
 void Ship::updateWeapon(float t, PlaySpace* space)
 {
-	Weapon.ShotTimer -= t;
 	if(IsShooting)
 	{
-		if(Weapon.ShotTimer <= 0.f)
+		Weapon.ShotTimer -= t;
+		while(Weapon.ShotTimer <= 0.f)
 		{
-			Weapon.ShotTimer = Weapon.ShotDelay;
-			
 			Bullet bullet(Weapon.BulletPrototype);
 			bullet.Faction = Faction;
 			bullet.Rotation = Rotation;
 			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
 			bullet.Position = Position + (Rotation+0.25_turn).toDirection()*10;
+			
+			Bullet bulletB(bullet);
+			bulletB.Position = Position - (Rotation+0.25_turn).toDirection()*10;
+			
+			bullet.update(-Weapon.ShotTimer, space);
+			bulletB.update(-Weapon.ShotTimer, space);
+			
+			space->applyPhysics(&bullet, -Weapon.ShotTimer);
+			space->applyPhysics(&bulletB, -Weapon.ShotTimer);
+			
 			space->spawnPlayerBullet(bullet);
-			bullet.Position = Position - (Rotation+0.25_turn).toDirection()*10;
-			space->spawnPlayerBullet(bullet);
+			space->spawnPlayerBullet(bulletB);
+			
+			Weapon.ShotTimer += Weapon.ShotDelay;
 		}
 	}
 }

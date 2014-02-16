@@ -36,7 +36,8 @@ public:
 	RandomNumberGenerator RNG;
 	Particle ImpulseParticle;
 	Particle SparkParticle;
-	float ImpulseFXTimer = 0.f;
+	float ImpulseTimer = 0.f;
+	float ImpulseSparkTimer = 0.f;
 	
 	// Diplomacy
 	int Faction = -1;
