@@ -24,12 +24,12 @@ struct Bullet : public PhysicsObject
 	
 	bool HitObject = false;
 	
-	KeyframeList<float> AlphaAnimation;
-	KeyframeList<Color> ColorAnimation;
-	KeyframeList<Vec2F> ScaleAnimation;
+	KeyframeList<float> AlphaAnimation = 1.0f;
+	KeyframeList<Color> ColorAnimation = Colors::White;
+	KeyframeList<Vec2F> ScaleAnimation = Vec2F(1.0f);
 	
-	KeyframeList<Color> GlowColorAnimation;
-	KeyframeList<Vec2F> GlowScaleAnimation;
+	KeyframeList<Color> GlowColorAnimation = Colors::White;
+	KeyframeList<Vec2F> GlowScaleAnimation = Vec2F(1.f);
 	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);

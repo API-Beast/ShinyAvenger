@@ -16,18 +16,25 @@ Ship::Ship(const Image& img) : Sprite(img)
 	ImpulseParticle.Drag = 10;
 	ImpulseParticle.Mass = 0.5f;
 	
-	ImpulseParticle.Animation.Alpha[0.0].insert(1.0f);
-	ImpulseParticle.Animation.Alpha[1.0].insert(0.0f);
+	{
+		auto& anim = ImpulseParticle.Animation.Alpha;
+		anim.insert(1.0f, 0.0f);
+	}
 	
-	ImpulseParticle.Animation.Color[0.0].insert(Colors::Saturated::Orange);
-	ImpulseParticle.Animation.Color[1.0].insert(Colors::Saturated::Magenta);
+	{
+		auto& anim = ImpulseParticle.Animation.Color;
+		anim.clear();
+		anim.insert(0.0f, Colors::Saturated::Orange);
+		anim.insert(1.0f, Colors::Saturated::Magenta);
+	}
 	
-	ImpulseParticle.Animation.Scale[0.0].insert(Vec2F(1.0f, 1.0f));
-	ImpulseParticle.Animation.Scale[0.3].insert(Vec2F(1.0f, 2.0f));
-	ImpulseParticle.Animation.Scale[1.0].insert(Vec2F(1.0f, 3.0f));
-	
-	ImpulseParticle.Animation.Rotation[0.0].insert(0.0_turn);
-	ImpulseParticle.Animation.Rotation[1.0].insert(0.0_turn);
+	{
+		auto& anim = ImpulseParticle.Animation.Scale;
+		anim.clear();
+		anim.insert(0.0f, Vec2F(1.0f, 1.0f));
+		anim.insert(0.3f, Vec2F(1.0f, 2.0f));
+		anim.insert(1.0f, Vec2F(1.0f, 3.0f));
+	}
 	
 	SparkParticle = ImpulseParticle;
 	SparkParticle.Sprite = Image("Player/Spark.png");
@@ -35,28 +42,29 @@ Ship::Ship(const Image& img) : Sprite(img)
 	SparkParticle.Mass = 5;
 	SparkParticle.Lifetime = 0.15f;
 	
-	SparkParticle.Animation.Alpha = KeyframeList<float>();
-	SparkParticle.Animation.Alpha[0.0].insert(0.0f);
-	SparkParticle.Animation.Alpha[0.2].insert(1.0f);
-	SparkParticle.Animation.Alpha[1.0].insert(0.0f);
+	{
+		auto& anim = SparkParticle.Animation.Alpha;
+		anim.clear();
+		anim.insert(0.0f, 0.0f);
+		anim.insert(0.2f, 1.0f);
+		anim.insert(1.0f, 0.0f);
+	}
 	
 	ShieldParticle.Sprite = Image("Ship/Shield.png");
 	ShieldParticle.DrawMode = RenderContext::Additive;
 	ShieldParticle.Lifetime = 0.2f;
 	ShieldParticle.Drag = 0.f;
 	
-	ShieldParticle.Animation.Alpha[0.0].insert(1.0f);
-	ShieldParticle.Animation.Alpha[0.5].insert(0.2f);
-	ShieldParticle.Animation.Alpha[1.0].insert(0.0f);
+	{
+		auto& anim = ShieldParticle.Animation.Alpha;
+		anim.clear();
+		anim.insert(0.0f, 1.0f);
+		anim.insert(0.5f, 0.2f);
+		anim.insert(1.0f, 0.0f);
+	}
 	
-	ShieldParticle.Animation.Color[0.0].insert(Colors::White);
-	ShieldParticle.Animation.Color[1.0].insert(Color(0.0f, 0.0f, 0.4f));
-	
-	ShieldParticle.Animation.Scale[0.0].insert(Vec2F(0.75f, 0.75f));
-	ShieldParticle.Animation.Scale[1.0].insert(Vec2F(0.75f, 0.75f));
-	
-	ShieldParticle.Animation.Rotation[0.0].insert(0.0_turn);
-	ShieldParticle.Animation.Rotation[1.0].insert(0.0_turn);
+	ShieldParticle.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
+	ShieldParticle.Animation.Scale = Vec2F(0.75f, 0.75f);
 }
 
 void Ship::update(float t, PlaySpace* space)

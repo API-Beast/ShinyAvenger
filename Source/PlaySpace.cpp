@@ -23,25 +23,21 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	b.Flow = 5;
 	b.Lifetime = 1.f;
 
-	b.ColorAnimation[0.0].insert(Colors::White);
-	b.ColorAnimation[0.5].insert(Colors::Saturated::Orange);
-	b.ColorAnimation[1.0].insert(Colors::Saturated::Red);
+	b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
+	b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
 
-	b.GlowColorAnimation[0.0].insert(Colors::Saturated::Yellow);
-	b.GlowColorAnimation[0.5].insert(Colors::Saturated::Orange);
-	b.GlowColorAnimation[1.0].insert(Colors::Saturated::Red);
+	b.GlowColorAnimation = Colors::Saturated::Yellow;
+	b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
+	b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
 
-	b.AlphaAnimation[0.0].insert(1.f);
-	b.AlphaAnimation[0.8].insert(1.f);
-	b.AlphaAnimation[1.0].insert(0.f);
+	b.AlphaAnimation.insert(0.8, 1.f);
+	b.AlphaAnimation.insert(1.0, 0.f);
 
-	b.ScaleAnimation[0.0].insert(1.f);
-	b.ScaleAnimation[0.2].insert(Vec2F(1.f, 4.f));
-	b.ScaleAnimation[0.8].insert(Vec2F(1.5f, 3.f));
-	b.ScaleAnimation[1.0].insert(Vec2F(0.5f, 4.f));
+	b.ScaleAnimation.insert(0.2, {1.f, 4.f});
+	b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
+	b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
 
-	b.GlowScaleAnimation[0.0].insert(2.f);
-	b.GlowScaleAnimation[1.0].insert(2.f);
+	b.GlowScaleAnimation = Vec2F(2.f);
 
 	b.Sprite = Image("Player/Bullet.png");
 	b.Glow = Image("Glow.png");
@@ -55,10 +51,10 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	GravitySources.pushBack({Vec2F(0,0), 100.f, 2500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
-	BackgroundGradient[0].insert(Color(0.22f, 0.15f, 0.24f));
-	BackgroundGradient[2000].insert(Color(0.42f, 0.15f, 0.14f));
-	BackgroundGradient[5000].insert(Color(0.12f, 0.10f, 0.10f));
-	BackgroundGradient[9000].insert(Colors::Black);
+	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
+	BackgroundGradient.insert(2000, Color(0.42f, 0.15f, 0.14f));
+	BackgroundGradient.insert(5000,Color(0.12f, 0.10f, 0.10f));
+	BackgroundGradient.insert(9000, Colors::Black);
 	
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);

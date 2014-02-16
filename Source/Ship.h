@@ -63,7 +63,7 @@ public:
 	
 	// AI
 	Behavior* AI = nullptr;
-    Particle ShieldParticle;
+	Particle ShieldParticle;
 public:
 	Ship(const Image& img);
 	virtual ~Ship();

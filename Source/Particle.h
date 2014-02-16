@@ -21,10 +21,10 @@ struct Particle : public PhysicsObject
 	
 	struct
 	{
-		KeyframeList<float> Alpha;
-		KeyframeList<ColorRGB> Color;
-		KeyframeList<Vec2F> Scale;
-		KeyframeList<Angle> Rotation;
+		KeyframeList<float> Alpha = 1.f;
+		KeyframeList<ColorRGB> Color = Colors::White;
+		KeyframeList<Vec2F> Scale = Vec2F(1.f);
+		KeyframeList<Angle> Rotation = 0.0_turn;
 	} Animation;
 	
 	virtual void update(float dt, PlaySpace* space);
