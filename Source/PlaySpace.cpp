@@ -15,6 +15,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
 	BackgroundFogB = Image("BackgroundFogB.png");
+	ForegroundFog = Image("ForegroundFog.png");
 	
 	Player = new Ship(Image("Player/Sprite.png"));
 	Player->Position = Vec2F{200, 150};
@@ -49,6 +50,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Spawner.Prototype.Sprite = Image("Enemy/Enemy01.png");
 	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
 	Spawner.Prototype.Faction = 2;
+	Spawner.Prototype.EngineAccleration *= 1.3f;
 	Spawner.spawnShip(this, Vec2F(500, 500));
 	
 	Objects.pushBack(Player);
@@ -99,7 +101,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.25f;
 		rBG.Scale = 1.9f;
-		rBG.setColor(BackgroundGradient[Player->Position.getLength()+3000]* 0.6f);
+		rBG.setColor(BackgroundGradient[Player->Position.getLength()+4000]* 0.6f);
 		BackgroundFogB.drawRepeated(rBG);
 	}
 	
@@ -115,7 +117,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.35f;
 		rBG.Scale = 3.f;
-		rBG.setColor(BackgroundGradient[Player->Position.getLength()+4500]* 0.9f);
+		rBG.setColor(BackgroundGradient[Player->Position.getLength()]* 0.9f);
 		BackgroundFog.drawRepeated(rBG);
 	}
 	
@@ -129,6 +131,14 @@ void PlaySpace::draw()
 		obj->draw(r);
 	for(Particle& particle : Particles)
 		particle.draw(r);
+	
+	{
+		RenderContext rBG(r);
+		rBG.Parallaxity = 2.00f;
+		rBG.Scale = 2.f;
+		rBG.setColor(BackgroundGradient[Player->Position.getLength()+2000]* 0.9f);
+		ForegroundFog.drawRepeated(rBG);
+	}
 	
 	GUIContainer.draw(&r);
 }

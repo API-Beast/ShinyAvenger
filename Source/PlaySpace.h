@@ -40,6 +40,7 @@ public:
 	Image BackgroundStars;
 	Image BackgroundFog;
 	Image BackgroundFogB;
+	Image ForegroundFog;
 	
 	List<PhysicsObject*> Objects;
 	List<Bullet> Bullets;
