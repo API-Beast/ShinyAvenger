@@ -21,29 +21,38 @@ void GravitySource::draw(RenderContext r)
 	// Background 1
 	r.Rotation = TimeSinceSpawn * 0.040_turn;
 	r.Scale = 1.2f;
-	r.setColor(BackgroundColor, 0.7f);
+	r.setColor(BackgroundColor*0.2f);
 	GlowSprite.drawStretched(Range*2, r);
 	
 	// Background 2
 	r.Rotation = TimeSinceSpawn * 0.070_turn;
 	r.Scale = 1.0f;
 	r.setColor(BackgroundColor, 0.9f);
+	r.setBlendingMode(RenderContext::Additive);
+	GlowSprite.drawStretched(Range*2, r);
+	
+	// Background 3
+	r.Rotation = TimeSinceSpawn * 0.090_turn;
+	r.Scale = 0.3f;
+	r.setColor(Colors::Black, 0.5f);
+	r.setBlendingMode(RenderContext::Default);
 	GlowSprite.drawStretched(Range*2, r);
 	
 	// Background Center 1
-	r.Rotation = TimeSinceSpawn * 0.060_turn;
+	r.Rotation = TimeSinceSpawn * 0.20_turn;
 	r.Scale = CenterSize * 1.5f;
-	r.setColor(CenterColor, 0.7f);
+	r.setColor(CenterColor, 0.9f);
 	Graphics.draw(r);
 	
 	// Background Center 2
-	r.Rotation = TimeSinceSpawn * 0.070_turn;
+	r.Rotation = TimeSinceSpawn * 0.25_turn;
 	r.Scale = CenterSize * 1.1f;
 	r.setColor(CenterColor);
+	r.setBlendingMode(RenderContext::Default);
 	Graphics.draw(r);
 	
 	// Background Center Highlight
-	r.Rotation = TimeSinceSpawn * 0.080_turn;
+	r.Rotation = TimeSinceSpawn * 0.30_turn;
 	r.Scale = CenterSize;
 	r.setColor(HighlightColor);
 	r.setBlendingMode(RenderContext::Additive);
