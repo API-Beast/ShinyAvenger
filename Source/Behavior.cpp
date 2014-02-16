@@ -11,7 +11,7 @@
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
-	Vec2F delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + Target->Position * 0.1));
+	Vec2F delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + ship->Speed * 0.1f));
 	float distance = delta.getLength();
 	
 	Angle targetRotation = Angle(delta);
