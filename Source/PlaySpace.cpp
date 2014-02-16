@@ -12,6 +12,10 @@
 
 PlaySpace::PlaySpace(GameSurface* surface)
 {
+	BackgroundStars = Image("BackgroundStars.png");
+	BackgroundFog = Image("BackgroundFog.png");
+	BackgroundFogB = Image("BackgroundFogB.png");
+	
 	Player = new Ship(Image("Player/Sprite.png"));
 	Player->Position = Vec2F{200, 150};
 	Player->Faction = 0;
@@ -52,9 +56,10 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	GravitySources.pushBack({Vec2F(0,0), 100.f, 2500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
 	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
-	BackgroundGradient.insert(2000, Color(0.42f, 0.15f, 0.14f));
-	BackgroundGradient.insert(5000,Color(0.12f, 0.10f, 0.10f));
-	BackgroundGradient.insert(9000, Colors::Black);
+	BackgroundGradient.insert(10000, Color(0.42f, 0.15f, 0.14f));
+	BackgroundGradient.insert(20000, Color(0.32f, 0.10f, 0.24f));
+	BackgroundGradient.insert(30000, Color(0.12f, 0.10f, 0.10f));
+	BackgroundGradient.insert(35000, Colors::Black);
 	
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
@@ -71,11 +76,48 @@ PlaySpace::~PlaySpace()
 
 void PlaySpace::draw()
 {
-	Color bgColor = BackgroundGradient[Player->Position.getLength()];
-	glClearColor(bgColor.Red, bgColor.Green, bgColor.Blue, 1.f);
+	//Color bgColor = BackgroundGradient[Player->Position.getLength()];
+	//glClearColor(bgColor.Red, bgColor.Green, bgColor.Blue, 1.f);
+	glClearColor(0, 0, 0, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	
 	RenderContext r;
+	r.RenderTargetOrigin = 0;
+	r.RenderTargetSize = ScreenSize;
 	r.CameraPos = CameraPos;
+	r.setColor(Colors::White);
+	
+	{
+		RenderContext rBG(r);
+		rBG.Parallaxity = 0.21f;
+		rBG.Scale = 1.2f;
+		//rBG.setColor(BackgroundGradient[Player->Position.getLength()+2500]* 0.8f);
+		BackgroundStars.drawRepeated(rBG);
+	}
+	
+	{
+		RenderContext rBG(r);
+		rBG.Parallaxity = 0.25f;
+		rBG.Scale = 1.9f;
+		rBG.setColor(BackgroundGradient[Player->Position.getLength()+3000]* 0.6f);
+		BackgroundFogB.drawRepeated(rBG);
+	}
+	
+	{
+		RenderContext rBG(r);
+		rBG.Parallaxity = 0.28f;
+		rBG.Scale = 1.6f;
+		//rBG.setColor(BackgroundGradient[Player->Position.getLength()+2500]* 0.8f);
+		BackgroundStars.drawRepeated(rBG);
+	}
+	
+	{
+		RenderContext rBG(r);
+		rBG.Parallaxity = 0.35f;
+		rBG.Scale = 3.f;
+		rBG.setColor(BackgroundGradient[Player->Position.getLength()+4500]* 0.9f);
+		BackgroundFog.drawRepeated(rBG);
+	}
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);

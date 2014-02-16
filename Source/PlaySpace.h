@@ -36,6 +36,11 @@ public:
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 public:
 	Ship* Player;
+	
+	Image BackgroundStars;
+	Image BackgroundFog;
+	Image BackgroundFogB;
+	
 	List<PhysicsObject*> Objects;
 	List<Bullet> Bullets;
 	List<GravitySource> GravitySources;

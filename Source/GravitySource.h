@@ -15,7 +15,7 @@ struct GravitySource
 {
 public:
 	GravitySource(Vec2F pos, float grav, float range, Color color, Color hcolor)
-	 : Position(pos),Gravity(grav),Range(range),CenterColor(color),HighlightColor(hcolor){};
+	 : Position(pos),Gravity(grav),Range(range),CenterColor(color),HighlightColor(hcolor),BackgroundColor(CenterColor*0.3f){};
 	GravitySource() = default;
 	void update(float dt, PlaySpace* space);
 	void draw(RenderContext r);
@@ -27,6 +27,7 @@ public:
 	
 	Color CenterColor;
 	Color HighlightColor;
+	Color BackgroundColor;
 	
 	float TimeSinceSpawn = 0.0f;
 	float CenterSize = 1.0f;
