@@ -34,6 +34,7 @@ public:
 	float ShieldEnergy = 100;
 	float MaxShield = 100;
 	float ShieldRegeneration = 0;
+	ShipState Status = Ship::Okay;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;
@@ -55,16 +56,20 @@ public:
 	
 	enum WeaponType
 	{
-		DoubleShot
+		MultiShot
 	};
 	// Weapon
 	struct _Weapon
 	{
 		float ShotDelay = 0.15f;
 		float ShotTimer = 0.0f;
-		WeaponType Type = Ship::DoubleShot;
+		WeaponType Type = Ship::MultiShot;
 		Bullet BulletPrototype;
-	} Weapon;
+		int Bullets = 2;
+		Angle Spread = 0_turn;
+	} PrimaryWeapon;
+	
+	_Weapon SecondaryWeapon;
 	
 	// AI
 	Behavior* AI = nullptr;
@@ -75,10 +80,12 @@ public:
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(RenderContext r);
 	virtual void updateBounds();
+	bool canBeDespawned(){ return Status == Destroyed; };
 	
 	void doDamage(float damage);
 	void updateControls(float t, PlaySpace* space);
 	void updateWeapon(float t, PlaySpace* space);
+	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
 };

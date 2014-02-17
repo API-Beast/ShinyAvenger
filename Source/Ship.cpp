@@ -76,9 +76,12 @@ void Ship::update(float t, PlaySpace* space)
 	if(AI)
 		AI->update(t, this, space);
 	
-	updateControls(t, space);
-	updateWeapon  (t, space);
-	updateFX      (t, space);
+	if(Status != Destroyed)
+	{
+		updateControls(t, space);
+		updateWeapon  (t, space);
+		updateFX      (t, space);
+	}
 }
 
 void Ship::updateControls(float t, PlaySpace* space)
@@ -138,38 +141,50 @@ void Ship::updateFX(float t, PlaySpace* space)
 	}
 }
 
+void Ship::shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation)
+{
+	Bullet bullet(prototype);
+	bullet.Faction = Faction;
+	bullet.Rotation = Rotation + rotation;
+	bullet.Speed = (Rotation + rotation ).toDirection()*1000 + Speed *0.8;
+	bullet.Position = Position + (Rotation+0.25_turn).toDirection()*xOffset;
+	bullet.update(deltaTimeFix, space);
+	space->applyPhysics(&bullet, deltaTimeFix);
+	space->spawnPlayerBullet(bullet);
+}
+
+
 void Ship::updateWeapon(float t, PlaySpace* space)
 {
 	if(IsShooting)
 	{
-		Weapon.ShotTimer -= t;
-		while(Weapon.ShotTimer <= 0.f)
+		PrimaryWeapon.ShotTimer -= t;
+		while(PrimaryWeapon.ShotTimer <= 0.f)
 		{
-			Bullet bullet(Weapon.BulletPrototype);
-			bullet.Faction = Faction;
-			bullet.Rotation = Rotation;
-			bullet.Speed = Rotation.toDirection()*1000 + Speed *0.8;
-			bullet.Position = Position + (Rotation+0.25_turn).toDirection()*10;
-			
-			Bullet bulletB(bullet);
-			bulletB.Position = Position - (Rotation+0.25_turn).toDirection()*10;
-			
-			bullet.update(-Weapon.ShotTimer, space);
-			bulletB.update(-Weapon.ShotTimer, space);
-			
-			space->applyPhysics(&bullet, -Weapon.ShotTimer);
-			space->applyPhysics(&bulletB, -Weapon.ShotTimer);
-			
-			space->spawnPlayerBullet(bullet);
-			space->spawnPlayerBullet(bulletB);
-			
-			Weapon.ShotTimer += Weapon.ShotDelay;
+			if(PrimaryWeapon.Bullets <= 1)
+				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, 0, 0_turn);
+			else if(PrimaryWeapon.Bullets == 2)
+			{
+				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, +10, 0_turn);
+				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, -10, 0_turn);
+			}
+			else if(Modulo(PrimaryWeapon.Bullets, 2) == 1)
+			{
+				for(int i = -PrimaryWeapon.Bullets/2; i <= PrimaryWeapon.Bullets/2; ++i)
+					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i, PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
+			}
+			else
+				for(int i = -PrimaryWeapon.Bullets/2; i < PrimaryWeapon.Bullets; ++i)
+					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), 0_turn);
+			PrimaryWeapon.ShotTimer += PrimaryWeapon.ShotDelay;
 		}
 	}
 }
 
 void Ship::onHit(Bullet* bullet, PlaySpace* space)
 {
+	if(ShieldEnergy <= 0)
+		return;
 	Particle p(ShieldParticle);
 	reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
 	p.Rotation = Angle(bullet->Position - Position);
@@ -197,7 +212,10 @@ void Ship::updateBounds()
 
 void Ship::doDamage(float damage)
 {
-	ShieldEnergy -= damage;
+	if(ShieldEnergy >= 0)
+		ShieldEnergy -= damage;
+	else
+		Status = Destroyed;
 }
 
 Ship::~Ship()

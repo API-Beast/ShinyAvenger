@@ -24,7 +24,7 @@ struct Bullet : public PhysicsObject
 	
 	bool HitObject = false;
 	
-	float Power = 10.f;
+	float Power = 2.f;
 	
 	KeyframeList<float> AlphaAnimation = 1.0f;
 	KeyframeList<Color> ColorAnimation = Colors::White;
