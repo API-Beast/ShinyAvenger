@@ -48,13 +48,13 @@ public:
 	
 	void append(UIContainer* Child) 
 	{ 
-		if (Child->parent != NULL)
-		{
-			Child->parent->remove(Child);
-		}
+		//if (Child->parent != NULL)
+		//{
+			//Child->parent->remove(Child);
+		//}
 		
 		Children.pushBack(Child); 
-		Child->parent = this;
+		//Child->parent = this;
 		
 	}
 	void remove(UIContainer* Child) { 		
@@ -62,7 +62,7 @@ public:
 		{
 			if (Child == Children[i])
 			{
-				Child->parent = NULL;
+				//Child->parent = NULL;
 				Children.quickRemove(i);
 				break;
 			}
