@@ -47,6 +47,7 @@ public:
 	// Diplomacy
 	int Faction = -1;
 	ColorRGB FactionColor = Colors::White;
+	Image FactionColorSprite;
 	
 	// Controls
 	float Steering = 0.0f;

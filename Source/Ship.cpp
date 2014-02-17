@@ -10,6 +10,8 @@
 
 Ship::Ship(const Image& img) : Sprite(img)
 {	
+	FactionColorSprite = Image("Player/FactionColor.png");
+	
 	ImpulseParticle.Sprite = Image("Player/Impulse.png");
 	ImpulseParticle.DrawMode = RenderContext::Additive;
 	ImpulseParticle.Lifetime = 0.2f;
@@ -200,13 +202,13 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 
 void Ship::draw(RenderContext r)
 {
-	if(Status == Okay)
-		r.setColor(FactionColor, 1.f);
-	else
-		r.setColor(Colors::Black);
+	if(Status == Destroyed)
+		r.setColor(Colors::Grey);
 	r.Offset = Position;
 	r.Rotation = Rotation;
 	Sprite.draw(r);
+	r.setColor(FactionColor, 1.f);
+	FactionColorSprite.draw(r);
 }
 
 void Ship::updateBounds()

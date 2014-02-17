@@ -257,31 +257,9 @@ bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)
    return shipA->Faction != shipB->Faction;
 }
 
-float getValue(float min, float max, int hash, float complexity) 
+ColorRGB PlaySpace::getFactionColor(int factionID)
 {
-	float difference = (max - min) / 2.0f;
-	return (float) (difference * cos(pow(hash, complexity)) + max - difference);
-}
-
-float getSeedRed(int hash) {
-	return getValue(0.6f, 1.0f, (int) pow(hash, 3), 2);
-}
-
-float getSeedGreen(int hash) {
-	return getValue(0.6f, 1.0f, hash * 100, 3);
-}
-
-float getSeedBlue(int hash) {
-	return getValue(0.6f, 1.0f, hash * 50, 5);
-}
-
-ColorRGB PlaySpace::getFactionColor(int FractionID)
-{
-  ColorRGB rgb;
-  
-  rgb.Red = getSeedRed(FractionID);
-  rgb.Green = getSeedGreen(FractionID);
-  rgb.Blue = getSeedBlue(FractionID);
-  
-  return rgb;
+	RandomNumberGenerator rng(factionID);
+  ColorHSY hsy(rng.generate(), rng.generate(0.8f, 1.0f), rng.generate(0.6f, 1.2f));
+	return ColorRGB(hsy);
 }
