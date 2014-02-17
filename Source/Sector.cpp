@@ -13,7 +13,7 @@ static RandomNumberGenerator RNG;
 
 Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
 : Center(center), Radius(r), Time(0), Interval(3.0), Prototype(Image("Player/Sprite.png")),
-TheGravitySource({center, 100.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
+TheGravitySource({center, 250.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
 {
 	
 	
