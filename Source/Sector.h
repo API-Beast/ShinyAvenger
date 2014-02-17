@@ -15,7 +15,6 @@ class PlaySpace;
 class Sector
 {
 private:
-	RandomNumberGenerator RNG;
 	float Time;
 	float Interval;
 public:

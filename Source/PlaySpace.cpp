@@ -8,8 +8,6 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
-#include <iostream>
-
 PlaySpace::PlaySpace(GameSurface* surface)
 {	
 	BackgroundStars = Image("BackgroundStars.png");
@@ -17,42 +15,18 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	BackgroundFogB = Image("BackgroundFogB.png");
 	ForegroundFog = Image("ForegroundFog.png");
 	
-	Player = new Ship(Image("Player/Sprite.png"));
-	Player->PrimaryWeapon.Bullets = 3;
-	Player->PrimaryWeapon.Spread = 0.08_turn;
-	Player->Position = Vec2F{200, 150};
+	HomeSector = new Sector(Vec2F(0.f, 0.f), 500.0f, this);
+	Sectors.pushBack(HomeSector);
+	Sectors.pushBack(new Sector(Vec2F(-2000.f, -500.f), 500.0f, this));
+	//Sectors.pushBack(new Sector(Vec2F(2000.f, 1000.f), 1000.0f, this));
 	
-	Bullet& b = Player->PrimaryWeapon.BulletPrototype;
-	b.Mass = 5;
-	b.Drag = 0;
-	b.Flow = 5;
-	b.Lifetime = 1.f;
-	b.Power = 10.f;
-
-	b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
-	b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
-
-	b.GlowColorAnimation = Colors::Saturated::Yellow;
-	b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
-	b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
-
-	b.AlphaAnimation.insert(0.8, 1.f);
-	b.AlphaAnimation.insert(1.0, 0.f);
-
-	b.ScaleAnimation.insert(0.2, {1.f, 4.f});
-	b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
-	b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
-
-	b.GlowScaleAnimation = Vec2F(2.f);
-
-	b.Sprite = Image("Player/Bullet.png");
-	b.Glow = Image("Glow.png");
-		
-	Player = Spawner.spawnShip(Vec2F(0.f, 0.f), this);
+	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
 	Player->PrimaryWeapon.Bullets = 3;
 	Player->AI = NULL;
 	Player->PrimaryWeapon.Spread = 0.08_turn;
 	Player->Position = Vec2F{200, 150};
+	Player->PrimaryWeapon.Bullets = 3;
+	Player->PrimaryWeapon.Spread = 0.08_turn;
 	
 	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient.insert(10000, Color(0.42f, 0.15f, 0.14f));
@@ -71,6 +45,9 @@ PlaySpace::~PlaySpace()
 {
 	for(PhysicsObject* obj : Objects)
 		delete obj;
+	
+	for(Sector* sec : Sectors)
+		delete sec;
 }
 
 void PlaySpace::draw()
@@ -144,7 +121,11 @@ void PlaySpace::update(float time)
 {
 	GameTime += time;
 	
-	Spawner.update(time, this);
+	for(int i = 0; i < Sectors.UsedLength; ++i)
+	{
+		Sectors[i]->update(time, this);
+	}
+	
 	GUIContainer.update(time);
 	
 	for(int i = 0; i < Bullets.UsedLength; ++i)

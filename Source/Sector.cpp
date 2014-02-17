@@ -8,12 +8,14 @@
 #include "PlaySpace.h"
 #include "Behavior.h"
 
+
+static RandomNumberGenerator RNG;
+
 Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
-: Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")),
-  TheGravitySource({center, 100.f, r, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
-{ 
-	ID = RNG.generate() * sizeof(int);
-	
+: Center(center), Radius(r), Time(0), Interval(3.0), Prototype(Image("Null.png")),
+  TheGravitySource({center, 100.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
+{
+	ID = RNG.generate() * 30000.0f;
 	Prototype.Sprite = Image("Player/Sprite.png");
 	Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
 	Prototype.PrimaryWeapon.ShotDelay = 0.4f;
@@ -22,18 +24,44 @@ Sector::Sector(Vec2F center, float r, PlaySpace *Space)
 	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
 	TheGravitySource.CenterColor = Space->getFactionColor(ID);
 	Space->GravitySources.pushBack(TheGravitySource);
+	
+	Bullet& b = Prototype.PrimaryWeapon.BulletPrototype;
+	b.Mass = 5;
+	b.Drag = 0;
+	b.Flow = 5;
+	b.Lifetime = 1.f;
+	b.Power = 10.f;
+
+	b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
+	b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
+
+	b.GlowColorAnimation = Colors::Saturated::Yellow;
+	b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
+	b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
+
+	b.AlphaAnimation.insert(0.8, 1.f);
+	b.AlphaAnimation.insert(1.0, 0.f);
+
+	b.ScaleAnimation.insert(0.2, {1.f, 4.f});
+	b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
+	b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
+
+	b.GlowScaleAnimation = Vec2F(2.f);
+
+	b.Sprite = Image("Player/Bullet.png");
+	b.Glow = Image("Glow.png");
 }
 void Sector::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
 	{
-		const int GROUP_SIZE = 2 + (Space->GameTime / 5000.f) / 10.0f;
+		const int GROUP_SIZE = 2;
 		Time = Time - Interval;
 		
-		float radius = RNG.generate(50.f, Radius);
+		float radius = RNG.generate(200.f, Radius);
 		Angle angle = Angle::FromTurn(RNG.generate());
 		
-		spawnGroup(angle.toDirection() * radius, GROUP_SIZE, Space);
+		spawnGroup(Center + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);
 	}
 }
 
