@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Space.h"
-#include "ShipSpawner.h"
+#include "Sector.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
@@ -40,6 +40,8 @@ public:
 public:
 	Ship* Player;
 	
+	Sector* HomeSector;
+	
 	Image BackgroundStars;
 	Image BackgroundFog;
 	Image BackgroundFogB;
@@ -49,12 +51,15 @@ public:
 	BitmapFont SmallFont;
 	
 	List<PhysicsObject*> Objects;
+	
 	List<Bullet> Bullets = List<Bullet>(512);
 	List<GravitySource> GravitySources;
 	List<Particle> Particles = List<Particle>(512);
+
 	List<Ship*> Ships;
+	List<Sector*> Sectors;
+
 	KeyframeList<Color> BackgroundGradient;
-	ShipSpawner Spawner;
 	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;

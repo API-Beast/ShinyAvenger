@@ -6,12 +6,13 @@
 
 #include "Behavior.h"
 #include "Ship.h"
+#include "PlaySpace.h"
 
 #include <iostream>
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
-	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed)
+	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed && space->isHostile(Target, ship))
 	{
 		Vec2F delta = ((Target->Position + Target->Speed * 0.2f) - (ship->Position + ship->Speed * 0.2f));
 		float distance = delta.getLength();
