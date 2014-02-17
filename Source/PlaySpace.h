@@ -48,7 +48,7 @@ public:
 	
 	List<PhysicsObject*> Objects;
 	List<Bullet> Bullets;
-	List<GravitySource> GravitySources;
+	List<GravitySource*> GravitySources;
 	List<Particle> Particles;
 	List<Ship*> Ships;
 	List<Sector*> Sectors;

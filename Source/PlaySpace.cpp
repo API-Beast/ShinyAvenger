@@ -95,8 +95,8 @@ void PlaySpace::draw()
 		BackgroundFog.drawRepeated(rBG);
 	}
 	
-	for(GravitySource& src : GravitySources)
-		src.draw(r);
+	for(GravitySource* src : GravitySources)
+		src->draw(r);
 	
 	r.setColor(Colors::White);
 	for(Bullet& obj : Bullets)
@@ -143,8 +143,8 @@ void PlaySpace::update(float time)
 	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
-	for(GravitySource& src : GravitySources)
-		src.update(time, this);
+	for(GravitySource* src : GravitySources)
+		src->update(time, this);
 	for(Bullet& obj : Bullets)
 		obj.update(time, this);
 	for(Particle& particle : Particles)
@@ -182,8 +182,8 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	obj->Speed -= obj->Speed * ((AirDrag * obj->Drag * dt) + (obj->NegativeForce * dt)) * obj->Speed.getLength();
 	
 	// Add gravity
-	for(GravitySource& src : GravitySources)
-		src.influence(obj, dt);
+	for(GravitySource* src : GravitySources)
+		src->influence(obj, dt);
 	
 	obj->Rotation += Angle(obj->RotationSpeed * dt);
 	

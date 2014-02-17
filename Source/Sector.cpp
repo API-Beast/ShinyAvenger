@@ -51,7 +51,7 @@ Sector::Sector(Vec2F center, float r, PlaySpace *Space)
 	b.Sprite = Image("Player/Bullet.png");
 	b.Glow = Image("Glow.png");
 	
-	Space->GravitySources.pushBack(*TheGravitySource);
+	Space->GravitySources.pushBack(TheGravitySource);
 }
 
 Sector::~Sector()
