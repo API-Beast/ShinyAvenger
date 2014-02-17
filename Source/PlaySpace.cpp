@@ -13,6 +13,14 @@
 PlaySpace::PlaySpace(GameSurface* surface)
 : Spawner(Vec2F(0.f, 0.f), 1500.f)
 {
+	// TODO: Move this code into the sector!
+	Spawner.TheGravitySource.BackgroundColor = getFactionColor(Spawner.ID);
+	Spawner.TheGravitySource.BackgroundColor.Red /= 3.f;
+	Spawner.TheGravitySource.BackgroundColor.Green /= 3.f;
+	Spawner.TheGravitySource.BackgroundColor.Blue /= 3.f;
+	Spawner.TheGravitySource.CenterColor = getFactionColor(Spawner.ID);
+	GravitySources.pushBack(Spawner.TheGravitySource);
+	
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
 	BackgroundFogB = Image("BackgroundFogB.png");
@@ -60,8 +68,6 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Player->AI = NULL;
 	Player->PrimaryWeapon.Spread = 0.08_turn;
 	Player->Position = Vec2F{200, 150};
-	
-	GravitySources.pushBack({Vec2F(0,0), 100.f, 2500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
 	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient.insert(10000, Color(0.42f, 0.15f, 0.14f));

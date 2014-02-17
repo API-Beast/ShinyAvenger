@@ -9,7 +9,8 @@
 #include "Behavior.h"
 
 Sector::Sector(Vec2F center, float r) 
-: Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")) 
+: Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")),
+  TheGravitySource({center, 100.f, r, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
 { 
 	ID = RNG.generate() * sizeof(int);
 }

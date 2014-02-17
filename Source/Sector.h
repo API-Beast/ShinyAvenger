@@ -8,6 +8,7 @@
 
 #include <Springbok/Geometry/Vec2.h>
 #include "Ship.h"
+#include "GravitySource.h"
 
 class PlaySpace;
 
@@ -17,12 +18,12 @@ private:
 	RandomNumberGenerator RNG;
 	float Time;
 	float Interval;
-	
 public:
 	float Radius;	
 	Vec2F Center;	
 	int ID;		
 	Ship Prototype;
+	GravitySource TheGravitySource;
 public:
 	Sector(Vec2F center, float r);
 	
