@@ -6,18 +6,30 @@
 
 #pragma once
 
+#include <Springbok/Geometry/Vec2.h>
+#include "Ship.h"
+
 class PlaySpace;
 
 class Sector
 {
+private:
+	RandomNumberGenerator RNG;
+	float Time;
+	float Interval;
 	
 public:
 	float Radius;	
 	Vec2F Center;	
-	int ID;	
+	int ID;		
+	Ship Prototype;
 public:
-	Sector() { }
+	Sector(Vec2F center, float r) : Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")) { }
 	
-	void update(float, PlaySpace*);
+        // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
+	void spawnGroup(PlaySpace*);
+	
+private:
+	void spawnShip(Vec2<float>, PlaySpace*);
 };
 
