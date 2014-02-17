@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Space.h"
-#include "ShipSpawner.h"
+#include "Sector.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
@@ -50,7 +50,7 @@ public:
 	List<Particle> Particles;
 	List<Ship*> Ships;
 	KeyframeList<Color> BackgroundGradient;
-	ShipSpawner Spawner;
+	Sector Spawner;
 	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;

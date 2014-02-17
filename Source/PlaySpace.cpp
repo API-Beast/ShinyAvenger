@@ -11,6 +11,7 @@
 #include <iostream>
 
 PlaySpace::PlaySpace(GameSurface* surface)
+: Spawner(Vec2F(0.f, 0.f), 1500.f)
 {
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
@@ -56,7 +57,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Spawner.Prototype.PrimaryWeapon.ShotDelay = 0.4f;
 	Spawner.Prototype.Faction = 2;
 	Spawner.Prototype.EngineAccleration *= 1.3f;
-	Spawner.spawnShip(this, Vec2F(500, 500));
+	Spawner.spawnGroup(Vec2F(0.f, 0.f), 5, this);
 	
 	Objects.pushBack(Player);
 	

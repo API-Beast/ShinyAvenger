@@ -12,20 +12,25 @@ void Sector::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
 	{
+		const int GROUP_SIZE = 2 + (Space->GameTime / 5000.f) / 10.0f;
 		Time = Time - Interval;
-		spawnGroup(RNG.generateVec2(Center - Radius, Center + Radius), Space);
+		
+		float radius = RNG.generate(50.f, Radius);
+		Angle angle = RNG.generate(0_turn, 1_turn);
+		
+		spawnGroup(angle.toDirection() * radius, GROUP_SIZE, Space);
 	}
 }
 
-void Sector::spawnGroup(Vec2F pos, PlaySpace *Space)
+void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 {
-	const int GROUP_SIZE = 2 + (Space->GameTime / 1000.f) / 10.0f;
+	
 	const float SPRAY_FACTOR = 150.f;
 	
 	
-	for(int i = 0; i < GROUP_SIZE; ++i)
+	for(int i = 0; i < groupSize; ++i)
 	{
-		spawnShip(pos + RNG.generate(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
+		spawnShip(pos + RNG.generateVec2<>(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
 	}
 }
 
