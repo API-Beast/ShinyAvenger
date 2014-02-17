@@ -173,12 +173,13 @@ void PlaySpace::update(float time)
 	for(Bullet& bullet : Bullets)
 		for(Ship* ship : Ships)
 			if(ship->Faction != bullet.Faction)
-				if(IsIntersecting(bullet.Bounds, ship->Bounds))
-				{
-					bullet.onHit(ship, this);
-					ship->onHit(&bullet, this);
-				}
-	
+				if(ship->Status != Ship::Destroyed)
+					if(IsIntersecting(bullet.Bounds, ship->Bounds))
+					{
+						bullet.onHit(ship, this);
+						ship->onHit(&bullet, this);
+					}
+		
 	CameraPos = -(ScreenSize/2) + Player->Position;
 	
 	// Will be reset to true before next PlaySpace::update
