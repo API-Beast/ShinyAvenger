@@ -8,6 +8,11 @@
 #include "PlaySpace.h"
 #include "Behavior.h"
 
+Sector::Sector(Vec2F center, float r) 
+: Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")) 
+{ 
+	ID = RNG.generate() * sizeof(int);
+}
 void Sector::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
@@ -16,7 +21,7 @@ void Sector::update(float delta, PlaySpace *Space)
 		Time = Time - Interval;
 		
 		float radius = RNG.generate(50.f, Radius);
-		Angle angle = RNG.generate(0_turn, 1_turn);
+		Angle angle = Angle::FromTurn(RNG.generate());
 		
 		spawnGroup(angle.toDirection() * radius, GROUP_SIZE, Space);
 	}
@@ -34,12 +39,15 @@ void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	}
 }
 
-void Sector::spawnShip(Vec2F position, PlaySpace *Space)
+Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 {
 	Ship* ship = new Ship(Prototype);
-	ship->AI = new TrackingBehavior(Space->Player);
+	ship->AI = new TrackingBehavior(NULL);
 	ship->Position = position;
-	ship->FactionColor = Space->getFactionColor(rand() % 1000);
+	ship->Faction = ID;
+	ship->Rotation = Angle::FromTurn(RNG.generate());
+	ship->FactionColor = Space->getFactionColor(ID);
 	Space->Ships.pushBack(ship);
 	Space->Objects.pushBack(ship);
+	return ship;
 }

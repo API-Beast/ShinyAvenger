@@ -22,8 +22,6 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Player->PrimaryWeapon.Bullets = 3;
 	Player->PrimaryWeapon.Spread = 0.08_turn;
 	Player->Position = Vec2F{200, 150};
-	Player->Faction = 0;
-	Ships.pushBack(Player);
 	
 	Bullet& b = Player->PrimaryWeapon.BulletPrototype;
 	b.Mass = 5;
@@ -55,11 +53,13 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Spawner.Prototype.PrimaryWeapon.BulletPrototype = Player->PrimaryWeapon.BulletPrototype;
 	Spawner.Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
 	Spawner.Prototype.PrimaryWeapon.ShotDelay = 0.4f;
-	Spawner.Prototype.Faction = 2;
 	Spawner.Prototype.EngineAccleration *= 1.3f;
-	Spawner.spawnGroup(Vec2F(0.f, 0.f), 5, this);
-	
-	Objects.pushBack(Player);
+		
+	Player = Spawner.spawnShip(Vec2F(0.f, 0.f), this);
+	Player->PrimaryWeapon.Bullets = 3;
+	Player->AI = NULL;
+	Player->PrimaryWeapon.Spread = 0.08_turn;
+	Player->Position = Vec2F{200, 150};
 	
 	GravitySources.pushBack({Vec2F(0,0), 100.f, 2500.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
 	
