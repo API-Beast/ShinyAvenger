@@ -30,7 +30,10 @@ public:
 	// General
 	Image Sprite;
 	float EngineAccleration = 400;
+	
 	float ShieldEnergy = 100;
+	float MaxShield = 100;
+	float ShieldRegeneration = 0;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;
@@ -38,6 +41,7 @@ public:
 	Particle SparkParticle;
 	float ImpulseTimer = 0.f;
 	float ImpulseSparkTimer = 0.f;
+	KeyframeList<Color> ShieldColors;
 	
 	// Diplomacy
 	int Faction = -1;
@@ -72,6 +76,7 @@ public:
 	virtual void draw(RenderContext r);
 	virtual void updateBounds();
 	
+	void doDamage(float damage);
 	void updateControls(float t, PlaySpace* space);
 	void updateWeapon(float t, PlaySpace* space);
 	void updateFX(float t, PlaySpace* space);

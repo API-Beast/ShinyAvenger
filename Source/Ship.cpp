@@ -65,6 +65,10 @@ Ship::Ship(const Image& img) : Sprite(img)
 	
 	ShieldParticle.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
 	ShieldParticle.Animation.Scale = Vec2F(0.75f, 0.75f);
+	
+	ShieldColors.insert(0.0f, Colors::White);
+	ShieldColors.insert(0.5f, Colors::Saturated::Cyan);
+	ShieldColors.insert(1.0f, Colors::Saturated::Red);
 }
 
 void Ship::update(float t, PlaySpace* space)
@@ -173,6 +177,7 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 	p.Drag = 0;
 	p.Flow = 0;
 	p.Stabilizer = 0;
+	p.Animation.Color.insert(0.05f, ShieldColors[Min(ShieldEnergy, 1.f) / MaxShield]);
 	space->spawnParticle(p);
 }
 
@@ -188,6 +193,11 @@ void Ship::updateBounds()
 {
 	Bounds.Size = Sprite.getSize();
 	PhysicsObject::updateBounds();
+}
+
+void Ship::doDamage(float damage)
+{
+	ShieldEnergy -= damage;
 }
 
 Ship::~Ship()

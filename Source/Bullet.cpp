@@ -32,4 +32,5 @@ void Bullet::draw(RenderContext r)
 void Bullet::onHit(Ship* which, PlaySpace* space)
 {
 	HitObject = true;
+	which->doDamage(Power);
 }
