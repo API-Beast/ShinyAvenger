@@ -198,7 +198,10 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 
 void Ship::draw(RenderContext r)
 {
-	r.setColor(FactionColor, 1.f);
+	if(Status == Okay)
+		r.setColor(FactionColor, 1.f);
+	else
+		r.setColor(Colors::Black);
 	r.Offset = Position;
 	r.Rotation = Rotation;
 	Sprite.draw(r);
