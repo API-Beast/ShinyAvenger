@@ -34,7 +34,7 @@ void ShipSpawner::spawnShip(PlaySpace *space, Vec2F position)
 	Ship* ship = new Ship(Prototype);
 	ship->AI = new TrackingBehavior(space->Player);
 	ship->Position = position;
-	
+	ship->FactionColor = space->getFactionColor(rand() % 1000);
 	space->Ships.pushBack(ship);
 	space->Objects.pushBack(ship);
 }

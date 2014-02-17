@@ -25,7 +25,7 @@ void EnemyArrow::draw(RenderContext* Context)
 			Opacity = 0;
 		}
 			
-		Context->setColor(ColorRGB(1, 1, 1), Opacity);
+		Context->setColor(ship->FactionColor, Opacity);
 		ArrowImage.draw(*Context);
 		
 	}

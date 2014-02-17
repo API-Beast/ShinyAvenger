@@ -246,3 +246,37 @@ void PlaySpace::spawnParticle(Particle particle)
 {
 	Particles.pushBack(particle);
 }
+
+bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)
+{
+   return shipA->Faction != shipB->Faction;
+}
+
+float getValue(float min, float max, int hash, float complexity) 
+{
+	float difference = (max - min) / 2.0f;
+	return (float) (difference * cos(pow(hash, complexity)) + max - difference);
+}
+
+float getSeedRed(int hash) {
+	return getValue(0.3f, 0.6f, (int) pow(hash, 3), 2);
+}
+
+float getSeedGreen(int hash) {
+	return getValue(0.3f, 0.7f, hash * 100, 3);
+}
+
+float getSeedBlue(int hash) {
+	return getValue(0.3f, 1.0f, hash * 50, 5);
+}
+
+ColorRGB PlaySpace::getFactionColor(int FractionID)
+{
+  ColorRGB rgb;
+  
+  rgb.Red = getSeedRed(FractionID);
+  rgb.Green = getSeedGreen(FractionID);
+  rgb.Blue = getSeedBlue(FractionID);
+  
+  return rgb;
+}

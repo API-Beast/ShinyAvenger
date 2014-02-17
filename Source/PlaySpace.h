@@ -34,6 +34,8 @@ public:
 	void spawnPlayerBullet(Bullet bullet);
 	void spawnParticle(Particle particle);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
+	bool isHostile(Ship *, Ship*);
+	ColorRGB getFactionColor(int);
 public:
 	Ship* Player;
 	
