@@ -211,7 +211,7 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 	
 	Angle diff = Angle(obj->Speed) - obj->Rotation;
 	obj->Rotation += diff * obj->Flow * (obj->Speed.getLength() / 500) * dt;
-	obj->RotationSpeed -= ((obj->Stabilizer * dt) + (AirDrag * obj->Flow * dt)) * obj->RotationSpeed;
+	obj->RotationSpeed -= ((obj->Stabilizer * dt) + (RotationAirDrag * obj->Flow * dt)) * obj->RotationSpeed;
 
 	obj->Position += obj->Speed * dt;
 	obj->updateBounds();

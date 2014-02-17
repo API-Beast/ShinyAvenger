@@ -56,6 +56,7 @@ public:
 	
 	Vec2I Size;
 
-	float AirDrag = 0.0005f;
+	float AirDrag = 0.001f;
+	float RotationAirDrag = 0.01f;
 	float GameTime = 0.0f;
 };
