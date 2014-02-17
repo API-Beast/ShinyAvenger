@@ -8,11 +8,19 @@
 #include "PlaySpace.h"
 #include "Behavior.h"
 
-void Sector::spawnGroup(PlaySpace *Space)
+void Sector::update(float delta, PlaySpace *Space)
+{
+	if ((Time += delta) > Interval)
+	{
+		Time = Time - Interval;
+		spawnGroup(RNG.generateVec2(Center - Radius, Center + Radius), Space);
+	}
+}
+
+void Sector::spawnGroup(Vec2F pos, PlaySpace *Space)
 {
 	const int GROUP_SIZE = 2 + (Space->GameTime / 1000.f) / 10.0f;
 	const float SPRAY_FACTOR = 150.f;
-	Vec2F pos = RNG.generateVec2(Center - Radius, Center + Radius);
 	
 	
 	for(int i = 0; i < GROUP_SIZE; ++i)

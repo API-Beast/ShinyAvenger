@@ -27,7 +27,9 @@ public:
 	Sector(Vec2F center, float r) : Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")) { }
 	
         // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
-	void spawnGroup(PlaySpace*);
+	void spawnGroup(Vec2F, PlaySpace*);
+	
+	void update(float, PlaySpace*);
 	
 private:
 	void spawnShip(Vec2<float>, PlaySpace*);
