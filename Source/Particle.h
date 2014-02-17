@@ -13,22 +13,27 @@
 
 struct Particle : public PhysicsObject
 {
-	Image Sprite;
-	RenderContext::BlendingMode DrawMode = RenderContext::Additive;
-	
 	float TimeSinceSpawn = 0.f;
-	float Lifetime = 2.f;
 	
-	struct
+	struct _Definition
 	{
-		KeyframeList<float> Alpha = 1.f;
-		KeyframeList<ColorRGB> Color = Colors::White;
-		KeyframeList<Vec2F> Scale = Vec2F(1.f);
-		KeyframeList<Angle> Rotation = 0.0_turn;
-	} Animation;
+		Image Sprite;
+		float Lifetime = 2.f;
+		RenderContext::BlendingMode DrawMode = RenderContext::Additive;
+		PhysicsObject PhysicsProperties;
+		struct
+		{
+			KeyframeList<float> Alpha = 1.f;
+			KeyframeList<ColorRGB> Color = Colors::White;
+			KeyframeList<Vec2F> Scale = Vec2F(1.f);
+			KeyframeList<Angle> Rotation = 0.0_turn;
+		} Animation;
+	} *Definition = nullptr;
 	
+	Particle() = default;
+	Particle(Particle::_Definition& def);
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
-	bool canBeDespawned(){ return TimeSinceSpawn > Lifetime; };
-	float normalizedAge(){ return TimeSinceSpawn / Lifetime; };
+	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime; };
+	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };
 };
