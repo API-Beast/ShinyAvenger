@@ -47,7 +47,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	b.Sprite = Image("Player/Bullet.png");
 	b.Glow = Image("Glow.png");
 	
-	Spawner.Prototype.Sprite = Image("Enemy/Enemy01.png");
+	Spawner.Prototype.Sprite = Image("Player/Sprite.png");
 	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
 	Spawner.Prototype.Faction = 2;
 	Spawner.Prototype.EngineAccleration *= 1.3f;
@@ -259,15 +259,15 @@ float getValue(float min, float max, int hash, float complexity)
 }
 
 float getSeedRed(int hash) {
-	return getValue(0.3f, 0.6f, (int) pow(hash, 3), 2);
+	return getValue(0.6f, 1.0f, (int) pow(hash, 3), 2);
 }
 
 float getSeedGreen(int hash) {
-	return getValue(0.3f, 0.7f, hash * 100, 3);
+	return getValue(0.6f, 1.0f, hash * 100, 3);
 }
 
 float getSeedBlue(int hash) {
-	return getValue(0.3f, 1.0f, hash * 50, 5);
+	return getValue(0.6f, 1.0f, hash * 50, 5);
 }
 
 ColorRGB PlaySpace::getFactionColor(int FractionID)
