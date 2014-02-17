@@ -82,6 +82,8 @@ void Ship::update(float t, PlaySpace* space)
 		updateWeapon  (t, space);
 		updateFX      (t, space);
 	}
+	else
+		Acceleration = 0;
 }
 
 void Ship::updateControls(float t, PlaySpace* space)
