@@ -11,16 +11,7 @@
 #include <iostream>
 
 PlaySpace::PlaySpace(GameSurface* surface)
-: Spawner(Vec2F(0.f, 0.f), 1500.f)
-{
-	// TODO: Move this code into the sector!
-	Spawner.TheGravitySource.BackgroundColor = getFactionColor(Spawner.ID);
-	Spawner.TheGravitySource.BackgroundColor.Red /= 3.f;
-	Spawner.TheGravitySource.BackgroundColor.Green /= 3.f;
-	Spawner.TheGravitySource.BackgroundColor.Blue /= 3.f;
-	Spawner.TheGravitySource.CenterColor = getFactionColor(Spawner.ID);
-	GravitySources.pushBack(Spawner.TheGravitySource);
-	
+{	
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
 	BackgroundFogB = Image("BackgroundFogB.png");
@@ -56,12 +47,6 @@ PlaySpace::PlaySpace(GameSurface* surface)
 
 	b.Sprite = Image("Player/Bullet.png");
 	b.Glow = Image("Glow.png");
-	
-	Spawner.Prototype.Sprite = Image("Player/Sprite.png");
-	Spawner.Prototype.PrimaryWeapon.BulletPrototype = Player->PrimaryWeapon.BulletPrototype;
-	Spawner.Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
-	Spawner.Prototype.PrimaryWeapon.ShotDelay = 0.4f;
-	Spawner.Prototype.EngineAccleration *= 1.3f;
 		
 	Player = Spawner.spawnShip(Vec2F(0.f, 0.f), this);
 	Player->PrimaryWeapon.Bullets = 3;

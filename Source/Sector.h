@@ -25,7 +25,7 @@ public:
 	Ship Prototype;
 	GravitySource TheGravitySource;
 public:
-	Sector(Vec2F center, float r);
+	Sector(Vec2F center, float r, PlaySpace*);
 	
         // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
 	void spawnGroup(Vec2F, int, PlaySpace*);

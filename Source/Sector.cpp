@@ -8,11 +8,20 @@
 #include "PlaySpace.h"
 #include "Behavior.h"
 
-Sector::Sector(Vec2F center, float r) 
+Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
 : Center(center), Radius(r), Time(0), Interval(5.0), Prototype(Image("Null.png")),
   TheGravitySource({center, 100.f, r, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
 { 
 	ID = RNG.generate() * sizeof(int);
+	
+	Prototype.Sprite = Image("Player/Sprite.png");
+	Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
+	Prototype.PrimaryWeapon.ShotDelay = 0.4f;
+	Prototype.EngineAccleration *= 1.3f;
+	
+	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
+	TheGravitySource.CenterColor = Space->getFactionColor(ID);
+	Space->GravitySources.pushBack(TheGravitySource);
 }
 void Sector::update(float delta, PlaySpace *Space)
 {

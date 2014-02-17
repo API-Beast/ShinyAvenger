@@ -39,6 +39,8 @@ public:
 public:
 	Ship* Player;
 	
+	Sector* HomeSector;
+	
 	Image BackgroundStars;
 	Image BackgroundFog;
 	Image BackgroundFogB;
@@ -49,8 +51,9 @@ public:
 	List<GravitySource> GravitySources;
 	List<Particle> Particles;
 	List<Ship*> Ships;
+	List<Sector*> Sectors;
+
 	KeyframeList<Color> BackgroundGradient;
-	Sector Spawner;
 	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;
