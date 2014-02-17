@@ -26,4 +26,7 @@ public:
 
 	TrackingBehavior(Ship* t) : Target(t) {}
 	void update(float t, Ship *const ship, PlaySpace* space);
+	
+private:
+	Ship* findTargetFor(Ship*,PlaySpace*);
 };

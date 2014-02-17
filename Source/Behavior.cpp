@@ -56,5 +56,20 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 		ship->IsBraking = false;
 		ship->IsShooting = false;
 		ship->IsStabilizing = 1;
+		
+		Target = findTargetFor(ship, space);
 	}
+}
+
+Ship* TrackingBehavior::findTargetFor(Ship *ship, PlaySpace *Space)
+{
+	for (Ship* other : Space->Ships)
+	{
+	    if (Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+	    {
+		return other;    
+	    }
+	}
+	
+	return NULL;
 }
