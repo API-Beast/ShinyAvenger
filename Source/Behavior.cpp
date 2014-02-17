@@ -11,40 +11,49 @@
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
-	Vec2F delta = ((Target->Position + Target->Speed * 0.2f) - (ship->Position + ship->Speed * 0.2f));
-	float distance = delta.getLength();
-	if(distance < 250)
+	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed)
 	{
-		delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + ship->Speed * 0.1f));
-		distance = delta.getLength();
-	}
-	
-	Angle targetRotation = Angle(delta);
-	Angle angleDelta = ship->Rotation - targetRotation;
-	
-	if(Abs(angleDelta) > 0.01_turn)
-	{
-		ship->IsStabilizing = 0;
-		if(angleDelta > 0_turn)
-			ship->Steering = -1;
+		Vec2F delta = ((Target->Position + Target->Speed * 0.2f) - (ship->Position + ship->Speed * 0.2f));
+		float distance = delta.getLength();
+		if(distance < 250)
+		{
+			delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + ship->Speed * 0.1f));
+			distance = delta.getLength();
+		}
+		
+		Angle targetRotation = Angle(delta);
+		Angle angleDelta = ship->Rotation - targetRotation;
+		
+		if(Abs(angleDelta) > 0.01_turn)
+		{
+			ship->IsStabilizing = 0;
+			if(angleDelta > 0_turn)
+				ship->Steering = -1;
+			else
+				ship->Steering =  1;
+		}
 		else
-			ship->Steering =  1;
-	}
-	else
+		{
+			ship->Steering = 0;
+			ship->IsStabilizing = 1;
+		}
+		
+		if(Abs(angleDelta) < 0.05_turn && distance < 750)
+			ship->IsShooting = 1;
+		else
+			ship->IsShooting = false;
+		
+		if(Abs(angleDelta) > 0.25_turn || distance < 500)
+			ship->IsBraking = true;
+		else
+			ship->IsBraking = false;
+	} 
+	else 
 	{
+		// Fly away!
 		ship->Steering = 0;
+		ship->IsBraking = false;
+		ship->IsShooting = false;
 		ship->IsStabilizing = 1;
 	}
-	
-	if(Abs(angleDelta) < 0.05_turn && distance < 750)
-		ship->IsShooting = 1;
-	else
-		ship->IsShooting = false;
-	
-	if(Abs(angleDelta) > 0.25_turn || distance < 500)
-		ship->IsBraking = true;
-	else
-		ship->IsBraking = false;
-	
-	//std::cout << ship->Rotation << " -> " << targetRotation << " = " << angleDelta << " (" << ship->IsShooting << ")" << std::endl;
 }

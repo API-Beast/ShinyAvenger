@@ -18,6 +18,7 @@ class UIContainer
 {	
 protected:	
 	List<UIContainer*> Children;
+	UIContainer *parent;
 public:		
 	Vec2F Position;
 	Vec2F Size;
@@ -40,17 +41,28 @@ public:
 		}
 	}
 	
-	float left() { return Position.X; }
-	float top() { return Position.Y; }
-	float right() { return Position.X + Size.X; }
-	float bottom() { return Position.Y + Size.Y; }
+	float left() { return parent->left() + Position.X; }
+	float top() { return parent->top() + Position.Y; }
+	float right() { return left() + Size.X; }
+	float bottom() { return top() + Size.Y; }
 	
-	void append(UIContainer* Child) { Children.pushBack(Child); }
+	void append(UIContainer* Child) 
+	{ 
+		//if (Child->parent != NULL)
+		//{
+			//Child->parent->remove(Child);
+		//}
+		
+		Children.pushBack(Child); 
+		//Child->parent = this;
+		
+	}
 	void remove(UIContainer* Child) { 		
 		for (int i = 0; i < Children.UsedLength; ++i)
 		{
 			if (Child == Children[i])
 			{
+				//Child->parent = NULL;
 				Children.quickRemove(i);
 				break;
 			}

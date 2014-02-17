@@ -22,8 +22,8 @@ public:
 class TrackingBehavior : public Behavior
 {
 public:
-	PhysicsObject* Target;
+	Ship* Target;
 
-	TrackingBehavior(PhysicsObject* PhysicsTarget) : Target(PhysicsTarget) {}
+	TrackingBehavior(Ship* t) : Target(t) {}
 	void update(float t, Ship *const ship, PlaySpace* space);
 };
