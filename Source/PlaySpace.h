@@ -18,6 +18,7 @@
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
+#include <Springbok/Graphics/BitmapFont.h>
 
 class Ship;
 
@@ -44,6 +45,9 @@ public:
 	Image BackgroundFogB;
 	Image ForegroundFog;
 	
+	BitmapFont BigFont;
+	BitmapFont SmallFont;
+	
 	List<PhysicsObject*> Objects;
 	List<Bullet> Bullets;
 	List<GravitySource> GravitySources;
@@ -61,4 +65,5 @@ public:
 	float AirDrag = 0.001f;
 	float RotationAirDrag = 0.01f;
 	float GameTime = 0.0f;
+	float LastDeltaTime = 0.0f;
 };
