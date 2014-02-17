@@ -22,10 +22,10 @@ public:
 	Vec2F Center;	
 	int ID;		
 	Ship Prototype;
-	GravitySource TheGravitySource;
+	GravitySource *TheGravitySource;
 public:
 	Sector(Vec2F center, float r, PlaySpace*);
-	
+	~Sector();
         // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
 	void spawnGroup(Vec2F, int, PlaySpace*);
 	Ship* spawnShip(Vec2<float>, PlaySpace*);

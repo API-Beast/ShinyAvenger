@@ -15,19 +15,6 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	BackgroundFogB = Image("BackgroundFogB.png");
 	ForegroundFog = Image("ForegroundFog.png");
 	
-	HomeSector = new Sector(Vec2F(0.f, 0.f), 500.0f, this);
-	Sectors.pushBack(HomeSector);
-	Sectors.pushBack(new Sector(Vec2F(-2000.f, -500.f), 500.0f, this));
-	//Sectors.pushBack(new Sector(Vec2F(2000.f, 1000.f), 1000.0f, this));
-	
-	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
-	Player->PrimaryWeapon.Bullets = 3;
-	Player->AI = NULL;
-	Player->PrimaryWeapon.Spread = 0.08_turn;
-	Player->Position = Vec2F{200, 150};
-	Player->PrimaryWeapon.Bullets = 3;
-	Player->PrimaryWeapon.Spread = 0.08_turn;
-	
 	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
 	BackgroundGradient.insert(10000, Color(0.42f, 0.15f, 0.14f));
 	BackgroundGradient.insert(20000, Color(0.32f, 0.10f, 0.24f));
@@ -36,6 +23,19 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
+	
+	HomeSector = new Sector(Vec2F(0.f, 0.f), 500.0f, this);
+	Sectors.pushBack(HomeSector);
+	Sectors.pushBack(new Sector(Vec2F(-2000.f, -500.f), 500.0f, this));
+	Sectors.pushBack(new Sector(Vec2F(2000.f, 1000.f), 1000.0f, this));
+	
+	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
+	Player->PrimaryWeapon.Bullets = 3;
+	Player->AI = NULL;
+	Player->PrimaryWeapon.Spread = 0.08_turn;
+	Player->Position = Vec2F{200, 150};
+	Player->PrimaryWeapon.Bullets = 3;
+	Player->PrimaryWeapon.Spread = 0.08_turn;
 	
 	EnemyArrow *Arrow = new EnemyArrow(this);
 	GUIContainer.append(Arrow);

@@ -12,18 +12,18 @@
 static RandomNumberGenerator RNG;
 
 Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
-: Center(center), Radius(r), Time(0), Interval(3.0), Prototype(Image("Null.png")),
-  TheGravitySource({center, 100.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
+: Center(center), Radius(r), Time(0), Interval(3.0), Prototype(Image("Player/Sprite.png"))
 {
+	TheGravitySource = new GravitySource({center, 100.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)});
+	
+	
 	ID = RNG.generate() * 30000.0f;
-	Prototype.Sprite = Image("Player/Sprite.png");
 	Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
 	Prototype.PrimaryWeapon.ShotDelay = 0.4f;
 	Prototype.EngineAccleration *= 1.3f;
 	
-	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
-	TheGravitySource.CenterColor = Space->getFactionColor(ID);
-	Space->GravitySources.pushBack(TheGravitySource);
+	TheGravitySource->BackgroundColor = Space->getFactionColor(ID) * 0.2f;
+	TheGravitySource->CenterColor = Space->getFactionColor(ID);
 	
 	Bullet& b = Prototype.PrimaryWeapon.BulletPrototype;
 	b.Mass = 5;
@@ -50,7 +50,15 @@ Sector::Sector(Vec2F center, float r, PlaySpace *Space)
 
 	b.Sprite = Image("Player/Bullet.png");
 	b.Glow = Image("Glow.png");
+	
+	Space->GravitySources.pushBack(*TheGravitySource);
 }
+
+Sector::~Sector()
+{
+	delete TheGravitySource;
+}
+
 void Sector::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
