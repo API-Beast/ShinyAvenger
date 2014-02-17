@@ -18,15 +18,18 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	ForegroundFog = Image("ForegroundFog.png");
 	
 	Player = new Ship(Image("Player/Sprite.png"));
+	Player->PrimaryWeapon.Bullets = 3;
+	Player->PrimaryWeapon.Spread = 0.08_turn;
 	Player->Position = Vec2F{200, 150};
 	Player->Faction = 0;
 	Ships.pushBack(Player);
 	
-	Bullet& b = Player->Weapon.BulletPrototype;
+	Bullet& b = Player->PrimaryWeapon.BulletPrototype;
 	b.Mass = 5;
 	b.Drag = 0;
 	b.Flow = 5;
 	b.Lifetime = 1.f;
+	b.Power = 10.f;
 
 	b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
 	b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
@@ -48,7 +51,9 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	b.Glow = Image("Glow.png");
 	
 	Spawner.Prototype.Sprite = Image("Player/Sprite.png");
-	Spawner.Prototype.Weapon.BulletPrototype = Player->Weapon.BulletPrototype;
+	Spawner.Prototype.PrimaryWeapon.BulletPrototype = Player->PrimaryWeapon.BulletPrototype;
+	Spawner.Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
+	Spawner.Prototype.PrimaryWeapon.ShotDelay = 0.4f;
 	Spawner.Prototype.Faction = 2;
 	Spawner.Prototype.EngineAccleration *= 1.3f;
 	Spawner.spawnShip(this, Vec2F(500, 500));
@@ -252,31 +257,9 @@ bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)
    return shipA->Faction != shipB->Faction;
 }
 
-float getValue(float min, float max, int hash, float complexity) 
+ColorRGB PlaySpace::getFactionColor(int factionID)
 {
-	float difference = (max - min) / 2.0f;
-	return (float) (difference * cos(pow(hash, complexity)) + max - difference);
-}
-
-float getSeedRed(int hash) {
-	return getValue(0.6f, 1.0f, (int) pow(hash, 3), 2);
-}
-
-float getSeedGreen(int hash) {
-	return getValue(0.6f, 1.0f, hash * 100, 3);
-}
-
-float getSeedBlue(int hash) {
-	return getValue(0.6f, 1.0f, hash * 50, 5);
-}
-
-ColorRGB PlaySpace::getFactionColor(int FractionID)
-{
-  ColorRGB rgb;
-  
-  rgb.Red = getSeedRed(FractionID);
-  rgb.Green = getSeedGreen(FractionID);
-  rgb.Blue = getSeedBlue(FractionID);
-  
-  return rgb;
+	RandomNumberGenerator rng(factionID);
+  ColorHSY hsy(rng.generate(), rng.generate(0.8f, 1.0f), rng.generate(0.6f, 1.2f));
+	return ColorRGB(hsy);
 }
