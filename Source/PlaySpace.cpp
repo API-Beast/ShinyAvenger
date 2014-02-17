@@ -260,7 +260,8 @@ void PlaySpace::spawnPlayerBullet(Bullet bullet)
 
 void PlaySpace::spawnParticle(Particle particle)
 {
-	Particles.pushBack(particle);
+	if((CameraPos - particle.Position).getLength() < 4000)
+		Particles.pushBack(particle);
 }
 
 bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)

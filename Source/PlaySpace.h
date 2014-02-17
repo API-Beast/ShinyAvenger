@@ -49,9 +49,9 @@ public:
 	BitmapFont SmallFont;
 	
 	List<PhysicsObject*> Objects;
-	List<Bullet> Bullets;
+	List<Bullet> Bullets = List<Bullet>(512);
 	List<GravitySource> GravitySources;
-	List<Particle> Particles;
+	List<Particle> Particles = List<Particle>(512);
 	List<Ship*> Ships;
 	KeyframeList<Color> BackgroundGradient;
 	ShipSpawner Spawner;
