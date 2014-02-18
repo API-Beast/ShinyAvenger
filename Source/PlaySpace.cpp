@@ -5,12 +5,14 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "PlaySpace.h"
+#include "AssetDefinition.h"
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
 PlaySpace::PlaySpace(GameSurface* surface)
-
 {
+	gAssets.initAll();
+	
 	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
 	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);
 
@@ -159,8 +161,11 @@ void PlaySpace::update(float time)
 		src.update(time, this);
 	for(Bullet& obj : Bullets)
 		obj.update(time, this);
+	
+	// The more particles exist the faster time passes for them, the faster they die
+	float particleTimeFactor = Max(float(Particles.UsedLength) / SoftMaxParticleCount, 1.0f);
 	for(Particle& particle : Particles)
-		particle.update(time, this);
+		particle.update(time * particleTimeFactor, this);
 	
 	// Physics
 	for(PhysicsObject* obj : Objects)
@@ -168,17 +173,18 @@ void PlaySpace::update(float time)
 	for(Bullet& obj : Bullets)
 		applyPhysics(&obj, time);
 	for(Particle& particle : Particles)
-		applyPhysics(&particle, time);
+		applyPhysics(&particle, time * particleTimeFactor);
 	
 	for(Bullet& bullet : Bullets)
 		for(Ship* ship : Ships)
 			if(ship->Faction != bullet.Faction)
-				if(IsIntersecting(bullet.Bounds, ship->Bounds))
-				{
-					bullet.onHit(ship, this);
-					ship->onHit(&bullet, this);
-				}
-	
+				if(ship->Status != Ship::Destroyed)
+					if(IsIntersecting(bullet.Bounds, ship->Bounds))
+					{
+						bullet.onHit(ship, this);
+						ship->onHit(&bullet, this);
+					}
+		
 	CameraPos = -(ScreenSize/2) + Player->Position;
 	
 	// Will be reset to true before next PlaySpace::update

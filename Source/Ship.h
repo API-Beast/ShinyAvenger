@@ -38,11 +38,10 @@ public:
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;
-	Particle ImpulseParticle;
-	Particle SparkParticle;
 	float ImpulseTimer = 0.f;
 	float ImpulseSparkTimer = 0.f;
 	KeyframeList<Color> ShieldColors;
+	Particle::_Definition ShieldParticleDef;
 	
 	// Diplomacy
 	int Faction = -1;
@@ -74,7 +73,6 @@ public:
 	
 	// AI
 	Behavior* AI = nullptr;
-	Particle ShieldParticle;
 public:
 	Ship(const Image& img);
 	virtual ~Ship();

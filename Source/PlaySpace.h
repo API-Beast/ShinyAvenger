@@ -54,7 +54,8 @@ public:
 	
 	List<Bullet> Bullets = List<Bullet>(512);
 	List<GravitySource> GravitySources;
-	List<Particle> Particles = List<Particle>(512);
+	List<Particle> Particles = List<Particle>(4096);
+	int SoftMaxParticleCount = 1024;
 
 	List<Ship*> Ships;
 	List<Sector*> Sectors;

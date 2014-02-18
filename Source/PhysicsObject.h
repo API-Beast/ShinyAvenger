@@ -33,4 +33,5 @@ public:
 	virtual void draw(RenderContext r){};
 	virtual void update(float dt, PlaySpace* space){};
 	virtual void updateBounds(){ Bounds.setCenter(Position - BoundsOffset); };
+	PhysicsObject& operator=(const PhysicsObject& other) = default;
 };
