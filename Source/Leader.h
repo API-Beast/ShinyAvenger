@@ -11,5 +11,5 @@
 class Leader
 {
 public:
-	Vec2F Position;
+	virtual Vec2F getPosition() const = 0;
 };

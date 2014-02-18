@@ -176,3 +176,9 @@ Ship::~Ship()
 {
 	//delete AI;
 }
+
+
+Vec2F Ship::getPosition() const
+{
+	return Position;
+}

@@ -91,3 +91,8 @@ Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 	Space->Objects.pushBack(ship);
 	return ship;
 }
+
+Vec2F Sector::getPosition() const
+{
+	return Position;
+}
