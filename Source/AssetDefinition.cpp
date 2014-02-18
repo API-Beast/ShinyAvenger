@@ -25,7 +25,8 @@ void AssetDefinition::initBullets()
 		b.PhysicsProperties.Drag = 0;
 		b.PhysicsProperties.Flow = 5;
 		b.Lifetime = 1.f;
-		b.Power = 2.f;
+		b.Power = 10.f;
+		b.Speed = 800.f;
 
 		b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
 		b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
@@ -53,11 +54,12 @@ void AssetDefinition::initBullets()
 	{
 		Bullet::_Definition& b = MiniGunBullet;
 		
-		b = PhaserBullet;
+		b.Bullet::_Definition::operator=(PhaserBullet);
 		b.PhysicsProperties.Flow = 0;
 		b.PhysicsProperties.Drag = 0;
 		b.PhysicsProperties.Mass = 0.2;
-		b.Power = 10.f;
+		b.Power = 5.f;
+		b.Speed = 1600.f;
 		
 		b.ColorAnimation = Colors::Saturated::Cyan;
 		b.ColorAnimation.insert(1.0, Colors::Saturated::Blue*0.2);
@@ -75,6 +77,21 @@ void AssetDefinition::initBullets()
 		/*TODO*/
 		b.Power = 20;
 	}
+	
+	// ------------------------------------------------------------------
+	// ### Missile
+	// ------------------------------------------------------------------
+	{
+		MissileDefinition& b = HomingMissile;
+		
+		b.Sprite = Image("Ship/Missile.png");
+		b.Power = 60;
+		b.Speed = 1000;
+		b.Explodes = true;
+		
+		b.RotationRate = 20.f;
+		b.Acceleration = 2000;
+	}
 }
 
 void AssetDefinition::initWeapons()
@@ -87,7 +104,7 @@ void AssetDefinition::initWeapons()
 		
 		w.BulletPrototype = PhaserBullet;
 		w.Bullets = 2;
-		w.ShotDelay = 0.30f;
+		w.ShotDelay = 0.50f;
 		w.Spread = 0.1_turn;
 		w.Type = Ship::MultiShot;
 	}
@@ -102,7 +119,6 @@ void AssetDefinition::initWeapons()
 		w.Bullets = 3;
 		w.ShotDelay = 0.10f;
 		w.Spread = 0.05_turn;
-		w.Type = Ship::MultiShot;
 	}
 	
 	// ------------------------------------------------------------------
@@ -115,7 +131,18 @@ void AssetDefinition::initWeapons()
 		w.Bullets = 2;
 		w.ShotDelay = 0.40f;
 		w.Spread = 0.0_turn;
-		w.Type = Ship::MultiShot;
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Missile Launch
+	// ------------------------------------------------------------------
+	{
+		Ship::_Weapon& w = MissileLauncher;
+		
+		w.BulletPrototype = HomingMissile;
+		w.Bullets = 1;
+		w.ShotDelay = 1.00f;
+		w.Spread = 0.125_turn;
 	}
 }
 

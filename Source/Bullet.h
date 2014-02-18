@@ -17,6 +17,7 @@ struct Bullet : public PhysicsObject
 	int Faction = -1;
 	float TimeSinceSpawn = 0.f;
 	bool HitObject = false;
+	PhysicsObject* CurrentTarget = nullptr; // Not used by the standard definition
 	
 	struct _Definition
 	{
@@ -26,6 +27,10 @@ struct Bullet : public PhysicsObject
 		float Lifetime = 2.f;
 		float Power = 2.f;
 		
+		float Speed = 600.f;
+		
+		bool Explodes = false;
+		
 		PhysicsObject PhysicsProperties;
 		
 		KeyframeList<float> AlphaAnimation = 1.0f;
@@ -34,6 +39,11 @@ struct Bullet : public PhysicsObject
 		
 		KeyframeList<Color> GlowColorAnimation = Colors::White;
 		KeyframeList<Vec2F> GlowScaleAnimation = Vec2F(1.f);
+		
+		virtual void update(Bullet& bullet, float dt, PlaySpace* space){};
+		virtual void onHit(Bullet& bullet, Ship* which, PlaySpace* space){};
+		
+		_Definition& operator=(const _Definition&) = default;
 	} *Definition = nullptr;
 	
 	Bullet() = default;
@@ -47,3 +57,13 @@ struct Bullet : public PhysicsObject
 	void onHit(Ship* which, PlaySpace* space);
 };
 
+struct MissileDefinition : public Bullet::_Definition
+{
+	float RotationRate = 2;
+	float Acceleration = 1000;
+	
+	float TargetingRange = 1000;
+	Angle TargetingCone = 0.3_turn;
+	
+	virtual void update(Bullet& b, float dt, PlaySpace* space);
+};

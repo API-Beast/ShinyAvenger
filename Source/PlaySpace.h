@@ -36,8 +36,12 @@ public:
 	void spawnParticle(Particle particle);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 	bool isHostile(Ship *, Ship*);
+	bool isHostile(int, int);
 	Sector* generateSector(Vec2F position);
 	ColorRGB getFactionColor(int);
+	
+	// TODO For now just return all Ships, this is just so I can swap it out later without redoing all the code
+	List<Ship*>& findShips(Vec2F topLeft, Vec2F bottomRight){ return Ships; };
 public:
 	Ship* Player;
 	

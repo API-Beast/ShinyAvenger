@@ -36,6 +36,7 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	
 	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
 	Player->PrimaryWeapon = gAssets.MiniGun;
+	Player->SecondaryWeapon = gAssets.MissileLauncher;
 	Player->AI = NULL;
 	Player->Position = Vec2F{200, 150};
 
@@ -194,6 +195,7 @@ void PlaySpace::update(float time)
 	
 	// Will be reset to true before next PlaySpace::update
 	Player->IsShooting = false;
+	Player->IsShootingSecondary = false;
 	Player->IsBraking = false;
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
@@ -231,7 +233,10 @@ void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float
 
 void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
 {
-	Player->IsShooting = true;
+	if(actionB)
+		Player->IsShootingSecondary = true;
+	if(actionA || actionC)
+		Player->IsShooting = true;
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)
@@ -252,6 +257,11 @@ void PlaySpace::spawnParticle(Particle particle)
 bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)
 {
    return shipA->Faction != shipB->Faction;
+}
+
+bool PlaySpace::isHostile(int a, int b)
+{
+   return a != b;
 }
 
 ColorRGB PlaySpace::getFactionColor(int factionID)

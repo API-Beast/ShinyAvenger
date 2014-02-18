@@ -27,8 +27,12 @@ void Ship::update(float t, PlaySpace* space)
 	if(Status != Destroyed)
 	{
 		updateControls(t, space);
-		updateWeapon  (t, space);
 		updateFX      (t, space);
+		
+		if(IsShooting)
+			updateWeapon(PrimaryWeapon, t, space);
+		if(IsShootingSecondary)
+			updateWeapon(SecondaryWeapon, t, space);
 	}
 	else
 		Acceleration = 0;
@@ -95,7 +99,7 @@ void Ship::shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, i
 	Bullet bullet(prototype);
 	bullet.Faction = Faction;
 	bullet.Rotation = Rotation + rotation;
-	bullet.Speed = (Rotation + rotation ).toDirection()*1000 + Speed *0.8;
+	bullet.Speed = (Rotation + rotation ).toDirection() * bullet.Definition->Speed + Speed *0.8;
 	bullet.Position = Position + (Rotation+0.25_turn).toDirection()*xOffset;
 	bullet.update(deltaTimeFix, space);
 	space->applyPhysics(&bullet, deltaTimeFix);
@@ -103,30 +107,27 @@ void Ship::shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, i
 }
 
 
-void Ship::updateWeapon(float t, PlaySpace* space)
+void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 {
-	if(IsShooting)
+	weapon.ShotTimer -= t;
+	while(weapon.ShotTimer <= 0.f)
 	{
-		PrimaryWeapon.ShotTimer -= t;
-		while(PrimaryWeapon.ShotTimer <= 0.f)
+		if(weapon.Bullets <= 1)
+			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, RNG.generate(-1.0f, +1.0f) * weapon.Spread);
+		else if(weapon.Bullets == 2)
 		{
-			if(PrimaryWeapon.Bullets <= 1)
-				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, 0, 0_turn);
-			else if(PrimaryWeapon.Bullets == 2)
-			{
-				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, +10, 0_turn);
-				shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, -10, 0_turn);
-			}
-			else if(Modulo(PrimaryWeapon.Bullets, 2) == 1)
-			{
-				for(int i = -PrimaryWeapon.Bullets/2; i <= PrimaryWeapon.Bullets/2; ++i)
-					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
-			}
-			else
-				for(int i = -PrimaryWeapon.Bullets/2; i < PrimaryWeapon.Bullets/2; ++i)
-					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
-			PrimaryWeapon.ShotTimer += PrimaryWeapon.ShotDelay;
+			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, +10, +weapon.Spread / 2);
+			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, -10, -weapon.Spread / 2);
 		}
+		else if(Modulo(weapon.Bullets, 2) == 1)
+		{
+			for(int i = -weapon.Bullets/2; i <= weapon.Bullets/2; ++i)
+				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
+		}
+		else
+			for(int i = -weapon.Bullets/2; i < weapon.Bullets/2; ++i)
+				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
+		weapon.ShotTimer += weapon.ShotDelay;
 	}
 }
 

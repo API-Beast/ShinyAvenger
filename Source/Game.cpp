@@ -47,7 +47,7 @@ void Game::execute()
 		bool right = Buttons::Right.isPressed(Input);
 		bool left  = Buttons::Left.isPressed(Input);
 		
-		bool actionA = Buttons::Confirm.isPressed(Input);
+		bool actionA = Buttons::ActionA.isPressed(Input);
 		bool actionB = Buttons::ActionB.isPressed(Input);
 		bool actionC = Buttons::ActionC.isPressed(Input);
 		

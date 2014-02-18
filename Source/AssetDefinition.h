@@ -17,10 +17,12 @@ struct AssetDefinition
 	Bullet::_Definition PhaserBullet;
 	Bullet::_Definition MiniGunBullet;
 	Bullet::_Definition GunBullet;
+	MissileDefinition HomingMissile;
 	
 	Ship::_Weapon Phaser;  // Weak and slow
 	Ship::_Weapon MiniGun; // Weak and fast
-	Ship::_Weapon BigGun;     // Strong and slow
+	Ship::_Weapon BigGun;  // Strong and slow
+	Ship::_Weapon MissileLauncher; // Very slow, strong, homing
 	
 	Particle::_Definition EnergyShield;
 	Particle::_Definition PulseEngineGlow;

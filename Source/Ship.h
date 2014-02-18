@@ -54,6 +54,7 @@ public:
 	float Steering = 0.0f;
 	bool IsBraking = false;
 	bool IsShooting = false;
+	bool IsShootingSecondary = false;
 	bool IsStabilizing = false;
 	
 	enum WeaponType
@@ -85,7 +86,7 @@ public:
 	virtual Vec2F getPosition() const;
 	void doDamage(float damage);
 	void updateControls(float t, PlaySpace* space);
-	void updateWeapon(float t, PlaySpace* space);
+	void updateWeapon(_Weapon& weapon, float t, PlaySpace* space);
 	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
