@@ -13,11 +13,12 @@
 #include "PhysicsObject.h"
 #include "Bullet.h"
 #include "Particle.h"
+#include "Leader.h"
 
 class PlaySpace;
 class Behavior;
 
-class Ship : public PhysicsObject
+class Ship : public PhysicsObject, public Leader
 {
 public:
 	enum ShipState
@@ -47,6 +48,7 @@ public:
 	int Faction = -1;
 	ColorRGB FactionColor = Colors::White;
 	Image FactionColorSprite;
+	Leader *TheLeader = NULL;
 	
 	// Controls
 	float Steering = 0.0f;
@@ -80,7 +82,7 @@ public:
 	virtual void draw(RenderContext r);
 	virtual void updateBounds();
 	bool canBeDespawned(){ return Status == Destroyed; };
-	
+	virtual Vec2F getPosition() const;
 	void doDamage(float damage);
 	void updateControls(float t, PlaySpace* space);
 	void updateWeapon(float t, PlaySpace* space);
