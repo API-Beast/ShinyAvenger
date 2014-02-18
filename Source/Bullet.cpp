@@ -19,18 +19,24 @@ void Bullet::draw(RenderContext r)
 	
 	float age = normalizedAge();
 
-	r.setColor(ColorAnimation[age], AlphaAnimation[age]);
-	r.Scale = ScaleAnimation[age];
-	Sprite.draw(r);
+	r.setColor(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]);
+	r.Scale = Definition->ScaleAnimation[age];
+	Definition->Sprite.draw(r);
 	
-	r.setColor(GlowColorAnimation[age], AlphaAnimation[age]/20);
-	r.Scale = GlowScaleAnimation[age];
+	r.setColor(Definition->GlowColorAnimation[age], Definition->AlphaAnimation[age]/20);
+	r.Scale = Definition->GlowScaleAnimation[age];
 	r.setBlendingMode(RenderContext::Additive);
-	Glow.draw(r);
+	Definition->Glow.draw(r);
+}
+
+Bullet::Bullet(Bullet::_Definition& def)
+{
+	PhysicsObject::operator=(def.PhysicsProperties);
+	Definition = &def;
 }
 
 void Bullet::onHit(Ship* which, PlaySpace* space)
 {
 	HitObject = true;
-	which->doDamage(Power);
+	which->doDamage(Definition->Power);
 }

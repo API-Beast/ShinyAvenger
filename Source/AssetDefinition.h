@@ -5,15 +5,30 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #pragma once
+
+#include "Bullet.h"
 #include "Particle.h"
+#include "Ship.h"
 
 struct AssetDefinition
 {
 	void initAll();
 	
+	Bullet::_Definition PhaserBullet;
+	Bullet::_Definition MiniGunBullet;
+	Bullet::_Definition GunBullet;
+	
+	Ship::_Weapon Phaser;  // Weak and slow
+	Ship::_Weapon MiniGun; // Weak and fast
+	Ship::_Weapon BigGun;     // Strong and slow
+	
 	Particle::_Definition EnergyShield;
 	Particle::_Definition PulseEngineGlow;
 	Particle::_Definition PulseEngineSpark;
+private:
+	void initBullets();
+	void initWeapons();
+	void initParticles();
 };
 
 extern AssetDefinition gAssets;

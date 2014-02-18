@@ -120,11 +120,11 @@ void Ship::updateWeapon(float t, PlaySpace* space)
 			else if(Modulo(PrimaryWeapon.Bullets, 2) == 1)
 			{
 				for(int i = -PrimaryWeapon.Bullets/2; i <= PrimaryWeapon.Bullets/2; ++i)
-					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i, PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
+					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
 			}
 			else
-				for(int i = -PrimaryWeapon.Bullets/2; i < PrimaryWeapon.Bullets; ++i)
-					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), 0_turn);
+				for(int i = -PrimaryWeapon.Bullets/2; i < PrimaryWeapon.Bullets/2; ++i)
+					shootBullet(space, PrimaryWeapon.BulletPrototype, -PrimaryWeapon.ShotTimer, i*(3 + 14 / PrimaryWeapon.Bullets), PrimaryWeapon.Spread / PrimaryWeapon.Bullets * i);
 			PrimaryWeapon.ShotTimer += PrimaryWeapon.ShotDelay;
 		}
 	}

@@ -36,6 +36,7 @@ public:
 	void spawnParticle(Particle particle);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 	bool isHostile(Ship *, Ship*);
+	Sector* generateSector(Vec2F position);
 	ColorRGB getFactionColor(int);
 public:
 	Ship* Player;
@@ -46,6 +47,8 @@ public:
 	Image BackgroundFog;
 	Image BackgroundFogB;
 	Image ForegroundFog;
+	
+	RandomNumberGenerator WorldRNG;
 	
 	BitmapFont BigFont;
 	BitmapFont SmallFont;

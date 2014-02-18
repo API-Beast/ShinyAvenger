@@ -15,28 +15,35 @@ class Ship;
 struct Bullet : public PhysicsObject
 {
 	int Faction = -1;
-	
-	Image Sprite;
-	Image Glow;
-	
 	float TimeSinceSpawn = 0.f;
-	float Lifetime = 2.f;
-	
 	bool HitObject = false;
 	
-	float Power = 2.f;
+	struct _Definition
+	{
+		Image Sprite;
+		Image Glow;
+		
+		float Lifetime = 2.f;
+		float Power = 2.f;
+		
+		PhysicsObject PhysicsProperties;
+		
+		KeyframeList<float> AlphaAnimation = 1.0f;
+		KeyframeList<Color> ColorAnimation = Colors::White;
+		KeyframeList<Vec2F> ScaleAnimation = Vec2F(1.0f);
+		
+		KeyframeList<Color> GlowColorAnimation = Colors::White;
+		KeyframeList<Vec2F> GlowScaleAnimation = Vec2F(1.f);
+	} *Definition = nullptr;
 	
-	KeyframeList<float> AlphaAnimation = 1.0f;
-	KeyframeList<Color> ColorAnimation = Colors::White;
-	KeyframeList<Vec2F> ScaleAnimation = Vec2F(1.0f);
-	
-	KeyframeList<Color> GlowColorAnimation = Colors::White;
-	KeyframeList<Vec2F> GlowScaleAnimation = Vec2F(1.f);
+	Bullet() = default;
+	Bullet(Bullet::_Definition& def);
 	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
-	bool canBeDespawned(){ return TimeSinceSpawn > Lifetime || HitObject; };
-	float normalizedAge(){ return TimeSinceSpawn / Lifetime; };
+	
+	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime || HitObject; };
+	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };
 	void onHit(Ship* which, PlaySpace* space);
 };
 

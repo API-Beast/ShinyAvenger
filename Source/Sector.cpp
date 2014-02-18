@@ -17,38 +17,9 @@ TheGravitySource({center, 250.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB
 {
 	Position = center;	
 	ID = RNG.generate() * 30000.0f;
-	Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
-	Prototype.PrimaryWeapon.ShotDelay = 0.4f;
-	Prototype.EngineAccleration *= 1.1f;
 	
 	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
 	TheGravitySource.CenterColor = Space->getFactionColor(ID);
-	
-	Bullet& b = Prototype.PrimaryWeapon.BulletPrototype;
-	b.Mass = 5;
-	b.Drag = 0;
-	b.Flow = 5;
-	b.Lifetime = 1.f;
-	b.Power = 10.f;
-
-	b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
-	b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
-
-	b.GlowColorAnimation = Colors::Saturated::Yellow;
-	b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
-	b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
-
-	b.AlphaAnimation.insert(0.8, 1.f);
-	b.AlphaAnimation.insert(1.0, 0.f);
-
-	b.ScaleAnimation.insert(0.2, {1.f, 4.f});
-	b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
-	b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
-
-	b.GlowScaleAnimation = Vec2F(2.f);
-
-	b.Sprite = Image("Player/Bullet.png");
-	b.Glow = Image("Glow.png");
 	
 	Space->GravitySources.pushBack(TheGravitySource);
 }

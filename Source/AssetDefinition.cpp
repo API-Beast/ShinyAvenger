@@ -8,61 +8,202 @@
 
 void AssetDefinition::initAll()
 {
-	PulseEngineGlow.Sprite = Image("Player/Impulse.png");
-	PulseEngineGlow.DrawMode = RenderContext::Additive;
-	PulseEngineGlow.Lifetime = 0.2f;
-	PulseEngineGlow.PhysicsProperties.Drag = 10;
-	PulseEngineGlow.PhysicsProperties.Mass = 0.5f;
-	
-	{
-		auto& anim = PulseEngineGlow.Animation.Alpha;
-		anim.insert(1.0f, 0.0f);
-	}
-	
-	{
-		auto& anim = PulseEngineGlow.Animation.Color;
-		anim.clear();
-		anim.insert(0.0f, Colors::Saturated::Orange);
-		anim.insert(1.0f, Colors::Saturated::Magenta);
-	}
-	
-	{
-		auto& anim = PulseEngineGlow.Animation.Scale;
-		anim.clear();
-		anim.insert(0.0f, Vec2F(1.0f, 1.0f));
-		anim.insert(0.3f, Vec2F(1.0f, 2.0f));
-		anim.insert(1.0f, Vec2F(1.0f, 3.0f));
-	}
-	
-	PulseEngineSpark = PulseEngineGlow;
-	PulseEngineSpark.Sprite = Image("Player/Spark.png");
-	PulseEngineSpark.PhysicsProperties.Drag = 0;
-	PulseEngineSpark.PhysicsProperties.Mass = 5;
-	PulseEngineSpark.Lifetime = 0.15f;
-	
-	{
-		auto& anim = PulseEngineSpark.Animation.Alpha;
-		anim.clear();
-		anim.insert(0.0f, 0.0f);
-		anim.insert(0.2f, 1.0f);
-		anim.insert(1.0f, 0.0f);
-	}
-	
-	EnergyShield.Sprite = Image("Ship/Shield.png");
-	EnergyShield.DrawMode = RenderContext::Additive;
-	EnergyShield.Lifetime = 0.2f;
-	EnergyShield.PhysicsProperties.Drag = 0.f;
-	
-	{
-		auto& anim = EnergyShield.Animation.Alpha;
-		anim.clear();
-		anim.insert(0.0f, 1.0f);
-		anim.insert(0.5f, 0.2f);
-		anim.insert(1.0f, 0.0f);
-	}
-	
-	EnergyShield.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
-	EnergyShield.Animation.Scale = Vec2F(0.75f, 0.75f);
+	initParticles();
+	initBullets();
+	initWeapons();
 }
+
+void AssetDefinition::initBullets()
+{
+	// ------------------------------------------------------------------
+	// ### Phaser
+	// ------------------------------------------------------------------
+	{
+		Bullet::_Definition& b = PhaserBullet;
+		
+		b.PhysicsProperties.Mass = 5;
+		b.PhysicsProperties.Drag = 0;
+		b.PhysicsProperties.Flow = 5;
+		b.Lifetime = 1.f;
+		b.Power = 2.f;
+
+		b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
+		b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
+
+		b.GlowColorAnimation = Colors::Saturated::Yellow;
+		b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
+		b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
+
+		b.AlphaAnimation.insert(0.8, 1.f);
+		b.AlphaAnimation.insert(1.0, 0.f);
+
+		b.ScaleAnimation.insert(0.2, {1.f, 4.f});
+		b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
+		b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
+
+		b.GlowScaleAnimation = Vec2F(2.f);
+
+		b.Sprite = Image("Player/Bullet.png");
+		b.Glow = Image("Glow.png");
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Minigun
+	// ------------------------------------------------------------------
+	{
+		Bullet::_Definition& b = MiniGunBullet;
+		
+		b = PhaserBullet;
+		b.PhysicsProperties.Flow = 0;
+		b.PhysicsProperties.Drag = 0;
+		b.PhysicsProperties.Mass = 0.2;
+		b.Power = 10.f;
+		
+		b.ColorAnimation = Colors::Saturated::Cyan;
+		b.ColorAnimation.insert(1.0, Colors::Saturated::Blue*0.2);
+		
+		b.GlowColorAnimation = Colors::White;
+		b.GlowColorAnimation.insert(0.5, Colors::Saturated::Cyan);
+		b.GlowColorAnimation.insert(1.0, Colors::Saturated::Blue);
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Gun
+	// ------------------------------------------------------------------
+	{
+		Bullet::_Definition& b = GunBullet;
+		/*TODO*/
+		b.Power = 20;
+	}
+}
+
+void AssetDefinition::initWeapons()
+{
+	// ------------------------------------------------------------------
+	// ### Phaser
+	// ------------------------------------------------------------------
+	{
+		Ship::_Weapon& w = Phaser;
+		
+		w.BulletPrototype = PhaserBullet;
+		w.Bullets = 2;
+		w.ShotDelay = 0.30f;
+		w.Spread = 0.1_turn;
+		w.Type = Ship::MultiShot;
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Minigun
+	// ------------------------------------------------------------------
+	{
+		Ship::_Weapon& w = MiniGun;
+		
+		w.BulletPrototype = MiniGunBullet;
+		w.Bullets = 3;
+		w.ShotDelay = 0.10f;
+		w.Spread = 0.05_turn;
+		w.Type = Ship::MultiShot;
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Gun 
+	// ------------------------------------------------------------------
+	{
+		Ship::_Weapon& w = BigGun;
+		
+		w.BulletPrototype = GunBullet;
+		w.Bullets = 2;
+		w.ShotDelay = 0.40f;
+		w.Spread = 0.0_turn;
+		w.Type = Ship::MultiShot;
+	}
+}
+
+
+void AssetDefinition::initParticles()
+{
+	//  ----------------------------------------------
+	//  ### Pulse Engine Glow           
+	//  ----------------------------------------------
+	{
+		Particle::_Definition& p = PulseEngineGlow;
+		
+		p.Sprite = Image("Player/Impulse.png");
+		p.DrawMode = RenderContext::Additive;
+		p.Lifetime = 0.2f;
+		p.PhysicsProperties.Drag = 10;
+		p.PhysicsProperties.Mass = 0.5f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.insert(1.0f, 0.0f);
+		}
+		
+		{
+			auto& anim = p.Animation.Color;
+			
+			anim.clear();
+			anim.insert(0.0f, Colors::Saturated::Orange);
+			anim.insert(1.0f, Colors::Saturated::Magenta);
+		}
+		
+		{
+			auto& anim = p.Animation.Scale;
+			
+			anim.clear();
+			anim.insert(0.0f, Vec2F(1.0f, 1.0f));
+			anim.insert(0.3f, Vec2F(1.0f, 2.0f));
+			anim.insert(1.0f, Vec2F(1.0f, 3.0f));
+		}
+	}
+	
+	//  ------------------------------------------------------------------------------
+	//  ### Pulse Engine Spark           
+	//  ------------------------------------------------------------------------------
+	{
+		Particle::_Definition& p = PulseEngineSpark;
+		
+		p = PulseEngineGlow;
+		p.Sprite = Image("Player/Spark.png");
+		p.PhysicsProperties.Drag = 0;
+		p.PhysicsProperties.Mass = 5;
+		p.Lifetime = 0.15f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.0f);
+			anim.insert(0.2f, 1.0f);
+			anim.insert(1.0f, 0.0f);
+		}
+	}
+	
+	// ------------------------------------------------------------------------------
+	// ### Energy Shield
+	// ------------------------------------------------------------------------------
+	{
+		Particle::_Definition& p = EnergyShield;
+		
+		p.Sprite = Image("Ship/Shield.png");
+		p.DrawMode = RenderContext::Additive;
+		p.Lifetime = 0.2f;
+		p.PhysicsProperties.Drag = 0.f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 1.0f);
+			anim.insert(0.5f, 0.2f);
+			anim.insert(1.0f, 0.0f);
+		}
+		
+		p.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
+		p.Animation.Scale = Vec2F(0.75f, 0.75f);
+	}
+}
+
 
 AssetDefinition gAssets;
