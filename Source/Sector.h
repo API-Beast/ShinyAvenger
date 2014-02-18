@@ -9,17 +9,17 @@
 #include <Springbok/Geometry/Vec2.h>
 #include "Ship.h"
 #include "GravitySource.h"
+#include "Leader.h"
 
 class PlaySpace;
 
-class Sector
+class Sector : public Leader
 {
 private:
 	float Time;
 	float Interval;
 public:
 	float Radius;	
-	Vec2F Center;	
 	int ID;		
 	Ship Prototype;
 	GravitySource TheGravitySource;

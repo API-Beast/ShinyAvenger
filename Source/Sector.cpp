@@ -12,15 +12,14 @@
 static RandomNumberGenerator RNG;
 
 Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
-: Center(center), Radius(r), Time(0), Interval(3.0), Prototype(Image("Player/Sprite.png")),
+: Radius(r), Time(0), Interval(8.0), Prototype(Image("Player/Sprite.png")),
 TheGravitySource({center, 250.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
 {
-	
-	
+	Position = center;	
 	ID = RNG.generate() * 30000.0f;
 	Prototype.PrimaryWeapon.BulletPrototype.Power = 2.f;
 	Prototype.PrimaryWeapon.ShotDelay = 0.4f;
-	Prototype.EngineAccleration *= 1.3f;
+	Prototype.EngineAccleration *= 1.1f;
 	
 	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
 	TheGravitySource.CenterColor = Space->getFactionColor(ID);
@@ -58,13 +57,13 @@ void Sector::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
 	{
-		const int GROUP_SIZE = 2;
+		const int GROUP_SIZE = 4;
 		Time = Time - Interval;
 		
 		float radius = RNG.generate(200.f, Radius);
 		Angle angle = Angle::FromTurn(RNG.generate());
 		
-		spawnGroup(Center + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);
+		spawnGroup(Position + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);
 	}
 }
 
