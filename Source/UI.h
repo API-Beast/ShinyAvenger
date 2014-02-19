@@ -18,7 +18,7 @@ class UIContainer
 {	
 protected:	
 	List<UIContainer*> Children;
-	UIContainer *parent;
+	UIContainer *parent = NULL;
 public:		
 	Vec2F Position;
 	Vec2F Size;
