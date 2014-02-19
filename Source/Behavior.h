@@ -21,24 +21,15 @@ public:
 	virtual void update(float t, Ship* const, PlaySpace*) = 0;
 };
 
-// A state based behavior
-class StateBasedBehavior : public Behavior
+class LeadBehavior : public Behavior
 {
-public:	
-	List<Behavior*> States;
-	virtual void update(float t, Ship *const ship, PlaySpace* space)
-	{
-		
-	}
-	
-private:
-	
+	virtual void update(float t, Ship *const ship, PlaySpace* space);
 };
 
 class TrackingBehavior : public Behavior
 {
 public:
-	Ship *Target = NULL;
+	Ship *Target = nullptr;
 	virtual void update(float t, Ship *const ship, PlaySpace* space);
 private:
 	Ship* findTargetFor(Ship*,PlaySpace*);

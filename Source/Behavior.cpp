@@ -10,6 +10,11 @@
 
 #include <iostream>
 
+void LeadBehavior::update(float t, Ship* const ship, PlaySpace* space)
+{
+	
+}
+
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
 	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed && space->isHostile(Target, ship))

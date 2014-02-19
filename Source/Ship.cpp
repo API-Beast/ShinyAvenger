@@ -193,7 +193,8 @@ void Ship::doDamage(float damage)
 
 Ship::~Ship()
 {
-	//delete AI;
+	if (AI != nullptr)	
+		delete AI;
 }
 
 

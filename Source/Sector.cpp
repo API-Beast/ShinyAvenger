@@ -43,17 +43,28 @@ void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	
 	const float SPRAY_FACTOR = 150.f;
 	
+	Ship* leader = NULL;
 	
 	for(int i = 0; i < groupSize; ++i)
 	{
-		spawnShip(pos + RNG.generateVec2<>(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
+		Ship* ship = spawnShip(pos + RNG.generateVec2<>(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
+	
+		if (leader != NULL)
+		{
+			ship->TheLeader = leader;
+		}
+		else
+		{
+			ship->TheLeader = this;
+			leader = ship;
+		}
 	}
 }
 
 Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 {
 	Ship* ship = new Ship(Prototype);
-	ship->AI = new StateBasedBehavior;
+	ship->AI = new TrackingBehavior;
 	ship->Position = position;
 	ship->Faction = ID;
 	ship->Rotation = Angle::FromTurn(RNG.generate());

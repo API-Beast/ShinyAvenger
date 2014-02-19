@@ -19,10 +19,10 @@ void EnemyArrow::draw(RenderContext* Context)
 			
 		Context->Offset = (Space->ScreenSize / 2) + Normalized * ((Space->ScreenSize.Y / 3.2f) + (20000.0f / (Length / 5)));
 		Context->Rotation = Angle(Direction);
-		float Opacity = 500.0 / Length;
+		float Opacity = 150.0 / Length;
 			
 		if (Length < Space->ScreenSize.X / 1.5f) {
-			Opacity = 0;
+			Opacity = Length / 10000.0f;
 		}
 			
 		Context->setColor(ship->FactionColor, Opacity);
