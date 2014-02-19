@@ -27,10 +27,15 @@ struct AssetDefinition
 	Particle::_Definition EnergyShield;
 	Particle::_Definition PulseEngineGlow;
 	Particle::_Definition PulseEngineSpark;
+	
+	Image ShieldRechargeSprite;
+	Image ShieldStaticSprite;
+	Image GlowSprite;
 private:
 	void initBullets();
 	void initWeapons();
 	void initParticles();
+	void initImages();
 };
 
 extern AssetDefinition gAssets;

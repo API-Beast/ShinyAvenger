@@ -34,8 +34,9 @@ public:
 	
 	float ShieldEnergy = 100;
 	float MaxShield = 100;
-	float ShieldRegeneration = 0;
+	float ShieldRegeneration = 10;
 	ShipState Status = Ship::Okay;
+	float Age;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;

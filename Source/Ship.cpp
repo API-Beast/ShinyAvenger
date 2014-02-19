@@ -14,18 +14,22 @@ Ship::Ship(const Image& img) : Sprite(img)
 	FactionColorSprite = Image("Player/FactionColor.png");
 	
 	ShieldParticleDef = gAssets.EnergyShield;
-	ShieldColors.insert(0.0f, Colors::White);
+	ShieldColors.insert(1.0f, Colors::White);
 	ShieldColors.insert(0.5f, Colors::Saturated::Cyan);
-	ShieldColors.insert(1.0f, Colors::Saturated::Red);
+	ShieldColors.insert(0.0f, Colors::Saturated::Red);
 }
 
 void Ship::update(float t, PlaySpace* space)
 {	
+	Age += t;
 	if(AI)
 		AI->update(t, this, space);
 	
 	if(Status != Destroyed)
 	{
+		if(ShieldEnergy < MaxShield)
+			ShieldEnergy = Approach(ShieldEnergy, MaxShield, t * ShieldRegeneration);
+		
 		updateControls(t, space);
 		updateFX      (t, space);
 		
@@ -149,11 +153,25 @@ void Ship::draw(RenderContext r)
 {
 	if(Status == Destroyed)
 		r.setColor(Colors::Grey);
+	
 	r.Offset = Position;
 	r.Rotation = Rotation;
 	Sprite.draw(r);
 	r.setColor(FactionColor, 1.f);
 	FactionColorSprite.draw(r);
+	
+	if(ShieldEnergy < (MaxShield * 0.8f) && ShieldEnergy > 0.f)
+	{
+		float percentShield = (Max(ShieldEnergy, 1.f) / (MaxShield * 0.8f));
+		r.setBlendingMode(RenderContext::Additive);
+		r.setColor(ShieldColors[percentShield], 1.0f * (1 - percentShield));
+		r.Rotation = 0_turn;
+		gAssets.ShieldStaticSprite.draw(r);
+		
+		r.setColor(ShieldColors[percentShield+0.2f], Max(Angle::FromTurn(Age).cos(), 0.) * (1 - percentShield));
+		r.Rotation = Angle::FromDegree(int(Age)*60);
+		gAssets.ShieldRechargeSprite.draw(r);
+	}
 }
 
 void Ship::updateBounds()
@@ -167,7 +185,7 @@ void Ship::doDamage(float damage)
 	if(ShieldEnergy >= 0)
 	{
 		ShieldEnergy -= damage;
-		ShieldParticleDef.Animation.Color.insert(0.05f, ShieldColors[Min(ShieldEnergy, 1.f) / MaxShield]);
+		ShieldParticleDef.Animation.Color.insert(0.05f, ShieldColors[Max(ShieldEnergy, 1.f) / MaxShield]);
 	}
 	else
 		Status = Destroyed;

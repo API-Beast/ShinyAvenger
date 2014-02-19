@@ -11,6 +11,14 @@ void AssetDefinition::initAll()
 	initParticles();
 	initBullets();
 	initWeapons();
+	initImages();
+}
+
+void AssetDefinition::initImages()
+{
+	ShieldRechargeSprite = Image("Ship/ShieldRecharge.png");
+	ShieldStaticSprite = Image("Ship/ShieldStatic.png");
+	GlowSprite = Image("Glow.png");
 }
 
 void AssetDefinition::initBullets()
@@ -213,7 +221,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = EnergyShield;
 		
-		p.Sprite = Image("Ship/Shield.png");
+		p.Sprite = Image("Ship/ShieldImpact.png");
 		p.DrawMode = RenderContext::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Drag = 0.f;
@@ -228,7 +236,6 @@ void AssetDefinition::initParticles()
 		}
 		
 		p.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
-		p.Animation.Scale = Vec2F(0.75f, 0.75f);
 	}
 }
 
