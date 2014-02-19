@@ -77,6 +77,6 @@ public:
 	
 	// User Interface
 	Arrows ShipArrows;
-	Label test1, test2;
+	Label FrameRate;
 	UIContainer GUIContainer;
 };

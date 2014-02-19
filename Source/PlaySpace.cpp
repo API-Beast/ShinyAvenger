@@ -39,6 +39,8 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 
 	// User Interface
 	GUIContainer.append(&ShipArrows);
+	GUIContainer.append(&FrameRate);
+	FrameRate.Font = &gAssets.BigFont;
 }
 
 PlaySpace::~PlaySpace()
@@ -123,15 +125,8 @@ void PlaySpace::draw()
 		ForegroundFog.drawRepeated(rBG);
 	}
 	
-	RenderContext gui;
-	gui.Alignment = 0;
-	gui.setColor(Colors::White);
-	gAssets.BigFont.draw<char>(std::to_string(LastDeltaTime*1000).substr(0, 4), gui);
-	
-	
+	RenderContext gui;	
 	GUIContainer.render(&gui);
-	//gui.Offset = {0, 200};
-	//SmallFont.draw<char>("Test!! 123xyz", gui);
 }
 
 void PlaySpace::update(float time)
@@ -197,6 +192,8 @@ void PlaySpace::update(float time)
 	Player->IsBraking = false;
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
+	
+	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
