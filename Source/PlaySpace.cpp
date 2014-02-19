@@ -9,7 +9,7 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
-PlaySpace::PlaySpace(GameSurface* surface)
+PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 {
 	gAssets.initAll();
 
@@ -37,8 +37,8 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Player->AI = NULL;
 	Player->Position = Vec2F{200, 150};
 
-	EnemyArrow *Arrow = new EnemyArrow(this);
-	GUIContainer.append(Arrow);
+	// User Interface
+	GUIContainer.append(&ShipArrows);
 }
 
 PlaySpace::~PlaySpace()
@@ -123,12 +123,13 @@ void PlaySpace::draw()
 		ForegroundFog.drawRepeated(rBG);
 	}
 	
-	GUIContainer.draw(&r);
-	
 	RenderContext gui;
 	gui.Alignment = 0;
 	gui.setColor(Colors::White);
 	gAssets.BigFont.draw<char>(std::to_string(LastDeltaTime*1000).substr(0, 4), gui);
+	
+	
+	GUIContainer.render(&gui);
 	//gui.Offset = {0, 200};
 	//SmallFont.draw<char>("Test!! 123xyz", gui);
 }

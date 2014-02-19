@@ -8,7 +8,7 @@
 #include "PlaySpace.h"
 #include <iostream>
 
-void EnemyArrow::draw(RenderContext* Context)
+void Arrows::draw(RenderContext* Context)
 {
 	for(Ship* ship : Space->Ships)
 	{
@@ -35,4 +35,16 @@ void EnemyArrow::draw(RenderContext* Context)
 		ArrowImage.draw(*Context);
 		
 	}
+}
+
+void Label::draw(RenderContext *Context)
+{
+	Context->Scale = Scale;
+	Context->setColor(Color);
+	Font->draw(Text, *Context);
+}
+
+void ShieldBar::draw(RenderContext *Context)
+{
+	
 }

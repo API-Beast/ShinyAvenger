@@ -64,7 +64,6 @@ public:
 	List<Sector*> Sectors;
 
 	KeyframeList<Color> BackgroundGradient;
-	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;
 	Vec2F ScreenSize;
@@ -75,4 +74,9 @@ public:
 	float RotationAirDrag = 0.01f;
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
+	
+	// User Interface
+	Arrows ShipArrows;
+	Label test1, test2;
+	UIContainer GUIContainer;
 };
