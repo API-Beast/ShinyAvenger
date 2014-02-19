@@ -41,20 +41,20 @@ public:
 		}
 	}
 	
-	float left() { return parent->left() + Position.X; }
-	float top() { return parent->top() + Position.Y; }
-	float right() { return left() + Size.X; }
-	float bottom() { return top() + Size.Y; }
+	float left()   const { return parent != NULL ? parent->left() + Position.X : Position.X; }
+	float top()    const { return parent != NULL ? parent->top()  + Position.Y : Position.Y; }
+	float right()  const { return left() + Size.X; }
+	float bottom() const { return top()  + Size.Y; }
 	
 	void append(UIContainer* Child) 
 	{ 
-		//if (Child->parent != NULL)
-		//{
-			//Child->parent->remove(Child);
-		//}
+		if (Child->parent != NULL)
+		{
+			Child->parent->remove(Child);
+		}
 		
 		Children.pushBack(Child); 
-		//Child->parent = this;
+		Child->parent = this;
 		
 	}
 	void remove(UIContainer* Child) { 		
@@ -62,7 +62,7 @@ public:
 		{
 			if (Child == Children[i])
 			{
-				//Child->parent = NULL;
+				Child->parent = NULL;
 				Children.quickRemove(i);
 				break;
 			}
