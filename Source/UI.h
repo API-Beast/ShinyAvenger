@@ -83,3 +83,8 @@ public:
 	
 	void draw(RenderContext *Context);
 };
+
+class ShieldBar : public UIContainer
+{
+	
+};

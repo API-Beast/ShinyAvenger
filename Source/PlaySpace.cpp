@@ -12,9 +12,6 @@
 PlaySpace::PlaySpace(GameSurface* surface)
 {
 	gAssets.initAll();
-	
-	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
-	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);
 
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
@@ -131,7 +128,7 @@ void PlaySpace::draw()
 	RenderContext gui;
 	gui.Alignment = 0;
 	gui.setColor(Colors::White);
-	BigFont.draw<char>(std::to_string(LastDeltaTime*1000).substr(0, 4), gui);
+	gAssets.BigFont.draw<char>(std::to_string(LastDeltaTime*1000).substr(0, 4), gui);
 	//gui.Offset = {0, 200};
 	//SmallFont.draw<char>("Test!! 123xyz", gui);
 }

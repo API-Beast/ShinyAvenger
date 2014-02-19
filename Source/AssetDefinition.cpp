@@ -12,6 +12,7 @@ void AssetDefinition::initAll()
 	initBullets();
 	initWeapons();
 	initImages();
+	initFonts();
 }
 
 void AssetDefinition::initImages()
@@ -19,6 +20,12 @@ void AssetDefinition::initImages()
 	ShieldRechargeSprite = Image("Ship/ShieldRecharge.png");
 	ShieldStaticSprite = Image("Ship/ShieldStatic.png");
 	GlowSprite = Image("Glow.png");
+}
+
+void AssetDefinition::initFonts()
+{	
+	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
+	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);	
 }
 
 void AssetDefinition::initBullets()

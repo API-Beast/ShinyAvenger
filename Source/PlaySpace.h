@@ -18,7 +18,6 @@
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
-#include <Springbok/Graphics/BitmapFont.h>
 
 class Ship;
 
@@ -53,9 +52,6 @@ public:
 	Image ForegroundFog;
 	
 	RandomNumberGenerator WorldRNG;
-	
-	BitmapFont BigFont;
-	BitmapFont SmallFont;
 	
 	List<PhysicsObject*> Objects;
 	
