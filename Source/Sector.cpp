@@ -53,7 +53,7 @@ void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 {
 	Ship* ship = new Ship(Prototype);
-	ship->AI = new TrackingBehavior(NULL);
+	ship->AI = new StateBasedBehavior;
 	ship->Position = position;
 	ship->Faction = ID;
 	ship->Rotation = Angle::FromTurn(RNG.generate());

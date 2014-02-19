@@ -7,26 +7,39 @@
 #pragma once
 
 #include "PhysicsObject.h"
-#include <iostream>
+
 #include <Springbok/Animation/Interpolation.h>
+#include <Springbok/Containers/List.h>
 
 class Ship;
 class PlaySpace;
 
+// Behavior for AI
 class Behavior
 {
 public:
 	virtual void update(float t, Ship* const, PlaySpace*) = 0;
 };
 
+// A state based behavior
+class StateBasedBehavior : public Behavior
+{
+public:	
+	List<Behavior*> States;
+	virtual void update(float t, Ship *const ship, PlaySpace* space)
+	{
+		
+	}
+	
+private:
+	
+};
+
 class TrackingBehavior : public Behavior
 {
 public:
-	Ship* Target;
-
-	TrackingBehavior(Ship* t) : Target(t) {}
-	void update(float t, Ship *const ship, PlaySpace* space);
-	
+	Ship *Target = NULL;
+	virtual void update(float t, Ship *const ship, PlaySpace* space);
 private:
 	Ship* findTargetFor(Ship*,PlaySpace*);
 };

@@ -17,7 +17,7 @@ void EnemyArrow::draw(RenderContext* Context)
 		float Length = Direction.getLength();
 		Vec2F Normalized = Direction.normalized();
 			
-		Context->Offset = (Space->ScreenSize / 2) + Normalized * (Space->ScreenSize.Y / 2.2f);
+		Context->Offset = (Space->ScreenSize / 2) + Normalized * ((Space->ScreenSize.Y / 3.2f) + (20000.0f / (Length / 5)));
 		Context->Rotation = Angle(Direction);
 		float Opacity = 500.0 / Length;
 			
