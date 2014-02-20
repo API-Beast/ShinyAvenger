@@ -97,7 +97,7 @@ class Label : public UIContainer
 public:
 	BitmapFont *Font = &gAssets.SmallFont;
 	std::string Text = "";
-	ColorRGB Color = Colors::White;
+	Color Col = Colors::White;
 	float Scale = 1.f;
 	
 	Label() { }

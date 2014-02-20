@@ -40,7 +40,7 @@ void Arrows::draw(RenderContext* Context)
 void Label::draw(RenderContext *Context)
 {
 	Context->Scale = Scale;
-	Context->setColor(Color);
+	Context->setColor(Col);
 	Font->draw(Text, *Context);
 }
 
