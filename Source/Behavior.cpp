@@ -68,9 +68,11 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 
 Ship* TrackingBehavior::findTargetFor(Ship *ship, PlaySpace *Space)
 {
+	RandomNumberGenerator RNG;
+	
 	for (Ship* other : Space->Ships)
 	{
-	    if (Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+	    if (RNG.generate() < 0.3f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
 	    {
 		return other;    
 	    }
