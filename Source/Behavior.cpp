@@ -70,12 +70,15 @@ Ship* TrackingBehavior::findTargetFor(Ship *ship, PlaySpace *Space)
 {
 	RandomNumberGenerator RNG;
 	
-	for (Ship* other : Space->Ships)
+	while (1) 
 	{
-	    if (RNG.generate() < 0.3f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
-	    {
-		return other;    
-	    }
+		for (Ship* other : Space->Ships)
+		{
+		if (RNG.generate() < 0.05f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+		{
+			return other;    
+		}
+		}
 	}
 	
 	return NULL;
