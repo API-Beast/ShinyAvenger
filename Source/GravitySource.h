@@ -22,8 +22,8 @@ public:
 	void influence(PhysicsObject* obj, float dt);
 public:
 	Vec2F Position;
-	float Gravity;
-	float Range;
+	float Gravity = 1;
+	float Range = 500;
 	
 	Color CenterColor;
 	Color HighlightColor;

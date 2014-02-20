@@ -16,14 +16,14 @@ class PlaySpace;
 class Sector : public Leader
 {
 private:
-	float Time;
-	float Interval;
+	float Time = 0.0f;
+	float Interval = 16.f;
 public:
-	float Radius;	
-	int ID;		
+	float Radius = 100;	
+	int ID = -1;		
 	Ship Prototype;
 	GravitySource TheGravitySource;
-	Vec2F Position;
+	Vec2F Position = 0;
 public:
 	Sector(Vec2F center, float r, PlaySpace*);
         // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
