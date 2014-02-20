@@ -46,5 +46,15 @@ void Label::draw(RenderContext *Context)
 
 void ShieldBar::draw(RenderContext *Context)
 {
-	
+	if (Target != nullptr)
+	{
+		Context->setColor(Colors::White, Opacity);
+		float Ratio = Target->ShieldEnergy / Target->MaxShield;
+		Ratio = Ratio < 0 ? 0 : Ratio;
+		float Offset = Ratio * foreground.getSize().Y;
+		Image realForeground = foreground.cut(Vec2F(0.f, foreground.getSize().Y - Offset), Vec2F(foreground.getSize().X, Offset));
+		background.draw(*Context);		
+		Context->Offset.Y = foreground.getSize().Y - Offset +Position.Y;
+		realForeground.draw(*Context);
+	}
 }

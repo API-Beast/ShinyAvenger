@@ -109,5 +109,13 @@ public:
 
 class ShieldBar : public UIContainer
 {
+public:
+	Image background;
+	Image foreground;
+	float Opacity = 1.f;
+	Ship *Target;
+	
+	ShieldBar() : background("UI/lifebar1.png"), foreground("UI/lifebar2.png") {}
+	
 	void draw(RenderContext *Context);
 };

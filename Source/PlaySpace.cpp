@@ -40,7 +40,11 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 	// User Interface
 	GUIContainer.append(&ShipArrows);
 	GUIContainer.append(&FrameRate);
-	FrameRate.Font = &gAssets.BigFont;
+	//FrameRate.Font = &gAssets.BigFont;
+	Shield.Target = Player;
+	Shield.Position.X = 15;
+	Shield.Position.Y = 25;
+	GUIContainer.append(&Shield);
 }
 
 PlaySpace::~PlaySpace()
