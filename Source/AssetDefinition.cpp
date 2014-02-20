@@ -43,12 +43,12 @@ void AssetDefinition::initBullets()
 		b.Power = 10.f;
 		b.Speed = 800.f;
 
-		b.ColorAnimation.insert(0.5, Colors::Saturated::Orange);
-		b.ColorAnimation.insert(1.0, Colors::Saturated::Red);
+		b.ColorAnimation.insert(0.5, Palette::Orange);
+		b.ColorAnimation.insert(1.0, Palette::Red);
 
-		b.GlowColorAnimation = Colors::Saturated::Yellow;
-		b.GlowColorAnimation.insert(0.5, Colors::Saturated::Orange);
-		b.GlowColorAnimation.insert(1.0, Colors::Saturated::Red);
+		b.GlowColorAnimation = Palette::Yellow;
+		b.GlowColorAnimation.insert(0.5, Palette::Orange);
+		b.GlowColorAnimation.insert(1.0, Palette::Red);
 
 		b.AlphaAnimation.insert(0.8, 1.f);
 		b.AlphaAnimation.insert(1.0, 0.f);
@@ -76,12 +76,12 @@ void AssetDefinition::initBullets()
 		b.Power = 5.f;
 		b.Speed = 1600.f;
 		
-		b.ColorAnimation = Colors::Saturated::Cyan;
-		b.ColorAnimation.insert(1.0, Colors::Saturated::Blue*0.2);
+		b.ColorAnimation = Palette::Cyan;
+		b.ColorAnimation.insert(1.0, Palette::Blue*0.2);
 		
 		b.GlowColorAnimation = Colors::White;
-		b.GlowColorAnimation.insert(0.5, Colors::Saturated::Cyan);
-		b.GlowColorAnimation.insert(1.0, Colors::Saturated::Blue);
+		b.GlowColorAnimation.insert(0.5, Palette::Cyan);
+		b.GlowColorAnimation.insert(1.0, Palette::Blue);
 	}
 	
 	// ------------------------------------------------------------------
@@ -186,8 +186,8 @@ void AssetDefinition::initParticles()
 			auto& anim = p.Animation.Col;
 			
 			anim.clear();
-			anim.insert(0.0f, Colors::Saturated::Orange);
-			anim.insert(1.0f, Colors::Saturated::Magenta);
+			anim.insert(0.0f, Palette::Orange);
+			anim.insert(1.0f, Palette::Magenta);
 		}
 		
 		{
