@@ -263,5 +263,5 @@ bool PlaySpace::isHostile(int a, int b)
 Color PlaySpace::getFactionColor(int factionID)
 {
 	RandomNumberGenerator rng(factionID);
-	return HSY(rng.generate(), rng.generate(0.8f, 1.0f), rng.generate(0.6f, 1.2f));
+	return HSY(rng.generate(), rng.generate(0.6f, 0.9f), rng.generate(0.5f, 0.8f));
 }

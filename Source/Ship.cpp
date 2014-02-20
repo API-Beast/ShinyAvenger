@@ -138,7 +138,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 void Ship::draw(RenderContext r)
 {
 	if(Status == Destroyed)
-		r.setColor(Palette::Grey);
+		r.setColor(Palette::Grey[1]);
 	
 	r.Offset = Position;
 	r.Rotation = Rotation;

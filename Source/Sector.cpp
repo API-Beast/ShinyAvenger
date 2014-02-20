@@ -18,11 +18,15 @@ Sector::Sector(Vec2F center, float r, PlaySpace *Space)
 	Position = center;
 	ID = RNG.generate() * 30000.0f;
 	
+	Color factionClr = Space->getFactionColor(ID);
+	
 	TheGravitySource.Position = center;
 	TheGravitySource.Range = r;
-	TheGravitySource.Gravity = 2.f;
-	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
-	TheGravitySource.CenterColor = Space->getFactionColor(ID);
+	TheGravitySource.Gravity = 100.f;
+	TheGravitySource.BackgroundColor = Dark(factionClr) * 0.5f;
+	TheGravitySource.CenterColor = Dark(factionClr);
+	TheGravitySource.HighlightColor = Bright(factionClr);
+	
 	
 	Space->GravitySources.pushBack(TheGravitySource);
 }
