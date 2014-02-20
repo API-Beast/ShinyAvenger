@@ -27,9 +27,12 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
 	
-	HomeSector = generateSector(0);
-	generateSector({-2000.f, -500.f});
-	generateSector({2000.f, 1000.f});
+	HomeSector = generateSector(0, 0);
+	generateSector({-2000.f, -500.f}, 1);
+	generateSector({1000.f, 1000.f}, 0);
+	generateSector({2000.f, -2500.f}, 1);
+	generateSector({-1000.f, -2500.f}, 2);
+	generateSector({0.f, -1500.f}, 2);
 	
 	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
 	Player->PrimaryWeapon = gAssets.MiniGun;
@@ -56,9 +59,9 @@ PlaySpace::~PlaySpace()
 		delete sec;
 }
 
-Sector* PlaySpace::generateSector(Vec2F position)
+Sector* PlaySpace::generateSector(Vec2F position, int faction)
 {
-	Sector* sect = new Sector(position, WorldRNG.generate(500, 1000), this);
+	Sector* sect = new Sector(position, WorldRNG.generate(500, 1000), this, faction);
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Sectors.pushBack(sect);
 	return sect;
@@ -262,6 +265,6 @@ bool PlaySpace::isHostile(int a, int b)
 
 Color PlaySpace::getFactionColor(int factionID)
 {
-	RandomNumberGenerator rng(factionID);
-	return HSY(rng.generate(), rng.generate(0.6f, 0.9f), rng.generate(0.5f, 0.8f));
+	static const Color FactionColors[3] = {Palette::Cyan, Palette::Orange, Palette::Green};
+	return FactionColors[factionID];
 }

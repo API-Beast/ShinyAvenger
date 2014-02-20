@@ -11,24 +11,24 @@
 
 static RandomNumberGenerator RNG;
 
-Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
-: Radius(r), Prototype(Image("Player/Sprite.png"))
+Sector::Sector(Vec2F center, float r, PlaySpace* space, int faction) 
+: Prototype(Image("Player/Sprite.png"))
 {
+	Faction = faction;
 	Radius = r;
+	Prototype.Sprite = Image("Player/Sprite.png");
 	Position = center;
-	ID = RNG.generate() * 30000.0f;
 	
-	Color factionClr = Space->getFactionColor(ID);
+	Color factionClr = space->getFactionColor(faction);
 	
 	TheGravitySource.Position = center;
 	TheGravitySource.Range = r;
 	TheGravitySource.Gravity = 100.f;
 	TheGravitySource.BackgroundColor = Dark(factionClr) * 0.5f;
-	TheGravitySource.CenterColor = Dark(factionClr);
-	TheGravitySource.HighlightColor = Bright(factionClr);
+	TheGravitySource.CenterColor = factionClr;
+	TheGravitySource.HighlightColor = Saturate(Bright(factionClr), 0.5f);
 	
-	
-	Space->GravitySources.pushBack(TheGravitySource);
+	space->GravitySources.pushBack(TheGravitySource);
 }
 
 void Sector::update(float delta, PlaySpace *Space)
@@ -73,9 +73,9 @@ Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 	Ship* ship = new Ship(Prototype);
 	ship->AI = new TrackingBehavior;
 	ship->Position = position;
-	ship->Faction = ID;
+	ship->Faction = Faction;
 	ship->Rotation = Angle::FromTurn(RNG.generate());
-	ship->FactionColor = Space->getFactionColor(ID);
+	ship->FactionColor = Space->getFactionColor(Faction);
 	Space->Ships.pushBack(ship);
 	Space->Objects.pushBack(ship);
 	return ship;
