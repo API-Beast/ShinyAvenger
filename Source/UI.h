@@ -6,10 +6,13 @@
 
 #pragma once
 
+#include "AssetDefinition.h"
+
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Graphics/Image.h>
 #include <Springbok/Graphics/RenderContext.h>
+#include <string>
 
 class Enemy;
 class PlaySpace;
@@ -18,7 +21,7 @@ class UIContainer
 {	
 protected:	
 	List<UIContainer*> Children;
-	UIContainer *parent;
+	UIContainer *parent = nullptr;
 public:		
 	Vec2F Position;
 	Vec2F Size;
@@ -30,16 +33,21 @@ public:
 			Children[i]->update(Time);
 		}
 	}
-        virtual void draw(RenderContext* Context) 
-	{
-		Context->CameraPos = Position;
 	
+        void render(RenderContext* Context) 
+	{		
+		draw(Context);
+		
 		for (int i = 0; i < Children.UsedLength; ++i)
 		{	
-			Context->Offset = Children[i]->Position;
-			Children[i]->draw(Context);
+			Context->Alignment = 0.f;
+			Context->Rotation = 0_turn;
+			Context->Offset = Position + Children[i]->Position;
+			Children[i]->render(Context);
 		}
 	}
+	
+	virtual void draw(RenderContext* Context) { }
 	
 	float left()   const { return parent != NULL ? parent->left() + Position.X : Position.X; }
 	float top()    const { return parent != NULL ? parent->top()  + Position.Y : Position.Y; }
@@ -70,16 +78,36 @@ public:
 	}
 };
 
-class EnemyArrow : public UIContainer
+class Arrows : public UIContainer
 {
 private:
 	Angle Rotation;
 	PlaySpace *Space;
 	Image ArrowImage = Image("UI/Arrow.png");
 public:
-	EnemyArrow(PlaySpace *TheSpace) : Space(TheSpace) { 
+	Arrows(PlaySpace *TheSpace) : Space(TheSpace) { 
 		Size = ArrowImage.getSize();
 	}
 	
+	void draw(RenderContext *Context);
+};
+
+class Label : public UIContainer
+{
+public:
+	BitmapFont *Font = &gAssets.SmallFont;
+	std::string Text = "";
+	ColorRGB Color = Colors::White;
+	float Scale = 1.f;
+	
+	Label() { }
+	
+	Label(std::string const &text) : Text(text) { }
+	
+	void draw(RenderContext *Context);
+};
+
+class ShieldBar : public UIContainer
+{
 	void draw(RenderContext *Context);
 };

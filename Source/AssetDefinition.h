@@ -10,6 +10,8 @@
 #include "Particle.h"
 #include "Ship.h"
 
+#include <Springbok/Graphics/BitmapFont.h>
+
 struct AssetDefinition
 {
 	void initAll();
@@ -35,11 +37,15 @@ struct AssetDefinition
 	Image ShieldRechargeSprite;
 	Image ShieldStaticSprite;
 	Image GlowSprite;
+	
+	BitmapFont BigFont;
+	BitmapFont SmallFont;
 private:
 	void initBullets();
 	void initWeapons();
 	void initParticles();
 	void initImages();
+	void initFonts();
 };
 
 extern AssetDefinition gAssets;

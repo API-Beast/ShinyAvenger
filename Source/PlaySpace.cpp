@@ -9,12 +9,9 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 
-PlaySpace::PlaySpace(GameSurface* surface)
+PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 {
 	gAssets.initAll();
-	
-	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
-	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);
 
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
@@ -40,8 +37,10 @@ PlaySpace::PlaySpace(GameSurface* surface)
 	Player->AI = NULL;
 	Player->Position = Vec2F{200, 150};
 
-	EnemyArrow *Arrow = new EnemyArrow(this);
-	GUIContainer.append(Arrow);
+	// User Interface
+	GUIContainer.append(&ShipArrows);
+	GUIContainer.append(&FrameRate);
+	FrameRate.Font = &gAssets.BigFont;
 }
 
 PlaySpace::~PlaySpace()
@@ -126,14 +125,8 @@ void PlaySpace::draw()
 		ForegroundFog.drawRepeated(rBG);
 	}
 	
-	GUIContainer.draw(&r);
-	
-	RenderContext gui;
-	gui.Alignment = 0;
-	gui.setColor(Colors::White);
-	BigFont.draw<char>(std::to_string(LastDeltaTime*1000).substr(0, 4), gui);
-	//gui.Offset = {0, 200};
-	//SmallFont.draw<char>("Test!! 123xyz", gui);
+	RenderContext gui;	
+	GUIContainer.render(&gui);
 }
 
 void PlaySpace::update(float time)
@@ -196,6 +189,8 @@ void PlaySpace::update(float time)
 	Player->IsBraking = false;
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
+	
+	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)

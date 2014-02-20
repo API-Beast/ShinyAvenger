@@ -18,7 +18,6 @@
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
-#include <Springbok/Graphics/BitmapFont.h>
 
 class Ship;
 
@@ -54,9 +53,6 @@ public:
 	
 	RandomNumberGenerator WorldRNG;
 	
-	BitmapFont BigFont;
-	BitmapFont SmallFont;
-	
 	List<PhysicsObject*> Objects;
 	
 	List<Bullet> Bullets = List<Bullet>(512);
@@ -68,7 +64,6 @@ public:
 	List<Sector*> Sectors;
 
 	KeyframeList<Color> BackgroundGradient;
-	UIContainer GUIContainer;
 	
 	Vec2F CameraPos;
 	Vec2F ScreenSize;
@@ -79,4 +74,9 @@ public:
 	float RotationAirDrag = 0.01f;
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
+	
+	// User Interface
+	Arrows ShipArrows;
+	Label FrameRate;
+	UIContainer GUIContainer;
 };
