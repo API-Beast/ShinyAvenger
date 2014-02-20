@@ -135,24 +135,10 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 	}
 }
 
-void Ship::onHit(Bullet* bullet, PlaySpace* space)
-{
-	if(ShieldEnergy <= 0)
-		return;
-	Particle p(ShieldParticleDef);
-	reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
-	p.Rotation = Angle(bullet->Position - Position);
-	p.RotationSpeed = 0;
-	p.Drag = 0;
-	p.Flow = 0;
-	p.Stabilizer = 0;
-	space->spawnParticle(p);
-}
-
 void Ship::draw(RenderContext r)
 {
 	if(Status == Destroyed)
-		r.setColor(Colors::Grey);
+		r.setColor(Palette::Grey);
 	
 	r.Offset = Position;
 	r.Rotation = Rotation;
@@ -180,13 +166,41 @@ void Ship::updateBounds()
 	PhysicsObject::updateBounds();
 }
 
+void Ship::onHit(Bullet* bullet, PlaySpace* space)
+{
+	bool shield = false;
+	if(ShieldEnergy > 0)
+	{
+		shield = true;
+		
+		Particle p(ShieldParticleDef);
+		reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
+		p.Rotation = Angle(bullet->Position - Position);
+		p.RotationSpeed = 0;
+		p.Drag = 0;
+		p.Flow = 0;
+		p.Stabilizer = 0;
+		space->spawnParticle(p);
+	}
+	
+	bullet->onHit(this, space);
+	if(shield && ShieldEnergy < 0)
+	{
+		Particle p(gAssets.EnergyShieldDestruction);
+		reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
+		p.Rotation = Angle(bullet->Position - Position);
+		p.RotationSpeed = 0;
+		p.Drag = 0;
+		p.Flow = 0;
+		p.Stabilizer = 0;
+		space->spawnParticle(p);
+	}
+}
+
 void Ship::doDamage(float damage)
 {
 	if(ShieldEnergy >= 0)
-	{
 		ShieldEnergy -= damage;
-		ShieldParticleDef.Animation.Color.insert(0.05f, ShieldColors[Max(ShieldEnergy, 1.f) / MaxShield]);
-	}
 	else
 		Status = Destroyed;
 }

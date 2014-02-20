@@ -25,8 +25,12 @@ struct AssetDefinition
 	Ship::_Weapon MissileLauncher; // Very slow, strong, homing
 	
 	Particle::_Definition EnergyShield;
+	Particle::_Definition EnergyShieldDestruction;
+	
 	Particle::_Definition PulseEngineGlow;
 	Particle::_Definition PulseEngineSpark;
+	
+	Particle::_Definition GlowParticle;
 	
 	Image ShieldRechargeSprite;
 	Image ShieldStaticSprite;

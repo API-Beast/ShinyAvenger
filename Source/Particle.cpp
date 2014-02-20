@@ -18,7 +18,7 @@ void Particle::draw(RenderContext r)
 	r.Offset = Position;
 	r.Rotation = Rotation + Definition->Animation.Rotation[age];
 	r.Scale = Definition->Animation.Scale[age];
-	r.setColor(Definition->Animation.Color[age], Definition->Animation.Alpha[age]);
+	r.setColor(Definition->Animation.Col[age], Definition->Animation.Alpha[age]);
 	r.setBlendingMode(Definition->DrawMode);
 	Definition->Sprite.draw(r);
 }

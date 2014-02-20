@@ -12,12 +12,13 @@
 static RandomNumberGenerator RNG;
 
 Sector::Sector(Vec2F center, float r, PlaySpace *Space) 
-: Radius(r), Time(0), Interval(8.0), Prototype(Image("Player/Sprite.png")),
-TheGravitySource({center, 250.f, r * 2.f, ColorRGB(0.62f, 0.2f, 0.44f), ColorRGB(0.92f, 0.5f, 0.44f)})
+: Radius(r), Time(0), Interval(8.0), Prototype(Image("Player/Sprite.png"))
 {
 	Position = center;	
 	ID = RNG.generate() * 30000.0f;
 	
+	TheGravitySource.Position = center;
+	TheGravitySource.Range = r;
 	TheGravitySource.BackgroundColor = Space->getFactionColor(ID) * 0.2f;
 	TheGravitySource.CenterColor = Space->getFactionColor(ID);
 	

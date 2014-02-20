@@ -47,7 +47,7 @@ public:
 	
 	// Diplomacy
 	int Faction = -1;
-	ColorRGB FactionColor = Colors::White;
+	Color FactionColor = Colors::White;
 	Image FactionColorSprite;
 	Leader *TheLeader = NULL;
 	

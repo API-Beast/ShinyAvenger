@@ -14,6 +14,7 @@
 struct Particle : public PhysicsObject
 {
 	float TimeSinceSpawn = 0.f;
+	Color Colorization = Colors::White;
 	
 	struct _Definition
 	{
@@ -24,7 +25,7 @@ struct Particle : public PhysicsObject
 		struct
 		{
 			KeyframeList<float> Alpha = 1.f;
-			KeyframeList<ColorRGB> Color = Colors::White;
+			KeyframeList<Color> Col = Colors::White;
 			KeyframeList<Vec2F> Scale = Vec2F(1.f);
 			KeyframeList<Angle> Rotation = 0.0_turn;
 		} Animation;

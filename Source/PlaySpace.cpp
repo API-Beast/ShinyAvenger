@@ -186,10 +186,7 @@ void PlaySpace::update(float time)
 			if(ship->Faction != bullet.Faction)
 				if(ship->Status != Ship::Destroyed)
 					if(IsIntersecting(bullet.Bounds, ship->Bounds))
-					{
-						bullet.onHit(ship, this);
 						ship->onHit(&bullet, this);
-					}
 		
 	CameraPos = -(ScreenSize/2) + Player->Position;
 	
@@ -264,9 +261,8 @@ bool PlaySpace::isHostile(int a, int b)
    return a != b;
 }
 
-ColorRGB PlaySpace::getFactionColor(int factionID)
+Color PlaySpace::getFactionColor(int factionID)
 {
 	RandomNumberGenerator rng(factionID);
-  ColorHSY hsy(rng.generate(), rng.generate(0.8f, 1.0f), rng.generate(0.6f, 1.2f));
-	return ColorRGB(hsy);
+	return HSY(rng.generate(), rng.generate(0.8f, 1.0f), rng.generate(0.6f, 1.2f));
 }

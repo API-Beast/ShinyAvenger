@@ -113,7 +113,7 @@ void AssetDefinition::initWeapons()
 		w.BulletPrototype = PhaserBullet;
 		w.Bullets = 2;
 		w.ShotDelay = 0.50f;
-		w.Spread = 0.1_turn;
+		w.Spread = 0.02_turn;
 		w.Type = Ship::MultiShot;
 	}
 	
@@ -176,7 +176,7 @@ void AssetDefinition::initParticles()
 		}
 		
 		{
-			auto& anim = p.Animation.Color;
+			auto& anim = p.Animation.Col;
 			
 			anim.clear();
 			anim.insert(0.0f, Colors::Saturated::Orange);
@@ -235,7 +235,31 @@ void AssetDefinition::initParticles()
 			anim.insert(1.0f, 0.0f);
 		}
 		
-		p.Animation.Color.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
+		p.Animation.Col.insert(1.0f, Color(0.0f, 0.0f, 0.4f));
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Energy Shield Destruction
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = EnergyShieldDestruction;
+		
+		p = EnergyShield;
+		p.Sprite = Image("Ship/ShieldDestruction.png");
+	}
+	
+	// ------------------------------------------------------------------
+	// ### Glow Particle
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = GlowParticle;
+		
+		p.Sprite = Image("Glow.png");
+		p.DrawMode = RenderContext::Additive;
+		p.Lifetime = 0.2f;
+		p.PhysicsProperties.Mass = 0.f;
+		p.PhysicsProperties.Drag = 0.0f;
+		p.PhysicsProperties.Stabilizer = 0.0f;
 	}
 }
 
