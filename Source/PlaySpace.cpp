@@ -35,6 +35,7 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 	generateSector({0.f, -1500.f}, 2);
 	
 	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
+	Player->Sprite = Image("Player/Ship.png");
 	Player->PrimaryWeapon = gAssets.MiniGun;
 	Player->SecondaryWeapon = gAssets.MissileLauncher;
 	Player->AI = NULL;
