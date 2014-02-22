@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+static RandomNumberGenerator RNG;
+
 void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
 	if (ship->TheLeader != nullptr)
@@ -20,9 +22,7 @@ void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 		if (!ship->TheLeader->hasMoved())
 		{
 			delete ship->AI;
-			ship->AI = new EmptyBehavior;
-			ship->Steering = 0;
-			ship->IsStabilizing = 1;
+			ship->AI = new RotatingBehavior;
 			return;
 		}
 		
@@ -49,14 +49,40 @@ void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			ship->IsBraking = true;
 		else
 			ship->IsBraking = false;
-	
-		LastLeaderPos = LeaderPos;
 	}
 }
 
 void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
-	
+	if (ship->TheLeader != nullptr)
+	{
+		// Check for movement
+		if (ship->TheLeader->hasMoved())
+		{
+			delete ship->AI;
+			ship->AI = new FollowingBehavior;
+			return;
+		}
+		
+		if (radius == 0)
+		{
+			radius = RNG.generate(100.f, 1000.f);
+		}
+		
+		// TODO: Fly/Rotate around the leader, aim to keep the radius as distance
+		
+		/* TODO: Check for enemy (every second) in a given area around this ship. If
+		 *       found, track it! 
+		 *
+		 * if (enemyInRadius)
+		 * {
+		 *     delete ship->AI;
+		 *     ship->AI = new TrackingBehavior(foundShip);
+		 * }
+		 */
+		
+		
+	}
 }
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)

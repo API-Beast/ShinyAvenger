@@ -25,14 +25,15 @@ class EmptyBehavior : public Behavior { void update(float t, Ship *const ship, P
 
 class FollowingBehavior : public Behavior
 {
-private:
-	Vec2F LastLeaderPos;
 public:
 	void update(float t, Ship *const ship, PlaySpace* space);
 };
 
 class RotatingBehavior : public Behavior
 {
+private:
+	
+	float radius = 0;
 public:
 	void update(float t, Ship *const ship, PlaySpace* space);
 };

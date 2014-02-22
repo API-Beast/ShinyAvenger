@@ -31,7 +31,6 @@ public:
 	// General
 	Image Sprite;
 	float EngineAccleration = 400;
-	Vec2F LastPosition;
 	
 	float ShieldEnergy = 100;
 	float MaxShield = 100;
@@ -92,5 +91,5 @@ public:
 	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
-	bool hasMoved() const { return (Position - LastPosition).getLength() != 0.f; }
+	bool hasMoved() const { return Speed.getLength() > 0; }
 };
