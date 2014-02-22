@@ -84,8 +84,8 @@ public:
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
 	
-	Vec2F SectorSize = 10000;
-	float SectorLookAhead = 5000;
+	Vec2F SectorSize = 15000;
+	float SectorLookAhead = 15000;
 	
 	// User Interface
 	Arrows ShipArrows;

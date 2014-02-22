@@ -66,13 +66,32 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 		Vec2F sectStart = sectCoordinates * SectorSize;
 		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
 		int primaryFaction = WorldRNG.generate(0, 1);
-		generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+		int secondaryFaction = WorldRNG.generate(0, 1);
+		while(primaryFaction == secondaryFaction)
+			secondaryFaction = WorldRNG.generate(0, 1);
+		int type = WorldRNG.generate(0, 3);
+		
+		if(type == 0)
+		{
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+		}
+		else if(type == 1)
+		{
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), secondaryFaction);
+		}
+		else if(type == 2)
+		{
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), secondaryFaction);
+		}
 	}
 }
 
 SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 {
-	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(500, 1000), this, faction);
+	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(1500, 2500), this, faction);
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Systems.pushBack(sect);
 	return sect;
