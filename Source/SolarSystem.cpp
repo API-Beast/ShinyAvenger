@@ -4,14 +4,14 @@
 //  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-#include "Sector.h"
+#include "SolarSystem.h"
 #include "PlaySpace.h"
 #include "Behavior.h"
 
 
 static RandomNumberGenerator RNG;
 
-Sector::Sector(Vec2F center, float r, PlaySpace* space, int faction) 
+SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction) 
 : Prototype(Image("Player/Sprite.png"))
 {
 	Faction = faction;
@@ -31,7 +31,7 @@ Sector::Sector(Vec2F center, float r, PlaySpace* space, int faction)
 	space->GravitySources.pushBack(TheGravitySource);
 }
 
-void Sector::update(float delta, PlaySpace *Space)
+void SolarSystem::update(float delta, PlaySpace *Space)
 {
 	if ((Time += delta) > Interval)
 	{
@@ -45,7 +45,7 @@ void Sector::update(float delta, PlaySpace *Space)
 	}
 }
 
-void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
+void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 {
 	
 	const float SPRAY_FACTOR = 150.f;
@@ -68,7 +68,7 @@ void Sector::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	}
 }
 
-Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
+Ship* SolarSystem::spawnShip(Vec2F position, PlaySpace *Space)
 {
 	Ship* ship = new Ship(Prototype);
 	ship->AI = new FollowingBehavior;
@@ -81,7 +81,7 @@ Ship* Sector::spawnShip(Vec2F position, PlaySpace *Space)
 	return ship;
 }
 
-Vec2F Sector::getPosition() const
+Vec2F SolarSystem::getPosition() const
 {
 	return Position;
 }

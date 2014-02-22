@@ -27,12 +27,7 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
 	
-	HomeSector = generateSector(0, 0);
-	generateSector({-2000.f, -500.f}, 1);
-	generateSector({1000.f, 1000.f}, 0);
-	generateSector({2000.f, -2500.f}, 1);
-	generateSector({-1000.f, -2500.f}, 2);
-	generateSector({0.f, -1500.f}, 2);
+	HomeSector = generateSystem(0, 0);
 	
 	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
 	Player->Sprite = Image("Player/Ship.png");
@@ -56,18 +51,32 @@ PlaySpace::~PlaySpace()
 	for(PhysicsObject* obj : Objects)
 		delete obj;
 	
-	for(Sector* sec : Sectors)
+	for(SolarSystem* sec : Systems)
 		delete sec;
 }
 
-Sector* PlaySpace::generateSector(Vec2F position, int faction)
+void PlaySpace::checkSectorGeneration(Vec2F position)
 {
-	Sector* sect = new Sector(position, WorldRNG.generate(500, 1000), this, faction);
-	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
-	Sectors.pushBack(sect);
-	return sect;
+	Vec2I sectCoordinates = position / SectorSize;
+
+	auto& sector = Sectors[sectCoordinates];
+	if(!sector.Generated)
+	{
+		sector.Generated = true;
+		Vec2F sectStart = sectCoordinates * SectorSize;
+		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
+		int primaryFaction = WorldRNG.generate(0, 1);
+		generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+	}
 }
 
+SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
+{
+	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(500, 1000), this, faction);
+	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
+	Systems.pushBack(sect);
+	return sect;
+}
 
 void PlaySpace::draw()
 {
@@ -142,9 +151,9 @@ void PlaySpace::update(float time)
 	LastDeltaTime = time;
 	GameTime += time;
 	
-	for(int i = 0; i < Sectors.UsedLength; ++i)
+	for(int i = 0; i < Systems.UsedLength; ++i)
 	{
-		Sectors[i]->update(time, this);
+		Systems[i]->update(time, this);
 	}
 	
 	GUIContainer.update(time);
@@ -197,6 +206,14 @@ void PlaySpace::update(float time)
 	Player->IsBraking = false;
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
+	
+	checkSectorGeneration(Player->Position);
+	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
+	checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
+	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
+	checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
+	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
+	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 }
@@ -266,6 +283,6 @@ bool PlaySpace::isHostile(int a, int b)
 
 Color PlaySpace::getFactionColor(int factionID)
 {
-	static const Color FactionColors[3] = {Palette::Cyan, Palette::Orange, Palette::Green};
+	static const Color FactionColors[3] = {Colors::White, Palette::Vibrant::Lilac, Palette::Vibrant::Orange};
 	return FactionColors[factionID];
 }

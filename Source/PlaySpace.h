@@ -7,7 +7,7 @@
 #pragma once
 
 #include "Space.h"
-#include "Sector.h"
+#include "SolarSystem.h"
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
@@ -20,6 +20,12 @@
 #include <Springbok/Platform/GameSurface.h>
 
 class Ship;
+
+struct Sector
+{
+	Vec2I Position;
+	bool Generated = false;
+};
 
 class PlaySpace : public Space
 {
@@ -36,7 +42,8 @@ public:
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 	bool isHostile(Ship *, Ship*);
 	bool isHostile(int, int);
-	Sector* generateSector(Vec2F position, int faction);
+	void checkSectorGeneration(Vec2F position);
+	SolarSystem* generateSystem(Vec2F position, int faction);
 	Color getFactionColor(int);
 	
 	// TODO For now just return all Ships, this is just so I can swap it out later without redoing all the code
@@ -44,7 +51,7 @@ public:
 public:
 	Ship* Player;
 	
-	Sector* HomeSector;
+	SolarSystem* HomeSector;
 	
 	Image BackgroundStars;
 	Image BackgroundFog;
@@ -61,7 +68,9 @@ public:
 	int SoftMaxParticleCount = 1024;
 
 	List<Ship*> Ships;
-	List<Sector*> Sectors;
+	List<SolarSystem*> Systems;
+	
+	Map<Sector, Vec2I, &Sector::Position> Sectors;
 
 	KeyframeList<Color> BackgroundGradient;
 	
@@ -74,6 +83,9 @@ public:
 	float RotationAirDrag = 0.01f;
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
+	
+	Vec2F SectorSize = 10000;
+	float SectorLookAhead = 5000;
 	
 	// User Interface
 	Arrows ShipArrows;
