@@ -21,16 +21,27 @@ public:
 	virtual void update(float t, Ship* const, PlaySpace*) = 0;
 };
 
-class LeadBehavior : public Behavior
+class EmptyBehavior : public Behavior { void update(float t, Ship *const ship, PlaySpace* space) { } };
+
+class FollowingBehavior : public Behavior
 {
-	virtual void update(float t, Ship *const ship, PlaySpace* space);
+private:
+	Vec2F LastLeaderPos;
+public:
+	void update(float t, Ship *const ship, PlaySpace* space);
+};
+
+class RotatingBehavior : public Behavior
+{
+public:
+	void update(float t, Ship *const ship, PlaySpace* space);
 };
 
 class TrackingBehavior : public Behavior
 {
 public:
 	Ship *Target = nullptr;
-	virtual void update(float t, Ship *const ship, PlaySpace* space);
+	void update(float t, Ship *const ship, PlaySpace* space);
 private:
 	Ship* findTargetFor(Ship*,PlaySpace*);
 };

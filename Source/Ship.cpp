@@ -96,6 +96,8 @@ void Ship::updateFX(float t, PlaySpace* space)
 		space->spawnParticle(spark);
 		ImpulseSparkTimer += 0.005f;
 	}
+	
+	LastPosition = Position;
 }
 
 void Ship::shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation)

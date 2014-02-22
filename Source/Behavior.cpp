@@ -10,7 +10,51 @@
 
 #include <iostream>
 
-void LeadBehavior::update(float t, Ship* const ship, PlaySpace* space)
+void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
+{
+	if (ship->TheLeader != nullptr)
+	{		
+		Vec2F LeaderPos = ship->TheLeader->getPosition();
+		
+		// Check for movement
+		if (!ship->TheLeader->hasMoved())
+		{
+			delete ship->AI;
+			ship->AI = new EmptyBehavior;
+			ship->Steering = 0;
+			ship->IsStabilizing = 1;
+			return;
+		}
+		
+		Vec2F delta = ((LeaderPos) - (ship->Position));
+		float distance = delta.getLength();
+		Angle targetRotation = Angle(delta);
+		Angle angleDelta = ship->Rotation - targetRotation;
+		
+		if(Abs(angleDelta) > 0.01_turn)
+		{
+			ship->IsStabilizing = 0;
+			if(angleDelta > 0_turn)
+				ship->Steering = -1;
+			else
+				ship->Steering =  1;
+		}
+		else
+		{
+			ship->Steering = 0;
+			ship->IsStabilizing = 1;
+		}
+		
+		if(Abs(angleDelta) > 0.25_turn || distance < 500)
+			ship->IsBraking = true;
+		else
+			ship->IsBraking = false;
+	
+		LastLeaderPos = LeaderPos;
+	}
+}
+
+void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
 	
 }

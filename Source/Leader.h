@@ -12,4 +12,5 @@ class Leader
 {
 public:
 	virtual Vec2F getPosition() const = 0;
+	virtual bool hasMoved() const = 0;
 };

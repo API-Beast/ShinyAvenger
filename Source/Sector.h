@@ -30,6 +30,7 @@ public:
 	void spawnGroup(Vec2F, int, PlaySpace*);
 	Ship* spawnShip(Vec2<float>, PlaySpace*);
 	void update(float, PlaySpace*);
-	virtual Vec2F getPosition() const;
+	Vec2F getPosition() const;
+	bool hasMoved() const { return false; }
 };
 
