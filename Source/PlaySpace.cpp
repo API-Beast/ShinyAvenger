@@ -8,10 +8,19 @@
 #include "AssetDefinition.h"
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
+#include <Springbok/Utils/CliArgumentParser.h>
 
-PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
+#include <iostream>
+
+PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) : ShipArrows(this), GeoViews(Bullets, Objects, Particles, Ships)
 {
 	gAssets.initAll();
+	
+	CliArgumentParser argParser;
+	argParser.addSwitch("--stress-test");
+	
+	argParser.parse(arguments);
+	IsStressTesting = argParser["--stress-test"].IsSet;
 
 	BackgroundStars = Image("BackgroundStars.png");
 	BackgroundFog = Image("BackgroundFog.png");
@@ -44,10 +53,26 @@ PlaySpace::PlaySpace(GameSurface* surface) : ShipArrows(this)
 	Shield.Position.X = 15;
 	Shield.Position.Y = 25;
 	GUIContainer.append(&Shield);
+	
+	if(IsStressTesting)
+	{
+		WorldRNG.LowSeed = 453812932;
+		WorldRNG.HighSeed = 354843;
+		for(float y = -25000; y < 25000; y += 5000)
+			for(float x = -25000; x < 25000; x += 5000)
+				checkSectorGeneration({x, y});
+			
+		for(SolarSystem* system : Systems)
+			system->spawnGroup(system->getPosition(), 8, this);
+		
+		std::cout << "Stress testing: " << Ships.UsedLength << " Ships, " << Systems.UsedLength << " Solar Systems" << std::endl;
+	}
 }
 
 PlaySpace::~PlaySpace()
 {
+	std::cout << std::endl << "We simulated " << GameFrame << " Frames in " << GameTime << " seconds" << std::endl;
+	
 	for(PhysicsObject* obj : Objects)
 		delete obj;
 	
@@ -104,6 +129,10 @@ void PlaySpace::draw()
 	glClearColor(0, 0, 0, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
+	GeoViews.Objects.YAxisView.update();
+	GeoViews.Bullets.YAxisView.update();
+	GeoViews.Particles.YAxisView.update();
+	
 	RenderContext r;
 	r.RenderTargetOrigin = 0;
 	r.RenderTargetSize = ScreenSize;
@@ -145,7 +174,19 @@ void PlaySpace::draw()
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
 	
+	float start = CameraPos.Y - 600;
+	float end = start + ScreenSize.Y + 600;
+	
 	r.setColor(Colors::White);
+	// Draw clipped
+	/*for(Bullet& obj : GeoViews.Bullets.YAxisView.getRange(start, end))
+		obj.draw(r);
+	for(PhysicsObject* obj : GeoViews.Objects.YAxisView.getRange(start, end))
+		obj->draw(r);
+	for(Particle& particle : GeoViews.Particles.YAxisView.getRange(start, end))
+		particle.draw(r);*/
+	
+	// Draw unclipped
 	for(Bullet& obj : Bullets)
 		obj.draw(r);
 	for(PhysicsObject* obj : Objects)
@@ -169,11 +210,16 @@ void PlaySpace::update(float time)
 {
 	LastDeltaTime = time;
 	GameTime += time;
+	GameFrame += 1;
 	
-	for(int i = 0; i < Systems.UsedLength; ++i)
-	{
-		Systems[i]->update(time, this);
-	}
+	if(IsStressTesting)
+		time = 1.f / 30;
+	
+	if(!IsStressTesting)
+		for(int i = 0; i < Systems.UsedLength; ++i)
+		{
+			Systems[i]->update(time, this);
+		}
 	
 	GUIContainer.update(time);
 	
@@ -210,6 +256,27 @@ void PlaySpace::update(float time)
 	for(Particle& particle : Particles)
 		applyPhysics(&particle, time * particleTimeFactor);
 	
+	GeoViews.Objects.XAxisView.update();
+	GeoViews.Bullets.XAxisView.update();
+	GeoViews.Particles.XAxisView.update();
+	
+	// Add gravity
+	for(GravitySource& src : GravitySources)
+	{
+		float start = src.Position.X - src.Range*2;
+		float end = src.Position.X + src.Range*2;
+		
+		for(auto* obj : GeoViews.Objects.XAxisView.getRange(start, end))
+			src.influence(obj, time);
+		for(auto& obj : GeoViews.Bullets.XAxisView.getRange(start, end))
+			src.influence(&obj, time);
+		for(auto& obj : GeoViews.Particles.XAxisView.getRange(start, end))
+			src.influence(&obj, time);
+	}
+	
+	GeoViews.Bullets.XAxisView.update();
+	GeoViews.Ships.XAxisView.update();
+	
 	for(Bullet& bullet : Bullets)
 		for(Ship* ship : Ships)
 			if(ship->Faction != bullet.Faction)
@@ -226,13 +293,16 @@ void PlaySpace::update(float time)
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
 	
-	checkSectorGeneration(Player->Position);
-	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
-	checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
-	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
-	checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
-	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
-	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
+	if(!IsStressTesting)
+	{
+		checkSectorGeneration(Player->Position);
+		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
+		checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
+		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
+		checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
+		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
+		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
+	}
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 }
@@ -241,10 +311,6 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 {
 	obj->Speed += obj->Acceleration * dt;
 	obj->Speed -= obj->Speed * ((AirDrag * obj->Drag * dt) + (obj->NegativeForce * dt)) * obj->Speed.getLength();
-	
-	// Add gravity
-	for(GravitySource& src : GravitySources)
-		src.influence(obj, dt);
 	
 	obj->Rotation += Angle(obj->RotationSpeed * dt);
 	
@@ -304,4 +370,9 @@ Color PlaySpace::getFactionColor(int factionID)
 {
 	static const Color FactionColors[3] = {Colors::White, Palette::Vibrant::Lilac, Palette::Vibrant::Orange};
 	return FactionColors[factionID];
+}
+
+ContainerSubrange<ViewBase< Ship*, float >, Ship*> PlaySpace::findShips(Vec2F topLeft, Vec2F bottomRight)
+{
+	return GeoViews.Ships.XAxisView.getRange(topLeft.X, bottomRight.X);
 }

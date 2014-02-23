@@ -16,6 +16,7 @@
 #include "Ship.h"
 
 #include <Springbok/Geometry/Vec2.h>
+#include <Springbok/Geometry/GeometryView.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
 
@@ -30,7 +31,7 @@ struct Sector
 class PlaySpace : public Space
 {
 public:
-	PlaySpace(GameSurface* surface);
+	PlaySpace(GameSurface* surface, const List<std::string>& arguments);
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
@@ -45,9 +46,7 @@ public:
 	void checkSectorGeneration(Vec2F position);
 	SolarSystem* generateSystem(Vec2F position, int faction);
 	Color getFactionColor(int);
-	
-	// TODO For now just return all Ships, this is just so I can swap it out later without redoing all the code
-	List<Ship*>& findShips(Vec2F topLeft, Vec2F bottomRight){ return Ships; };
+	ContainerSubrange< ViewBase< Ship*, float >, Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
 public:
 	Ship* Player;
 	
@@ -65,10 +64,24 @@ public:
 	List<Bullet> Bullets = List<Bullet>(512);
 	List<GravitySource> GravitySources;
 	List<Particle> Particles = List<Particle>(4096);
-	int SoftMaxParticleCount = 1024;
-
 	List<Ship*> Ships;
 	List<SolarSystem*> Systems;
+	
+	int SoftMaxParticleCount = 1024;
+	
+	struct _GeoViews
+	{
+		template<typename T>
+		using GeoView = GeometryView<T, BoundingRect, PhysicsObject, &PhysicsObject::Bounds>;
+		
+		GeoView<Bullet>         Bullets;
+		GeoView<PhysicsObject*> Objects;
+		GeoView<Particle>       Particles;
+		GeoView<Ship*>					Ships;
+		
+		template<typename A, typename B, typename C, typename D>
+		_GeoViews(A& a, B& b, C& c, D& d):Bullets(a),Objects(b),Particles(c),Ships(d){};
+	} GeoViews;
 	
 	Map<Sector, Vec2I, &Sector::Position> Sectors;
 
@@ -81,8 +94,6 @@ public:
 
 	float AirDrag = 0.001f;
 	float RotationAirDrag = 0.01f;
-	float GameTime = 0.0f;
-	float LastDeltaTime = 0.0f;
 	
 	Vec2F SectorSize = 15000;
 	float SectorLookAhead = 15000;
@@ -92,4 +103,10 @@ public:
 	Label FrameRate;
 	ShieldBar Shield;
 	UIContainer GUIContainer;
+	
+	int GameFrame = 0;
+	float GameTime = 0.0f;
+	float LastDeltaTime = 0.0f;
+	
+	bool IsStressTesting = false;
 };

@@ -5,14 +5,26 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Game.h"
+#include <Springbok/Utils/CliArgumentParser.h>
 #include <Springbok/Graphics/RenderContext.h>
 
 Game::Game(int argc, char** argv)
 {
-	Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {1024, 768});
+	CliArgumentParser argParser;
+	argParser.addSwitch("--fullscreen");
+	argParser.addSwitch("--size", 2);
+	
+	argParser.parse(argc, argv);
+	
+	if(argParser["--fullscreen"])
+		Surface = new GameSurface("ShinyAvenger");
+	else if(argParser["--size"])
+		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {std::stoi(argParser["--size"][0]), std::stoi(argParser["--size"][1])});
+	else
+		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {1024, 768});
 	Input   = new InputMonitor(Surface);
 	Clock   = new PreciseClock();
-	Playfield = new PlaySpace(Surface);
+	Playfield = new PlaySpace(Surface, argParser.LooseArguments);
 	RenderContext::Setup2DEnvironment();
 }
 
