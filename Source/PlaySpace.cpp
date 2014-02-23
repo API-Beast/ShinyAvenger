@@ -71,7 +71,8 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 
 PlaySpace::~PlaySpace()
 {
-	std::cout << std::endl << "We simulated " << GameFrame << " Frames in " << GameTime << " seconds" << std::endl;
+	std::cout << "We simulated " << GameFrame << " Frames in " << GameTime << " seconds" << std::endl;
+	std::cout << "We ended up with " << Objects.UsedLength << " Objects, " << Systems.UsedLength << " Systems and " << Sectors.Data.UsedLength << " Sectors" << std::endl;
 	
 	for(PhysicsObject* obj : Objects)
 		delete obj;
@@ -85,9 +86,11 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 	Vec2I sectCoordinates = position / SectorSize;
 
 	auto& sector = Sectors[sectCoordinates];
-	if(!sector.Generated)
+	if(sector.Generated == false)
 	{
 		sector.Generated = true;
+		std::cout << "Generating sector at " << sectCoordinates << " / " << position << std::endl;
+		
 		Vec2F sectStart = sectCoordinates * SectorSize;
 		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
 		int primaryFaction = WorldRNG.generate(0, 1);
