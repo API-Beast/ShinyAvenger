@@ -305,6 +305,7 @@ void PlaySpace::update(float time)
 	}
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
+	ParticlesThisFrame = 0;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -353,7 +354,11 @@ void PlaySpace::spawnPlayerBullet(Bullet bullet)
 void PlaySpace::spawnParticle(Particle particle)
 {
 	if((CameraPos - particle.Position).getLength() < 4000)
-		Particles.pushBack(particle);
+		if(ParticlesThisFrame < 250)
+		{
+			Particles.pushBack(particle);
+			ParticlesThisFrame++;
+		}
 }
 
 bool PlaySpace::isHostile(Ship *shipA, Ship *shipB)

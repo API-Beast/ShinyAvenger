@@ -108,5 +108,7 @@ public:
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
 	
+	int ParticlesThisFrame = 0;
+	
 	bool IsStressTesting = false;
 };
