@@ -26,11 +26,24 @@ void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			return;
 		}
 		
-		Vec2F delta = ((LeaderPos) - (ship->Position));
+		if (Waypoint.getLength() < 0.1f)
+		{
+			Waypoint = LeaderPos;
+		}
+		
+		Vec2F delta = ((Waypoint) - (ship->Position));
 		float distance = delta.getLength();
+		
+		if(distance < 250)
+		{
+			Waypoint = LeaderPos;
+			delta = ((Waypoint) - (ship->Position));
+			distance = delta.getLength();
+		}
+		
 		Angle targetRotation = Angle(delta);
 		Angle angleDelta = ship->Rotation - targetRotation;
-		
+		std::cout << Waypoint << std::endl;
 		if(Abs(angleDelta) > 0.01_turn)
 		{
 			ship->IsStabilizing = 0;
@@ -44,11 +57,6 @@ void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			ship->Steering = 0;
 			ship->IsStabilizing = 1;
 		}
-		
-		if(Abs(angleDelta) > 0.25_turn || distance < 500)
-			ship->IsBraking = true;
-		else
-			ship->IsBraking = false;
 	}
 }
 
@@ -64,21 +72,39 @@ void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			return;
 		}
 		
-		ship->Rotation = Angle(ship->TheLeader->getPosition() - ship->getPosition()) + 0.1_turn;
+		ship->Rotation = Angle(ship->TheLeader->getPosition() - ship->getPosition()) + 0.1_turn;		
 		
-		/* TODO: Check for enemy (every second) in a given area around this ship. If
-		 *       found, track it! 
-		 *
-		 * if (enemyInRadius)
-		 * {
-		 *     delete ship->AI;
-		 *     ship->AI = new TrackingBehavior(foundShip);
-		 * }
-		 */
-		
-		
+		if (Clock.elapsed() > 0.5)
+		{
+			Clock.start();
+			
+			Ship* newTarget = findTargetFor(ship, space);
+			
+			if (newTarget != nullptr)
+			{
+			    delete ship->AI;
+			    ship->AI = new TrackingBehavior(newTarget);
+			}
+		}
 	}
 }
+
+Ship* Behavior::findTargetFor(Ship *ship, PlaySpace *Space)
+{
+	RandomNumberGenerator RNG;	
+	List<Ship*> nearShips = Space->findShips({ship->Position - ship->AggroRadius}, {ship->Position + ship->AggroRadius});
+
+	for (Ship* other : nearShips)
+	{
+		if (RNG.generate() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+		{
+			return other;    
+		}
+	}	
+	
+	return NULL;
+}
+
 
 void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 {
@@ -121,30 +147,7 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 	} 
 	else 
 	{
-		// Fly away!
-		ship->Steering = 0;
-		ship->IsBraking = false;
-		ship->IsShooting = false;
-		ship->IsStabilizing = 1;
-		
-		Target = findTargetFor(ship, space);
+		delete ship->AI;
+		ship->AI = new FollowingBehavior;
 	}
-}
-
-Ship* TrackingBehavior::findTargetFor(Ship *ship, PlaySpace *Space)
-{
-	RandomNumberGenerator RNG;
-	
-	while (1) 
-	{
-		for (Ship* other : Space->Ships)
-		{
-		if (RNG.generate() < 0.05f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
-		{
-			return other;    
-		}
-		}
-	}
-	
-	return NULL;
 }

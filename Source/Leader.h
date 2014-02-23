@@ -11,6 +11,7 @@
 class Leader
 {
 public:
+	List<Ship*> Group;
 	virtual Vec2F getPosition() const = 0;
 	virtual bool hasMoved() const = 0;
 	virtual bool isDestroyed() const = 0;
