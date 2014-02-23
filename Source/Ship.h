@@ -92,4 +92,5 @@ public:
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
 	bool hasMoved() const { return Speed.getLength() > 0; }
+	bool isDestroyed() const { return Status == Destroyed; }
 };

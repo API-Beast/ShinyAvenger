@@ -64,12 +64,7 @@ void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			return;
 		}
 		
-		if (radius == 0)
-		{
-			radius = RNG.generate(100.f, 1000.f);
-		}
-		
-		// TODO: Fly/Rotate around the leader, aim to keep the radius as distance
+		ship->Rotation = Angle(ship->TheLeader->getPosition() - ship->getPosition()) + 0.1_turn;
 		
 		/* TODO: Check for enemy (every second) in a given area around this ship. If
 		 *       found, track it! 

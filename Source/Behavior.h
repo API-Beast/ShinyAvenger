@@ -10,6 +10,7 @@
 
 #include <Springbok/Animation/Interpolation.h>
 #include <Springbok/Containers/List.h>
+#include <Springbok/Platform/PreciseClock.h>
 
 class Ship;
 class PlaySpace;
@@ -17,7 +18,10 @@ class PlaySpace;
 // Behavior for AI
 class Behavior
 {
+private:
+	PreciseClock Clock;
 public:
+	Behavior() { Clock.start(); }
 	virtual void update(float t, Ship* const, PlaySpace*) = 0;
 };
 

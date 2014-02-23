@@ -7,6 +7,8 @@
 #pragma once
 
 #include <Springbok/Geometry/Vec2.h>
+#include <Springbok/Platform/PreciseClock.h>
+
 #include "Ship.h"
 #include "GravitySource.h"
 #include "Leader.h"
@@ -16,7 +18,7 @@ class PlaySpace;
 class SolarSystem : public Leader
 {
 private:
-	float Time = 0.0f;
+	PreciseClock Clock;
 	float Interval = 16.f;
 public:
 	float Radius = 100;	
@@ -32,5 +34,6 @@ public:
 	void update(float, PlaySpace*);
 	Vec2F getPosition() const;
 	bool hasMoved() const { return false; }
+	bool isDestroyed() const { return false; }
 };
 

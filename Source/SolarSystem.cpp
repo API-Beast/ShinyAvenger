@@ -8,7 +8,6 @@
 #include "PlaySpace.h"
 #include "Behavior.h"
 
-
 static RandomNumberGenerator RNG;
 
 SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction) 
@@ -29,14 +28,15 @@ SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction)
 	TheGravitySource.HighlightColor = Saturate(Bright(factionClr), 0.5f);
 	
 	space->GravitySources.pushBack(TheGravitySource);
+	Clock.start();
 }
 
 void SolarSystem::update(float delta, PlaySpace *Space)
 {
-	if ((Time += delta) > Interval)
+	if (Clock.elapsed() > Interval)
 	{
 		const int GROUP_SIZE = 4;
-		Time = Time - Interval;
+		Clock.start();
 		
 		float radius = RNG.generate(200.f, Radius);
 		Angle angle = Angle::FromTurn(RNG.generate());

@@ -226,13 +226,13 @@ void PlaySpace::update(float time)
 	Player->IsStabilizing = false;
 	Player->Steering = 0.0f;
 	
-	checkSectorGeneration(Player->Position);
+	/*checkSectorGeneration(Player->Position);
 	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
 	checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
 	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
 	checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
 	checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
-	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
+	checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));*/
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 }
