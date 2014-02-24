@@ -211,6 +211,9 @@ void PlaySpace::draw()
 
 void PlaySpace::update(float time)
 {
+	if(time > 0.25f)
+		time = 0.25f;
+	
 	LastDeltaTime = time;
 	GameTime += time;
 	GameFrame += 1;
