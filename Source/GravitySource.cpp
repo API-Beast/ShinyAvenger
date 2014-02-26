@@ -64,16 +64,16 @@ void GravitySource::drawTop(RenderContext r)
 	phase[2] = BoundBy<float>(0, phase[2], 1.2f);
 	phase[3] = BoundBy<float>(0, phase[3], 0.8f);
 	
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		r.Rotation = TimeSinceSpawn * (0.08_turn + 0.02_turn * i) + (0.99_turn / 3 * i);
 		r.Scale = CenterSize;
-		r.setColor(CenterColor, Min(phase[i], 1.0f));
+		r.setColor(CenterColor, Min(phase[i]*2, 1.0f));
 		r.setBlendingMode(RenderContext::Default);
 		Graphics.draw(r);
 	}
 	
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		r.Rotation = TimeSinceSpawn * (0.08_turn + 0.02_turn * i) + (0.99_turn / 3 * i);
 		r.Scale = CenterSize;
@@ -82,7 +82,7 @@ void GravitySource::drawTop(RenderContext r)
 		HighlightGraphics.draw(r);
 	}
 	
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		r.Rotation = TimeSinceSpawn * (0.08_turn + 0.02_turn * i) + (1.3_turn / 3 * i);
 		r.Scale = CenterSize;
