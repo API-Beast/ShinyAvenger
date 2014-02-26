@@ -11,7 +11,9 @@
 int main(int argc, char **argv)
 {
 	ResourceManager::GetInstance()->findPrimaryResourcePath({"./Assets"});
-	Game game(argc, argv);
-	game.execute();
+	{
+		Game game(argc, argv);
+		game.execute();
+	}
 	return 0;
 }

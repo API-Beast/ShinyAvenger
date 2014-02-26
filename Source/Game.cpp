@@ -8,6 +8,8 @@
 #include <Springbok/Utils/CliArgumentParser.h>
 #include <Springbok/Graphics/RenderContext.h>
 
+#include <iostream>
+
 Game::Game(int argc, char** argv)
 {
 	CliArgumentParser argParser;
@@ -34,6 +36,7 @@ Game::~Game()
 	delete Input;
 	delete Clock;
 	delete Playfield;
+	std::cout << "Game gets deleted" << std::endl;
 }
 
 void Game::execute()

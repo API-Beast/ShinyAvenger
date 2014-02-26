@@ -19,6 +19,7 @@ public:
 	GravitySource() = default;
 	void update(float dt, PlaySpace* space);
 	void draw(RenderContext r);
+	void drawTop(RenderContext r);
 	void influence(PhysicsObject* obj, float dt);
 public:
 	Vec2F Position;
@@ -37,4 +38,5 @@ public:
 	Image GlowSprite = Image("GravityCloud.png");
 	Image Graphics = Image("GravitySource.png");
 	Image HighlightGraphics = Image("GravitySourceHighlight.png");
+	Image HighlightGraphics2 = Image("GravitySourceHighHighlight.png");
 };

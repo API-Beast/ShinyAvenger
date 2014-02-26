@@ -29,6 +29,7 @@ public:
         // Spawns a new group inside of the system (relative coordinates, 0|0 is center!
 	void spawnGroup(Vec2F, int, PlaySpace*);
 	Ship* spawnShip(Vec2<float>, PlaySpace*);
+	Ship* spawnShip(PlaySpace* space);
 	void update(float, PlaySpace*);
 	Vec2F getPosition() const;
 	bool hasMoved() const { return false; }

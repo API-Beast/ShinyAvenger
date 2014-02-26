@@ -36,14 +36,14 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
 	
-	HomeSector = generateSystem(0, 0);
+	checkSectorGeneration(0);
+	HomeSystem = Systems.front();
 	
-	Player = HomeSector->spawnShip(Vec2F(0.f, 0.f), this);
+	Player = HomeSystem->spawnShip(this);
 	Player->Sprite = Image("Player/Ship.png");
 	Player->PrimaryWeapon = gAssets.MiniGun;
 	Player->SecondaryWeapon = gAssets.MissileLauncher;
 	Player->AI = NULL;
-	Player->Position = Vec2F{200, 150};
 
 	// User Interface
 	GUIContainer.append(&ShipArrows);
@@ -97,7 +97,7 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 		int secondaryFaction = WorldRNG.generate(0, 1);
 		while(primaryFaction == secondaryFaction)
 			secondaryFaction = WorldRNG.generate(0, 1);
-		int type = WorldRNG.generate(0, 3);
+		int type = WorldRNG.generate(0, 2);
 		
 		if(type == 0)
 		{
@@ -119,7 +119,8 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 
 SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 {
-	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(1500, 2500), this, faction);
+	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(4500, 6500), this, faction);
+	std::cout << "Generating solar system at " << position << std::endl;
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Systems.pushBack(sect);
 	return sect;
@@ -197,13 +198,16 @@ void PlaySpace::draw()
 	for(Particle& particle : Particles)
 		particle.draw(r);
 	
-	{
+	/*{
 		RenderContext rBG(r);
 		rBG.Parallaxity = 2.00f;
 		rBG.Scale = 2.f;
 		rBG.setColor(BackgroundGradient[Player->Position.getLength()+2000]* 0.9f);
 		ForegroundFog.drawRepeated(rBG);
-	}
+	}*/
+	
+	for(GravitySource& src : GravitySources)
+		src.drawTop(r);
 	
 	RenderContext gui;	
 	GUIContainer.render(&gui);
@@ -212,7 +216,12 @@ void PlaySpace::draw()
 void PlaySpace::update(float time)
 {
 	if(time > 0.25f)
+	{
+		ParticleBudget = 0;
 		time = 0.25f;
+	}
+	else
+		ParticleBudget = 250;
 	
 	LastDeltaTime = time;
 	GameTime += time;
@@ -311,7 +320,7 @@ void PlaySpace::update(float time)
 	}
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
-	ParticlesThisFrame = 0;
+	ParticleBudget = 0;
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
@@ -359,11 +368,11 @@ void PlaySpace::spawnPlayerBullet(Bullet bullet)
 
 void PlaySpace::spawnParticle(Particle particle)
 {
-	if((CameraPos - particle.Position).getLength() < 4000)
-		if(ParticlesThisFrame < 250)
+	if(ParticleBudget > 0)
+		if((CameraPos - particle.Position).getLength() < 4000)
 		{
 			Particles.pushBack(particle);
-			ParticlesThisFrame++;
+			ParticleBudget--;
 		}
 }
 
@@ -379,7 +388,7 @@ bool PlaySpace::isHostile(int a, int b)
 
 Color PlaySpace::getFactionColor(int factionID)
 {
-	static const Color FactionColors[3] = {Colors::White, Palette::Vibrant::Lilac, Palette::Vibrant::Orange};
+	static const Color FactionColors[3] = {Palette::Vibrant::Lime, Palette::Vibrant::Lilac, Palette::Vibrant::Orange};
 	return FactionColors[factionID];
 }
 

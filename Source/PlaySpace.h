@@ -50,7 +50,7 @@ public:
 public:
 	Ship* Player;
 	
-	SolarSystem* HomeSector;
+	SolarSystem* HomeSystem;
 	
 	Image BackgroundStars;
 	Image BackgroundFog;
@@ -95,7 +95,7 @@ public:
 	float AirDrag = 0.001f;
 	float RotationAirDrag = 0.01f;
 	
-	Vec2F SectorSize = 15000;
+	Vec2F SectorSize = 25000;
 	float SectorLookAhead = 15000;
 	
 	// User Interface
@@ -108,7 +108,7 @@ public:
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;
 	
-	int ParticlesThisFrame = 0;
+	int ParticleBudget = 0;
 	
 	bool IsStressTesting = false;
 };

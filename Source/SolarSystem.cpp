@@ -24,9 +24,9 @@ SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction)
 	TheGravitySource.Position = center;
 	TheGravitySource.Range = r;
 	TheGravitySource.Gravity = 100.f;
-	TheGravitySource.BackgroundColor = Dark(factionClr) * 0.5f;
+	TheGravitySource.BackgroundColor = ShiftHueRight(factionClr, 0.05f) * 0.75f;
 	TheGravitySource.CenterColor = factionClr;
-	TheGravitySource.HighlightColor = Saturate(Bright(factionClr), 0.5f);
+	TheGravitySource.HighlightColor = ShiftHueLeft(factionClr, 0.1f);
 	
 	space->GravitySources.pushBack(TheGravitySource);
 }
@@ -38,7 +38,7 @@ void SolarSystem::update(float delta, PlaySpace *Space)
 		const int GROUP_SIZE = 4;
 		Time = Time - Interval;
 		
-		float radius = RNG.generate(200.f, Radius);
+		float radius = RNG.generate(700.f, 1000.f);
 		Angle angle = Angle::FromTurn(RNG.generate());
 		
 		spawnGroup(Position + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);
@@ -54,7 +54,7 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	
 	for(int i = 0; i < groupSize; ++i)
 	{
-		Ship* ship = spawnShip(pos + RNG.generateVec2<>(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
+		Ship* ship = spawnShip(pos + RNG.generateVec2(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
 	
 		if (leader != NULL)
 		{
@@ -66,6 +66,14 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 			leader = ship;
 		}
 	}
+}
+
+Ship* SolarSystem::spawnShip(PlaySpace* space)
+{
+	float radius = RNG.generate(700.f, 1000.f);
+	Angle angle = Angle::FromTurn(RNG.generate());
+	spawnShip(Position + angle.toDirection().normalized() * radius, space);
+	
 }
 
 Ship* SolarSystem::spawnShip(Vec2F position, PlaySpace *Space)
