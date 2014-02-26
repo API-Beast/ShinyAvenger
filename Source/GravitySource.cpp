@@ -52,17 +52,17 @@ void GravitySource::drawTop(RenderContext r)
 	r.setColor(HighlightColor, 0.4f);
 	gAssets.GlowSprite.drawStretched(Range/3, r);
 	
-	float phase[] = {0.f, 0.f, 0.f};
-	phase[0] = (TimeSinceSpawn * 0.25_turn).sin() + 0.7f;
-	phase[1] = 0.5-phase[0] + (TimeSinceSpawn * 0.30_turn).cos()*0.3f;
+	float phase[] = {0.5f, 0.f, 0.f, 0.f};
+	phase[1] = (TimeSinceSpawn * 0.1_turn).sin() + 0.7f;
+	phase[2] = 0.5-phase[1] + (TimeSinceSpawn * 0.3_turn).cos()*0.2f;
 	
-	phase[0] *= phase[0];
 	phase[1] *= phase[1];
-	phase[2]  = 1-phase[0]-phase[1] + (TimeSinceSpawn * 0.45_turn + 0.20_turn).cos()*0.3f;
+	phase[2] *= phase[2];
+	phase[3]  = 1-phase[1]-phase[2] + (TimeSinceSpawn * 0.4_turn + 0.20_turn).cos()*0.2f;
 	
-	phase[0] = BoundBy<float>(0, phase[0], 1.2f);
 	phase[1] = BoundBy<float>(0, phase[1], 1.2f);
-	phase[2] = BoundBy<float>(0, phase[2], 0.8f);
+	phase[2] = BoundBy<float>(0, phase[2], 1.2f);
+	phase[3] = BoundBy<float>(0, phase[3], 0.8f);
 	
 	for (int i = 0; i < 3; ++i)
 	{
