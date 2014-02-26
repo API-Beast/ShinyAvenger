@@ -116,6 +116,16 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 	weapon.ShotTimer -= t;
 	while(weapon.ShotTimer <= 0.f)
 	{
+		if(weapon.MuzzleFlashSize)
+		{
+			Particle muzzleFlash(gAssets.GlowParticle);
+			muzzleFlash.Position = this->Position;
+			muzzleFlash.Size = weapon.MuzzleFlashSize;
+			muzzleFlash.Colorization = weapon.MuzzleFlashColor;
+			muzzleFlash.Alpha = 0.1f;
+			space->spawnParticle(muzzleFlash);
+		}
+		
 		if(weapon.Bullets <= 1)
 			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, RNG.generate(-1.0f, +1.0f) * weapon.Spread);
 		else if(weapon.Bullets == 2)
@@ -131,6 +141,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 		else
 			for(int i = -weapon.Bullets/2; i < weapon.Bullets/2; ++i)
 				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
+		
 		weapon.ShotTimer += weapon.ShotDelay;
 	}
 }

@@ -15,6 +15,8 @@ struct Particle : public PhysicsObject
 {
 	float TimeSinceSpawn = 0.f;
 	Color Colorization = Colors::White;
+	float Size = 1;
+	float Alpha = 1;
 	
 	struct _Definition
 	{

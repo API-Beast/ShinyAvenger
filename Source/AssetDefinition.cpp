@@ -43,12 +43,10 @@ void AssetDefinition::initBullets()
 		b.Power = 10.f;
 		b.Speed = 800.f;
 
+		b.Blending = RenderContext::Additive;
+		
 		b.ColorAnimation.insert(0.5, Palette::Orange);
 		b.ColorAnimation.insert(1.0, Palette::Red);
-
-		b.GlowColorAnimation = Palette::Yellow;
-		b.GlowColorAnimation.insert(0.5, Palette::Orange);
-		b.GlowColorAnimation.insert(1.0, Palette::Red);
 
 		b.AlphaAnimation.insert(0.8, 1.f);
 		b.AlphaAnimation.insert(1.0, 0.f);
@@ -57,10 +55,7 @@ void AssetDefinition::initBullets()
 		b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
 		b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
 
-		b.GlowScaleAnimation = Vec2F(2.f);
-
 		b.Sprite = Image("Player/Bullet.png");
-		b.Glow = Image("Glow.png");
 	}
 	
 	// ------------------------------------------------------------------
@@ -70,6 +65,7 @@ void AssetDefinition::initBullets()
 		Bullet::_Definition& b = MiniGunBullet;
 		
 		b.Bullet::_Definition::operator=(PhaserBullet);
+		b.Blending = RenderContext::Additive;
 		b.PhysicsProperties.Flow = 0;
 		b.PhysicsProperties.Drag = 0;
 		b.PhysicsProperties.Mass = 0.2;
@@ -78,10 +74,6 @@ void AssetDefinition::initBullets()
 		
 		b.ColorAnimation = Palette::Cyan;
 		b.ColorAnimation.insert(1.0, Palette::Blue*0.2);
-		
-		b.GlowColorAnimation = Colors::White;
-		b.GlowColorAnimation.insert(0.5, Palette::Cyan);
-		b.GlowColorAnimation.insert(1.0, Palette::Blue);
 	}
 	
 	// ------------------------------------------------------------------
@@ -267,6 +259,15 @@ void AssetDefinition::initParticles()
 		p.PhysicsProperties.Mass = 0.f;
 		p.PhysicsProperties.Drag = 0.0f;
 		p.PhysicsProperties.Stabilizer = 0.0f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.4f);
+			anim.insert(0.5f, 0.1f);
+			anim.insert(1.0f, 0.0f);
+		}
 	}
 }
 

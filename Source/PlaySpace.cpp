@@ -208,6 +208,8 @@ void PlaySpace::draw()
 	
 	for(GravitySource& src : GravitySources)
 		src.drawTop(r);
+	for(Bullet& obj : Bullets)
+		obj.drawTop(r);
 	
 	RenderContext gui;	
 	GUIContainer.render(&gui);

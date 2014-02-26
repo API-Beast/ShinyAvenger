@@ -71,6 +71,8 @@ public:
 		Bullet BulletPrototype;
 		int Bullets = 2;
 		Angle Spread = 0_turn;
+		float MuzzleFlashSize = 0;
+		Color MuzzleFlashColor = Colors::White;
 	} PrimaryWeapon;
 	
 	_Weapon SecondaryWeapon;

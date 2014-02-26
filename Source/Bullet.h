@@ -22,7 +22,8 @@ struct Bullet : public PhysicsObject
 	struct _Definition
 	{
 		Image Sprite;
-		Image Glow;
+		
+		bool Glow = true;
 		
 		float Lifetime = 2.f;
 		float Power = 2.f;
@@ -31,14 +32,13 @@ struct Bullet : public PhysicsObject
 		
 		bool Explodes = false;
 		
+		RenderContext::BlendingMode Blending = RenderContext::Default;
+		
 		PhysicsObject PhysicsProperties;
 		
 		KeyframeList<float> AlphaAnimation = 1.0f;
 		KeyframeList<Color> ColorAnimation = Colors::White;
 		KeyframeList<Vec2F> ScaleAnimation = Vec2F(1.0f);
-		
-		KeyframeList<Color> GlowColorAnimation = Colors::White;
-		KeyframeList<Vec2F> GlowScaleAnimation = Vec2F(1.f);
 		
 		virtual void update(Bullet& bullet, float dt, PlaySpace* space){};
 		virtual void onHit(Bullet& bullet, Ship* which, PlaySpace* space){};
@@ -51,6 +51,7 @@ struct Bullet : public PhysicsObject
 	
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
+	void drawTop(RenderContext r);
 	
 	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime || HitObject; };
 	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };

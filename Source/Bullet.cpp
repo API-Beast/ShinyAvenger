@@ -23,13 +23,28 @@ void Bullet::draw(RenderContext r)
 
 	r.setColor(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]);
 	r.Scale = Definition->ScaleAnimation[age];
+	r.setBlendingMode(Definition->Blending);
 	Definition->Sprite.draw(r);
 	
-	r.setColor(Definition->GlowColorAnimation[age], Definition->AlphaAnimation[age]/20);
-	r.Scale = Definition->GlowScaleAnimation[age];
-	r.setBlendingMode(RenderContext::Additive);
-	Definition->Glow.draw(r);
+
 }
+
+void Bullet::drawTop(RenderContext r)
+{
+	if(Definition->Glow)
+	{
+		r.Offset = Position;
+		r.Rotation = Rotation;
+		
+		float age = normalizedAge();
+		
+		r.setColor(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]/20);
+		r.Scale = Definition->ScaleAnimation[age];
+		r.setBlendingMode(RenderContext::Additive);
+		gAssets.GlowSprite.drawStretched(Definition->Sprite.getSize()*4, r);
+	}
+}
+
 
 Bullet::Bullet(Bullet::_Definition& def)
 {
