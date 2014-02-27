@@ -4,8 +4,6 @@
 //  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
-#pragma once
-
 #include "GravitySource.h"
 #include "AssetDefinition.h"
 #include <GL/gl.h>
@@ -95,7 +93,7 @@ void GravitySource::drawTop(RenderContext r)
 void GravitySource::influence(PhysicsObject* obj, float dt)
 {
 	Vec2F difference = (Position - obj->Position);
-	float distance = difference.getLength();
+	float distance = difference.length();
 	Vec2F direction = difference.normalized();
 	obj->Speed += ((direction * Gravity * obj->Mass) / Max((distance/Range)*(distance/Range), 1.0f))*dt;
 }

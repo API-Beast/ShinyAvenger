@@ -62,16 +62,16 @@ void MissileDefinition::update(Bullet& b, float dt, PlaySpace* space)
 {	
 	// Enemy out of range?
 	if(b.CurrentTarget)
-		if((b.CurrentTarget->Position - b.Position).getLength() > TargetingRange * 1.5f)
+		if(!InRange(b.CurrentTarget->Position, b.Position, TargetingRange * 1.5f))
 			b.CurrentTarget = nullptr;
 	
 	// Find a new target
 	if(!b.CurrentTarget)
 	{
 		int minRange = TargetingRange;
-		for(Ship* ship : space->findShips(b.Position - 250, b.Position + 250))
+		for(Ship* ship : space->findShips(b.Position - TargetingRange, b.Position + TargetingRange))
 		{
-			float distance = (ship->Position - b.Position).getLength();
+			float distance = Distance(ship->Position, b.Position);
 			if(distance < minRange
 			 && space->isHostile(b.Faction, ship->Faction)
 			 && ship->Status != Ship::Destroyed)

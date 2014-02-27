@@ -26,19 +26,19 @@ void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 			return;
 		}
 		
-		if (Waypoint.getLength() < 0.1f)
+		if (Waypoint.length() < 0.1f)
 		{
 			Waypoint = LeaderPos;
 		}
 		
 		Vec2F delta = ((Waypoint) - (ship->Position));
-		float distance = delta.getLength();
+		float distance = delta.length();
 		
 		if(distance < 250)
 		{
 			Waypoint = LeaderPos;
 			delta = ((Waypoint) - (ship->Position));
-			distance = delta.getLength();
+			distance = delta.length();
 		}
 		
 		Angle targetRotation = Angle(delta);
@@ -95,7 +95,7 @@ Ship* Behavior::findTargetFor(Ship *ship, PlaySpace *Space)
 	auto nearShips = Space->findShips({ship->Position - ship->AggroRadius}, {ship->Position + ship->AggroRadius});
 
 	for(Ship* other : nearShips)
-		if(RNG.generate() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+		if(RNG.getFloat() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
 			return other;
 	
 	return NULL;
@@ -107,11 +107,11 @@ void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed && space->isHostile(Target, ship))
 	{
 		Vec2F delta = ((Target->Position + Target->Speed * 0.2f) - (ship->Position + ship->Speed * 0.2f));
-		float distance = delta.getLength();
+		float distance = delta.length();
 		if(distance < 250)
 		{
 			delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + ship->Speed * 0.1f));
-			distance = delta.getLength();
+			distance = delta.length();
 		}
 		
 		Angle targetRotation = Angle(delta);

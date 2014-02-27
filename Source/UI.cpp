@@ -18,7 +18,7 @@ void Arrows::draw(RenderContext* Context)
 		
 		Vec2F EnemyPosition = ship->Position;
 		Vec2F Direction = ship->Position - Space->Player->Position;
-		float Length = Direction.getLength();
+		float Length = Direction.length();
 		Vec2F Normalized = Direction.normalized();
 			
 		Context->Offset = (Space->ScreenSize / 2) + Normalized * ((Space->ScreenSize.Y / 3.2f) + (20000.0f / (Length / 5)));

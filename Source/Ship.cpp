@@ -88,8 +88,8 @@ void Ship::updateFX(float t, PlaySpace* space)
 		
 		Particle spark(gAssets.PulseEngineSpark);
 		spark.Rotation = Rotation;
-		spark.Position = Position - Rotation.toDirection()*(16+RNG.generate()*8) + (Rotation+0.25_turn).toDirection() * RNG.generate(-4.f, 4.f);
-		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * RNG.generate(-60.f, 60.f);
+		spark.Position = Position - Rotation.toDirection()*(16+RNG.getNumber(8.f)) + (Rotation+0.25_turn).toDirection() * RNG.getNumber(-4.f, 4.f);
+		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * RNG.getNumber(-60.f, 60.f);
 		
 		spark.update(supplementT, space);
 		space->applyPhysics(&spark, supplementT);
@@ -127,7 +127,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 		}
 		
 		if(weapon.Bullets <= 1)
-			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, RNG.generate(-1.0f, +1.0f) * weapon.Spread);
+			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, RNG.getNumber(-1.0f, +1.0f) * weapon.Spread);
 		else if(weapon.Bullets == 2)
 		{
 			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, +10, +weapon.Spread / 2);

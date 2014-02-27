@@ -38,8 +38,8 @@ void SolarSystem::update(float delta, PlaySpace *Space)
 		const int GROUP_SIZE = 4;
 		Clock.start();
 		
-		float radius = RNG.generate(700.f, 1000.f);
-		Angle angle = Angle::FromTurn(RNG.generate());
+		float radius = RNG.getNumber(700.f, 1000.f);
+		Angle angle = Angle::FromTurn(RNG.getFloat());
 		
 		spawnGroup(Position + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);
 	}
@@ -54,7 +54,7 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	
 	for(int i = 0; i < groupSize; ++i)
 	{
-		Ship* ship = spawnShip(pos + RNG.generateVec2(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
+		Ship* ship = spawnShip(pos + RNG.getVec2(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
 	
 		if (leader != NULL)
 		{
@@ -70,8 +70,8 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 
 Ship* SolarSystem::spawnShip(PlaySpace* space)
 {
-	float radius = RNG.generate(700.f, 1000.f);
-	Angle angle = Angle::FromTurn(RNG.generate());
+	float radius = RNG.getNumber(700.f, 1000.f);
+	Angle angle = Angle::FromTurn(RNG.getFloat());
 	spawnShip(Position + angle.toDirection().normalized() * radius, space);
 	
 }
@@ -82,7 +82,7 @@ Ship* SolarSystem::spawnShip(Vec2F position, PlaySpace *Space)
 	ship->AI = new FollowingBehavior;
 	ship->Position = position;
 	ship->Faction = Faction;
-	ship->Rotation = Angle::FromTurn(RNG.generate());
+	ship->Rotation = Angle::FromTurn(RNG.getFloat());
 	ship->FactionColor = Space->getFactionColor(Faction);
 	Space->Ships.pushBack(ship);
 	Space->Objects.pushBack(ship);

@@ -94,7 +94,7 @@ public:
 	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
-	bool hasMoved() const { return Speed.getLength() > 0; }
+	bool hasMoved() const { return Speed.length() > 0; }
 	bool isDestroyed() const { return Status == Destroyed; }
 	bool isLeader() const { return Group.UsedLength > 0; }
 };

@@ -93,33 +93,33 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 		
 		Vec2F sectStart = sectCoordinates * SectorSize;
 		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
-		int primaryFaction = WorldRNG.generate(0, 1);
-		int secondaryFaction = WorldRNG.generate(0, 1);
+		int primaryFaction = WorldRNG.getNumber(0, 1);
+		int secondaryFaction = WorldRNG.getNumber(0, 1);
 		while(primaryFaction == secondaryFaction)
-			secondaryFaction = WorldRNG.generate(0, 1);
-		int type = WorldRNG.generate(0, 2);
+			secondaryFaction = WorldRNG.getNumber(0, 1);
+		int type = WorldRNG.getNumber(0, 2);
 		
 		if(type == 0)
 		{
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), primaryFaction);
 		}
 		else if(type == 1)
 		{
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), secondaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), secondaryFaction);
 		}
 		else if(type == 2)
 		{
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), primaryFaction);
-			generateSystem(WorldRNG.generateVec2(sectStart, sectEnd), secondaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), primaryFaction);
+			generateSystem(WorldRNG.getVec2(sectStart, sectEnd), secondaryFaction);
 		}
 	}
 }
 
 SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 {
-	SolarSystem* sect = new SolarSystem(position, WorldRNG.generate(4500, 6500), this, faction);
+	SolarSystem* sect = new SolarSystem(position, WorldRNG.getNumber(4500, 6500), this, faction);
 	std::cout << "Generating solar system at " << position << std::endl;
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Systems.pushBack(sect);
@@ -155,7 +155,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.25f;
 		rBG.Scale = 1.9f;
-		rBG.setColor(BackgroundGradient[Player->Position.getLength()+4000]* 0.6f);
+		rBG.setColor(BackgroundGradient[Player->Position.length()+4000]* 0.6f);
 		BackgroundFogB.drawRepeated(rBG);
 	}
 	
@@ -171,7 +171,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.35f;
 		rBG.Scale = 3.f;
-		rBG.setColor(BackgroundGradient[Player->Position.getLength()]* 0.9f);
+		rBG.setColor(BackgroundGradient[Player->Position.length()]* 0.9f);
 		BackgroundFog.drawRepeated(rBG);
 	}
 	
@@ -328,12 +328,12 @@ void PlaySpace::update(float time)
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 {
 	obj->Speed += obj->Acceleration * dt;
-	obj->Speed -= obj->Speed * ((AirDrag * obj->Drag * dt) + (obj->NegativeForce * dt)) * obj->Speed.getLength();
+	obj->Speed -= obj->Speed * ((AirDrag * obj->Drag * dt) + (obj->NegativeForce * dt)) * obj->Speed.length();
 	
 	obj->Rotation += Angle(obj->RotationSpeed * dt);
 	
 	Angle diff = Angle(obj->Speed) - obj->Rotation;
-	obj->Rotation += diff * obj->Flow * (obj->Speed.getLength() / 500) * dt;
+	obj->Rotation += diff * obj->Flow * (obj->Speed.length() / 500) * dt;
 	obj->RotationSpeed -= ((obj->Stabilizer * dt) + (RotationAirDrag * obj->Flow * dt)) * obj->RotationSpeed;
 
 	obj->Position += obj->Speed * dt;
@@ -371,7 +371,7 @@ void PlaySpace::spawnPlayerBullet(Bullet bullet)
 void PlaySpace::spawnParticle(Particle particle)
 {
 	if(ParticleBudget > 0)
-		if((CameraPos - particle.Position).getLength() < 4000)
+		if((CameraPos - particle.Position).length() < 4000)
 		{
 			Particles.pushBack(particle);
 			ParticleBudget--;
