@@ -10,6 +10,7 @@
 
 #include <Springbok/Animation/Interpolation.h>
 #include <Springbok/Containers/List.h>
+#include <Springbok/Platform/PreciseClock.h>
 
 class Ship;
 class PlaySpace;
@@ -17,7 +18,11 @@ class PlaySpace;
 // Behavior for AI
 class Behavior
 {
+protected:
+	PreciseClock Clock;
+	Ship* findTargetFor(Ship*,PlaySpace*);
 public:
+	Behavior() { Clock.start(); }
 	virtual void update(float t, Ship* const, PlaySpace*) = 0;
 };
 
@@ -25,24 +30,23 @@ class EmptyBehavior : public Behavior { void update(float t, Ship *const ship, P
 
 class FollowingBehavior : public Behavior
 {
+private:
+	Vec2F Waypoint;
 public:
 	void update(float t, Ship *const ship, PlaySpace* space);
 };
 
 class RotatingBehavior : public Behavior
 {
-private:
-	
-	float radius = 0;
 public:
 	void update(float t, Ship *const ship, PlaySpace* space);
 };
 
 class TrackingBehavior : public Behavior
 {
-public:
-	Ship *Target = nullptr;
-	void update(float t, Ship *const ship, PlaySpace* space);
 private:
-	Ship* findTargetFor(Ship*,PlaySpace*);
+	Ship *Target;
+public:
+        TrackingBehavior(Ship *Target) : Target(Target) { }
+	void update(float t, Ship *const ship, PlaySpace* space);
 };

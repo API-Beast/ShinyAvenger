@@ -37,6 +37,7 @@ public:
 	float ShieldRegeneration = 10;
 	ShipState Status = Ship::Okay;
 	float Age;
+	float AggroRadius = 200.f;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;
@@ -94,4 +95,6 @@ public:
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
 	bool hasMoved() const { return Speed.getLength() > 0; }
+	bool isDestroyed() const { return Status == Destroyed; }
+	bool isLeader() const { return Group.UsedLength > 0; }
 };
