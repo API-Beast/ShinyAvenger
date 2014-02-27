@@ -92,15 +92,11 @@ void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
 Ship* Behavior::findTargetFor(Ship *ship, PlaySpace *Space)
 {
 	RandomNumberGenerator RNG;	
-	List<Ship*> nearShips = Space->findShips({ship->Position - ship->AggroRadius}, {ship->Position + ship->AggroRadius});
+	auto nearShips = Space->findShips({ship->Position - ship->AggroRadius}, {ship->Position + ship->AggroRadius});
 
-	for (Ship* other : nearShips)
-	{
-		if (RNG.generate() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
-		{
-			return other;    
-		}
-	}	
+	for(Ship* other : nearShips)
+		if(RNG.generate() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+			return other;
 	
 	return NULL;
 }
