@@ -79,7 +79,7 @@ Ship* SolarSystem::spawnShip(PlaySpace* space)
 Ship* SolarSystem::spawnShip(Vec2F position, PlaySpace *Space)
 {
 	Ship* ship = new Ship(Prototype);
-	ship->AI = new FollowingBehavior;
+	ship->AI = new ShipAI(this, ship, Space);
 	ship->Position = position;
 	ship->Faction = Faction;
 	ship->Rotation = Angle::FromTurn(RNG.getFloat());

@@ -31,6 +31,7 @@ struct Sector
 class PlaySpace : public Space
 {
 public:
+	PlaySpace() : ShipArrows(this), GeoViews(Bullets, Objects, Particles, Ships) {};
 	PlaySpace(GameSurface* surface, const List<std::string>& arguments);
 	virtual ~PlaySpace();
 	virtual void update(float time);

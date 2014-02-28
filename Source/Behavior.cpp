@@ -10,140 +10,134 @@
 
 #include <iostream>
 
-static RandomNumberGenerator RNG;
-
-void FollowingBehavior::update(float t, Ship* const ship, PlaySpace* space)
+ShipAI::ShipAI(Leader* lead, Ship* ship, PlaySpace* space)
 {
-	if (ship->TheLeader != nullptr)
-	{		
-		Vec2F LeaderPos = ship->TheLeader->getPosition();
-		
-		// Check for movement
-		if (!ship->TheLeader->hasMoved())
-		{
-			delete ship->AI;
-			ship->AI = new RotatingBehavior;
-			return;
-		}
-		
-		if (Waypoint.length() < 0.1f)
-		{
-			Waypoint = LeaderPos;
-		}
-		
-		Vec2F delta = ((Waypoint) - (ship->Position));
-		float distance = delta.length();
-		
-		if(distance < 250)
-		{
-			Waypoint = LeaderPos;
-			delta = ((Waypoint) - (ship->Position));
-			distance = delta.length();
-		}
-		
-		Angle targetRotation = Angle(delta);
-		Angle angleDelta = ship->Rotation - targetRotation;
-		std::cout << Waypoint << std::endl;
-		if(Abs(angleDelta) > 0.01_turn)
-		{
-			ship->IsStabilizing = 0;
-			if(angleDelta > 0_turn)
-				ship->Steering = -1;
-			else
-				ship->Steering =  1;
-		}
-		else
-		{
-			ship->Steering = 0;
-			ship->IsStabilizing = 1;
-		}
-	}
+	Home = lead;
+	NearbyShips = space->findShips({ship->Position - ViewRange}, {ship->Position + ViewRange});
 }
 
-void RotatingBehavior::update(float t, Ship* const ship, PlaySpace* space)
+void ShipAI::update(float t, Ship* ship, PlaySpace* space)
 {
-	if (ship->TheLeader != nullptr)
+	FindTimer += t;
+	if(t > 2.0f)
 	{
-		// Check for movement
-		if (ship->TheLeader->hasMoved())
+		FindTimer = 0.f;
+		NearbyShips = space->findShips({ship->Position - ViewRange}, {ship->Position + ViewRange});
+	}
+	
+	bool reachedTarget = false;
+	switch(GoalState)
+	{
+		case Follow:
 		{
-			delete ship->AI;
-			ship->AI = new FollowingBehavior;
-			return;
+			steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f);
+			if(InRange(ship->Position, Target->Position, 250))
+				reachedTarget = true;
+			break;
 		}
-		
-		ship->Rotation = Angle(ship->TheLeader->getPosition() - ship->getPosition()) + 0.1_turn;		
-		
-		if (Clock.elapsed() > 0.5)
+		case MoveTo:
 		{
-			Clock.start();
-			
-			Ship* newTarget = findTargetFor(ship, space);
-			
-			if (newTarget != nullptr)
+			steerTowards(ship, Waypoint);
+			if(InRange(ship->Position, Waypoint, 250))
+				reachedTarget = true;
+			break;
+		}
+		case ShotAt:
+		{
+			steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f, true);
+			if(Target->isDestroyed())
+				reachedTarget = true;
+			break;
+		}
+		case Wait:
+			reachedTarget = true;
+			break;
+		default:
+		{
+			std::cout << "State broken" << std::endl;
+			break;
+		}
+	}
+	
+	if(reachedTarget)
+	{
+		switch(TacticState)
+		{
+			case Orbit:
 			{
-			    delete ship->AI;
-			    ship->AI = new TrackingBehavior(newTarget);
+				GoalState = MoveTo;
+				Angle ang = Angle(ship->Position - Home->getPosition()) + 0.05_turn;
+				Waypoint = Home->getPosition() + ang.toDirection() * OrbitDistance;
+				break;
 			}
+			case Engage:
+			{
+				Target = findHostileTarget(ship, space, AggroRange);
+				if(Target)
+					GoalState = ShotAt;
+				else
+				{
+					GoalState = Wait;
+					TacticState = Orbit;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	else
+	{
+		if(TacticState == Orbit && GoalState != ShotAt)
+		{
+			Target = findHostileTarget(ship, space, AggroRange);
+			if(Target)
+				GoalState = ShotAt;
 		}
 	}
 }
 
-Ship* Behavior::findTargetFor(Ship *ship, PlaySpace *Space)
+Ship* ShipAI::findHostileTarget(Ship* ship, PlaySpace* space, float range)
 {
-	RandomNumberGenerator RNG;	
-	auto nearShips = Space->findShips({ship->Position - ship->AggroRadius}, {ship->Position + ship->AggroRadius});
-
-	for(Ship* other : nearShips)
-		if(RNG.getFloat() < 0.2f && Space->isHostile(ship, other) && other->Status != Ship::ShipState::Destroyed)
+	for(Ship* other : NearbyShips)
+		if(space->isHostile(ship, other) && InRange(ship->Position, other->Position, range) && !other->isDestroyed())
 			return other;
 	
-	return NULL;
+	return nullptr;
 }
 
-
-void TrackingBehavior::update(float t, Ship* const ship, PlaySpace* space)
+void ShipAI::steerTowards(Ship* ship, Vec2F point, float timePrediction, bool fireAtPoint)
 {
-	if (Target != NULL && Target->Status != Ship::ShipState::Destroyed && space->isHostile(Target, ship))
+	Vec2F delta = (point - (ship->Position + ship->Speed * timePrediction));
+	float distance = delta.length();
+	
+	Angle targetRotation = Angle(delta);
+	Angle angleDelta = ship->Rotation - targetRotation;
+	
+	if(Abs(angleDelta) > 0.01_turn)
 	{
-		Vec2F delta = ((Target->Position + Target->Speed * 0.2f) - (ship->Position + ship->Speed * 0.2f));
-		float distance = delta.length();
-		if(distance < 250)
-		{
-			delta = ((Target->Position + Target->Speed * 0.1f) - (ship->Position + ship->Speed * 0.1f));
-			distance = delta.length();
-		}
-		
-		Angle targetRotation = Angle(delta);
-		Angle angleDelta = ship->Rotation - targetRotation;
-		
-		if(Abs(angleDelta) > 0.01_turn)
-		{
-			ship->IsStabilizing = 0;
-			if(angleDelta > 0_turn)
-				ship->Steering = -1;
-			else
-				ship->Steering =  1;
-		}
+		ship->IsStabilizing = 0;
+		if(angleDelta > 0_turn)
+			ship->Steering = -1;
 		else
-		{
-			ship->Steering = 0;
-			ship->IsStabilizing = 1;
-		}
-		
+			ship->Steering =  1;
+	}
+	else
+	{
+		ship->Steering = 0;
+		ship->IsStabilizing = 1;
+	}
+	
+	if(Abs(angleDelta) > 0.25_turn || distance < 250)
+		ship->IsBraking = true;
+	else
+		ship->IsBraking = false;
+	
+	if(fireAtPoint)
+	{
 		if(Abs(angleDelta) < 0.05_turn && distance < 750)
 			ship->IsShooting = 1;
 		else
 			ship->IsShooting = false;
-		
-		if(Abs(angleDelta) > 0.25_turn || distance < 500)
-			ship->IsBraking = true;
-		else
-			ship->IsBraking = false;
-	} 
-	else 
-	{
-		delete ship->AI;
-		ship->AI = new FollowingBehavior;
 	}
 }

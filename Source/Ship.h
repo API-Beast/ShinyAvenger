@@ -37,7 +37,6 @@ public:
 	float ShieldRegeneration = 10;
 	ShipState Status = Ship::Okay;
 	float Age;
-	float AggroRadius = 200.f;
 	
 	// Particle Effects
 	RandomNumberGenerator RNG;

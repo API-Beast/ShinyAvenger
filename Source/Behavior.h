@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PhysicsObject.h"
+#include "PlaySpace.h"
 
 #include <Springbok/Animation/Interpolation.h>
 #include <Springbok/Containers/List.h>
@@ -18,35 +19,43 @@ class PlaySpace;
 // Behavior for AI
 class Behavior
 {
-protected:
-	PreciseClock Clock;
-	Ship* findTargetFor(Ship*,PlaySpace*);
 public:
-	Behavior() { Clock.start(); }
-	virtual void update(float t, Ship* const, PlaySpace*) = 0;
+	virtual void update(float t, Ship*, PlaySpace*) = 0;
+	virtual void onHit(Ship* by, Ship* ship){};
 };
 
-class EmptyBehavior : public Behavior { void update(float t, Ship *const ship, PlaySpace* space) { } };
-
-class FollowingBehavior : public Behavior
+class ShipAI : public Behavior
 {
-private:
+public:
+	ShipAI(Leader* lead, Ship* ship, PlaySpace* space);
+	virtual void update(float t, Ship* ship, PlaySpace* space);
+	Ship* findHostileTarget(Ship* ship, PlaySpace* space, float range);
+	void steerTowards(Ship* ship, Vec2F point, float timePrediction = 0.f, bool fireAtPoint = false);
+public:
+	enum _TacticState
+	{
+		Orbit,
+		Engage
+	} TacticState = Orbit;
+	
+	enum _GoalState
+	{
+		Wait,
+		Follow,
+		MoveTo,
+		ShotAt
+	} GoalState = Wait;
+	
 	Vec2F Waypoint;
-public:
-	void update(float t, Ship *const ship, PlaySpace* space);
-};
-
-class RotatingBehavior : public Behavior
-{
-public:
-	void update(float t, Ship *const ship, PlaySpace* space);
-};
-
-class TrackingBehavior : public Behavior
-{
-private:
-	Ship *Target;
-public:
-        TrackingBehavior(Ship *Target) : Target(Target) { }
-	void update(float t, Ship *const ship, PlaySpace* space);
+	Ship* Target;
+	Leader* Home;
+	float FindTimer;
+	decltype(PlaySpace().findShips(Vec2F(), Vec2F())) NearbyShips;
+	
+	float ViewRange  = 600.f;
+	float AggroRange = 250.f;
+	float OrbitRange = 600.f;
+	
+	float OrbitDistance  = 1500.f;
+	float FollowDistance = 250.f;
 };
