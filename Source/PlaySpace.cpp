@@ -93,10 +93,10 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 		
 		Vec2F sectStart = sectCoordinates * SectorSize;
 		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
-		int primaryFaction = WorldRNG.getNumber(0, 1);
-		int secondaryFaction = WorldRNG.getNumber(0, 1);
+		int primaryFaction = WorldRNG.getNumber(0, 2);
+		int secondaryFaction = WorldRNG.getNumber(0, 2);
 		while(primaryFaction == secondaryFaction)
-			secondaryFaction = WorldRNG.getNumber(0, 1);
+			secondaryFaction = WorldRNG.getNumber(0, 2);
 		int type = WorldRNG.getNumber(0, 2);
 		
 		if(type == 0)
@@ -375,9 +375,9 @@ void PlaySpace::spawnPlayerBullet(Bullet bullet)
 	Bullets.pushBack(bullet);
 }
 
-void PlaySpace::spawnParticle(Particle particle)
+void PlaySpace::spawnParticle(Particle particle, bool important)
 {
-	if(ParticleBudget > 0)
+	if(ParticleBudget > 0 || important)
 		if((CameraPos - particle.Position).length() < 4000)
 		{
 			Particles.pushBack(particle);

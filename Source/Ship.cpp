@@ -191,7 +191,7 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 		p.Drag = 0;
 		p.Flow = 0;
 		p.Stabilizer = 0;
-		space->spawnParticle(p);
+		space->spawnParticle(p, true);
 	}
 	
 	bullet->onHit(this, space);
@@ -204,7 +204,7 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 		p.Drag = 0;
 		p.Flow = 0;
 		p.Stabilizer = 0;
-		space->spawnParticle(p);
+		space->spawnParticle(p, true);
 	}
 }
 

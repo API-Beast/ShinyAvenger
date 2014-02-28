@@ -33,6 +33,10 @@ struct AssetDefinition
 	Particle::_Definition PulseEngineSpark;
 	
 	Particle::_Definition GlowParticle;
+	Particle::_Definition SparkParticle;
+	
+	Particle::_Definition ExplosionCloud;
+	Particle::_Definition ExplosionSparks;
 	
 	Image ShieldRechargeSprite;
 	Image ShieldStaticSprite;

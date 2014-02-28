@@ -40,7 +40,8 @@ public:
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);
 	void spawnPlayerBullet(Bullet bullet);
-	void spawnParticle(Particle particle);
+	void spawnParticle(Particle particle, bool important = false);
+	void spawnExplosion(float size, float force, Color sparkColor);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
 	bool isHostile(Ship *, Ship*);
 	bool isHostile(int, int);

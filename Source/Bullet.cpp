@@ -8,6 +8,8 @@
 #include "Ship.h"
 #include "PlaySpace.h"
 
+static RandomNumberGenerator RNG;
+
 void Bullet::update(float dt, PlaySpace* space)
 {
 	TimeSinceSpawn += dt;
@@ -56,6 +58,31 @@ void Bullet::onHit(Ship* which, PlaySpace* space)
 {
 	HitObject = true;
 	which->doDamage(Definition->Power);
+	if(Definition->Explodes)
+	{
+		// TODO
+	}
+	else
+	{
+		Angle ang = Angle((this->Position - this->Speed * 0.1f) - which->Position);
+		int particles = RNG.getNumber(1, 2);
+		float age = normalizedAge();
+		for(int i = 0; i < particles; ++i)
+		{
+			Angle angle = ang + 0.4_turn * RNG.getNumber(-1.f, +1.f);
+			Particle spark(gAssets.SparkParticle);
+			spark.Position = this->Position;
+			spark.Speed = angle.toDirection() * 200;
+			spark.Rotation = angle;
+			spark.Colorization = Definition->ColorAnimation[age];
+			space->spawnParticle(spark);
+		}
+		Particle glow(gAssets.GlowParticle);
+		glow.Position = this->Position;
+		glow.Size = 4.f;
+		glow.Colorization = Definition->ColorAnimation[age];
+		space->spawnParticle(glow);
+	}
 }
 
 void MissileDefinition::update(Bullet& b, float dt, PlaySpace* space)

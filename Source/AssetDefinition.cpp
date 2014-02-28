@@ -269,6 +269,46 @@ void AssetDefinition::initParticles()
 			anim.insert(1.0f, 0.0f);
 		}
 	}
+	
+	// ------------------------------------------------------------------
+	// ### Spark Particle
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = SparkParticle;
+		
+		p.Sprite = Image("spark.png");
+		p.DrawMode = RenderContext::Additive;
+		p.Lifetime = 0.2f;
+		p.PhysicsProperties.Mass = 2.f;
+		p.PhysicsProperties.Drag = 1.f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 1.0f);
+			anim.insert(0.7f, 1.0f);
+			anim.insert(1.0f, 0.0f);
+		}
+		
+		{
+			auto& anim = p.Animation.Col;
+			
+			anim.clear();
+			anim.insert(0.00f, RGB(1.0f, 1.0f, 1.0f));
+			anim.insert(0.70f, RGB(1.0f, 0.9f, 0.8f));
+			anim.insert(0.95f, RGB(1.0f, 0.0f, 0.0f));
+		}
+		
+		{
+			auto& anim = p.Animation.Scale;
+			
+			anim.clear();
+			anim.insert(0.0f, Vec2F(1.f, 0.5f));
+			anim.insert(0.7f, Vec2F(1.f, 1.f));
+			anim.insert(1.0f, Vec2F(1.f, 2.f));
+		}
+	}
 }
 
 
