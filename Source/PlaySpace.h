@@ -96,8 +96,8 @@ public:
 	float AirDrag = 0.001f;
 	float RotationAirDrag = 0.01f;
 	
-	Vec2F SectorSize = 25000;
-	float SectorLookAhead = 15000;
+	Vec2F SectorSize = 17500;
+	float SectorLookAhead = 20000;
 	
 	// User Interface
 	Arrows ShipArrows;

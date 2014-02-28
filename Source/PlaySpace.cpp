@@ -119,7 +119,7 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 
 SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 {
-	SolarSystem* sect = new SolarSystem(position, WorldRNG.getNumber(4500, 6500), this, faction);
+	SolarSystem* sect = new SolarSystem(position, WorldRNG.getNumber(3500, 4500), this, faction);
 	std::cout << "Generating solar system at " << position << std::endl;
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Systems.pushBack(sect);
@@ -319,6 +319,13 @@ void PlaySpace::update(float time)
 		checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
 		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
 		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
+		
+		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2, 0));
+		checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead/2));
+		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2, 0));
+		checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead/2));
+		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2));
+		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2));
 	}
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
