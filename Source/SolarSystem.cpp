@@ -22,6 +22,7 @@ SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction)
 	
 	TheGravitySource.Position = center;
 	TheGravitySource.Range = r;
+	TheGravitySource.CenterSize = r * 0.0004f * (0.60f + RNG.getFloat() * 0.8f);
 	TheGravitySource.Gravity = 100.f;
 	TheGravitySource.BackgroundColor = ShiftHueRight(factionClr, 0.05f) * 0.75f;
 	TheGravitySource.CenterColor = factionClr;
