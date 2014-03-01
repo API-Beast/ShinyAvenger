@@ -164,13 +164,15 @@ void AssetDefinition::initParticles()
 		
 		p.Sprite = Image("Player/Impulse.png");
 		p.DrawMode = RenderContext::Additive;
-		p.Lifetime = 0.2f;
-		p.PhysicsProperties.Drag = 10;
+		p.Lifetime = 0.3f;
+		p.PhysicsProperties.Drag = 2;
 		p.PhysicsProperties.Mass = 0.5f;
 		
 		{
 			auto& anim = p.Animation.Alpha;
 			
+			anim.insert(0.0f, 0.0f);
+			anim.insert(0.2f, 0.3f);
 			anim.insert(1.0f, 0.0f);
 		}
 		
@@ -178,15 +180,16 @@ void AssetDefinition::initParticles()
 			auto& anim = p.Animation.Col;
 			
 			anim.clear();
-			anim.insert(0.0f, Palette::Orange);
-			anim.insert(1.0f, Palette::Magenta);
+			anim.insert(0.0f, Colors::White);
+			anim.insert(1.0f, Palette::Red);
 		}
 		
 		{
 			auto& anim = p.Animation.Scale;
 			
 			anim.clear();
-			anim.insert(0.0f, Vec2F(1.0f, 1.0f));
+			anim.insert(0.0f, Vec2F(1.5f, 1.5f));
+			anim.insert(0.2f, Vec2F(1.0f, 1.0f));
 			anim.insert(0.3f, Vec2F(1.0f, 2.0f));
 			anim.insert(1.0f, Vec2F(1.0f, 3.0f));
 		}
@@ -200,8 +203,8 @@ void AssetDefinition::initParticles()
 		
 		p = PulseEngineGlow;
 		p.Sprite = Image("Player/Spark.png");
-		p.PhysicsProperties.Drag = 0;
-		p.PhysicsProperties.Mass = 5;
+		p.PhysicsProperties.Drag = 1;
+		p.PhysicsProperties.Mass = 1;
 		p.Lifetime = 0.15f;
 		
 		{

@@ -70,13 +70,13 @@ void Ship::updateFX(float t, PlaySpace* space)
 		
 		Particle glow(gAssets.PulseEngineGlow);
 		glow.Rotation = Rotation;
-		glow.Position = Position - Rotation.toDirection()*24;
+		glow.Position = Position - Rotation.toDirection()*12;
 		glow.Speed = -Acceleration + Speed;
-		
+		glow.Colorization = ImpulseColor;
 		glow.update(supplementT, space);
 		space->applyPhysics(&glow, supplementT);
 		space->spawnParticle(glow);
-		ImpulseTimer += 0.050f;
+		ImpulseTimer += 0.025f;
 	}
 	
 	while(ImpulseSparkTimer < 0)
@@ -88,9 +88,9 @@ void Ship::updateFX(float t, PlaySpace* space)
 		
 		Particle spark(gAssets.PulseEngineSpark);
 		spark.Rotation = Rotation;
-		spark.Position = Position - Rotation.toDirection()*(16+RNG.getNumber(8.f)) + (Rotation+0.25_turn).toDirection() * RNG.getNumber(-4.f, 4.f);
+		spark.Position = Position - Rotation.toDirection()*12 + (Rotation+0.25_turn).toDirection() * RNG.getNumber(-4.f, 4.f);
 		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * RNG.getNumber(-60.f, 60.f);
-		
+		spark.Colorization = ImpulseColor;
 		spark.update(supplementT, space);
 		space->applyPhysics(&spark, supplementT);
 		space->spawnParticle(spark);

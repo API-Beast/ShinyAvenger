@@ -41,8 +41,10 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	
 	Player = HomeSystem->spawnShip(this);
 	Player->Sprite = Image("Player/Ship.png");
+	Player->FactionColorSprite = Image("Player/ShipFactionColor.png");
 	Player->PrimaryWeapon = gAssets.MiniGun;
 	Player->SecondaryWeapon = gAssets.MissileLauncher;
+	Player->ImpulseColor = RGB(0.4f, 0.8f, 1.0f);
 	Player->AI = NULL;
 
 	// User Interface
