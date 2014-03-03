@@ -1,0 +1,32 @@
+{
+    "name" : "Galacticum",
+    "author" : "Miguel Gonzalez",
+    "url" : "http://shinyavenger.my-reality.de",
+    "version" : "0.1",
+    "phase" : "alpha",
+    "progress" : "40",
+    "phaselist" : [
+        "alpha", "release"
+    ],
+    
+    "team" : [
+      {
+         "name" : "Miguel Gonzalez",
+         "job": "Developer",
+         "email" : "miguel-gonzalez@gmx.de",
+         "url" : "http://my-reality.de",
+         "facebook" : "https://www.facebook.com/myrealityde",
+         "twitter" : "https://twitter.com/tweetmyreality",
+         "googleplus" : "https://plus.google.com/103183029519102261612"
+      },
+      
+      {
+         "name" : "Manuel Riecke",
+         "job": "Developer",
+         "email" : "test@gmx.de",
+         "url" : "http://shinyavenger.my-reality.de",
+         "twitter" : "https://twitter.com/API_Beast",
+         "googleplus" : "https://plus.google.com/100075361090121539492"
+      }
+   ]
+}
