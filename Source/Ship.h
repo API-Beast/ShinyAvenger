@@ -39,7 +39,6 @@ public:
 	float Age;
 	
 	// Particle Effects
-	RandomNumberGenerator RNG;
 	float ImpulseTimer = 0.f;
 	float ImpulseSparkTimer = 0.f;
 	KeyframeList<Color> ShieldColors;

@@ -8,8 +8,6 @@
 #include "Ship.h"
 #include "PlaySpace.h"
 
-static RandomNumberGenerator RNG;
-
 void Bullet::update(float dt, PlaySpace* space)
 {
 	TimeSinceSpawn += dt;
@@ -65,11 +63,11 @@ void Bullet::onHit(Ship* which, PlaySpace* space)
 	else
 	{
 		Angle ang = Angle((this->Position - this->Speed * 0.1f) - which->Position);
-		int particles = RNG.getNumber(1, 2);
+		int particles = gRNG.getNumber(1, 2);
 		float age = normalizedAge();
 		for(int i = 0; i < particles; ++i)
 		{
-			Angle angle = ang + 0.4_turn * RNG.getNumber(-1.f, +1.f);
+			Angle angle = ang + 0.4_turn * gRNG.getNumber(-1.f, +1.f);
 			Particle spark(gAssets.SparkParticle);
 			spark.Position = this->Position;
 			spark.Speed = angle.toDirection() * 200;
