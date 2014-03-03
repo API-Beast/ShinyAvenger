@@ -225,7 +225,7 @@ void PlaySpace::update(float time)
 		time = 0.25f;
 	}
 	else
-		ParticleBudget = 250;
+		ParticleBudget = 500;
 	
 	LastDeltaTime = time;
 	GameTime += time;

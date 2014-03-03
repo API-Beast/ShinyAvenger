@@ -11,12 +11,13 @@
 static RandomNumberGenerator RNG;
 
 SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction) 
-: Prototype(Image("Player/Sprite.png"))
+: Prototype(Image("Enemy/Enemy01.png"))
 {
 	Faction = faction;
 	Radius = r;
-	Prototype.Sprite = Image("Player/Sprite.png");
 	Position = center;
+	Prototype.FactionColorSprite = Image("Enemy/Enemy01FactionColor.png");
+	Prototype.ImpulseColor = Palette::Lilac;
 	
 	Color factionClr = space->getFactionColor(faction);
 	
