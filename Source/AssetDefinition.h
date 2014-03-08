@@ -16,6 +16,7 @@
 struct AssetDefinition
 {
 	void initAll();
+	void disposeAll();
 	
 	// BULLET DEFINITIONS
 	
@@ -66,6 +67,8 @@ private:
 	void initImages();
 	void initFonts();
 	void initSounds();
+	
+	void disposeSounds();
 };
 
 extern AssetDefinition gAssets;

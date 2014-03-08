@@ -16,6 +16,12 @@ void AssetDefinition::initAll()
 	initSounds();
 }
 
+void AssetDefinition::disposeAll()
+{
+	disposeSounds();
+}
+
+
 void AssetDefinition::initImages()
 {
 	ShieldRechargeSprite = Image("Ship/ShieldRecharge.png");
@@ -319,6 +325,12 @@ void AssetDefinition::initParticles()
 			anim.insert(1.0f, Vec2F(1.f, 2.f));
 		}
 	}
+}
+
+
+void AssetDefinition::disposeSounds()
+{
+	delete MusicMainTheme;
 }
 
 

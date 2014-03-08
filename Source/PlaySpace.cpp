@@ -81,6 +81,8 @@ PlaySpace::~PlaySpace()
 	
 	for(SolarSystem* sec : Systems)
 		delete sec;
+	
+	gAssets.disposeAll();
 }
 
 void PlaySpace::checkSectorGeneration(Vec2F position)
