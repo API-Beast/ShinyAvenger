@@ -58,7 +58,7 @@ struct AssetDefinition
 	
 	// SOUND DEFINITIONS
 	
-	SoundSource MusicMainTheme;
+	SoundSource *MusicMainTheme;
 private:
 	void initBullets();
 	void initWeapons();

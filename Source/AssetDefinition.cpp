@@ -31,7 +31,7 @@ void AssetDefinition::initFonts()
 
 void AssetDefinition::initSounds()
 {
-	MusicMainTheme = SoundSource("Sounds/MainTheme.mp3");
+	MusicMainTheme = new SoundSource("Sounds/MainTheme.ogg");
 }
 
 
