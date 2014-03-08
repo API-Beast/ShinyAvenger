@@ -11,20 +11,27 @@
 #include "Ship.h"
 
 #include <Springbok/Graphics/BitmapFont.h>
+#include <Springbok/Audio/SoundSource.h>
 
 struct AssetDefinition
 {
 	void initAll();
+	
+	// BULLET DEFINITIONS
 	
 	Bullet::_Definition PhaserBullet;
 	Bullet::_Definition MiniGunBullet;
 	Bullet::_Definition GunBullet;
 	MissileDefinition HomingMissile;
 	
+	// WEAPON DEFINITIONS
+	
 	Ship::_Weapon Phaser;  // Weak and slow
 	Ship::_Weapon MiniGun; // Weak and fast
 	Ship::_Weapon BigGun;  // Strong and slow
 	Ship::_Weapon MissileLauncher; // Very slow, strong, homing
+	
+	// PARTICLE DEFINITIONS
 	
 	Particle::_Definition EnergyShield;
 	Particle::_Definition EnergyShieldDestruction;
@@ -38,18 +45,27 @@ struct AssetDefinition
 	Particle::_Definition ExplosionCloud;
 	Particle::_Definition ExplosionSparks;
 	
+	// IMAGE DEFINITIONS
+	
 	Image ShieldRechargeSprite;
 	Image ShieldStaticSprite;
 	Image GlowSprite;
 	
+	// FONT DEFINITIONS
+	
 	BitmapFont BigFont;
 	BitmapFont SmallFont;
+	
+	// SOUND DEFINITIONS
+	
+	SoundSource MusicMainTheme;
 private:
 	void initBullets();
 	void initWeapons();
 	void initParticles();
 	void initImages();
 	void initFonts();
+	void initSounds();
 };
 
 extern AssetDefinition gAssets;

@@ -13,6 +13,7 @@ void AssetDefinition::initAll()
 	initWeapons();
 	initImages();
 	initFonts();
+	initSounds();
 }
 
 void AssetDefinition::initImages()
@@ -27,6 +28,12 @@ void AssetDefinition::initFonts()
 	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
 	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);	
 }
+
+void AssetDefinition::initSounds()
+{
+	MusicMainTheme = SoundSource("Sounds/MainTheme.mp3");
+}
+
 
 void AssetDefinition::initBullets()
 {
