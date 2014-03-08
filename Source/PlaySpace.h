@@ -106,6 +106,10 @@ public:
 	ShieldBar Shield;
 	UIContainer GUIContainer;
 	
+	// Sounds
+	
+	SoundInstance *music;
+	
 	int GameFrame = 0;
 	float GameTime = 0.0f;
 	float LastDeltaTime = 0.0f;

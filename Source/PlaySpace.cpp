@@ -9,6 +9,7 @@
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 #include <Springbok/Utils/CliArgumentParser.h>
+#include <Springbok/Audio/SoundInstance.h>
 
 #include <iostream>
 
@@ -55,6 +56,10 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	Shield.Position.X = 15;
 	Shield.Position.Y = 25;
 	GUIContainer.append(&Shield);
+	
+	// Play sounds
+	
+	music = gAssets.MusicMainTheme->play({0.f, 0.f});
 	
 	if(IsStressTesting)
 	{
@@ -334,6 +339,8 @@ void PlaySpace::update(float time)
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 	ParticleBudget = 0;
+	
+	if(music->isFinished()){ music->setOffset(0); music->resume(); };
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
