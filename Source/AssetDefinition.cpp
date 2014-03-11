@@ -38,6 +38,7 @@ void AssetDefinition::initFonts()
 void AssetDefinition::initSounds()
 {
 	MusicMainTheme = new SoundSource("Sounds/MainTheme.ogg");
+	SoundSimpleShot = new SoundSource("Sounds/shot01.ogg");
 }
 
 
@@ -331,6 +332,7 @@ void AssetDefinition::initParticles()
 void AssetDefinition::disposeSounds()
 {
 	delete MusicMainTheme;
+	delete SoundSimpleShot;
 }
 
 

@@ -57,9 +57,13 @@ struct AssetDefinition
 	BitmapFont BigFont;
 	BitmapFont SmallFont;
 	
-	// SOUND DEFINITIONS
+	// MUSIC DEFINITIONS
 	
 	SoundSource *MusicMainTheme;
+	
+	// SOUND DEFINITIONS
+	
+	SoundSource *SoundSimpleShot;
 private:
 	void initBullets();
 	void initWeapons();

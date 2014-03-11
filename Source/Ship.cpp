@@ -143,6 +143,11 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
 		
 		weapon.ShotTimer += weapon.ShotDelay;
+		
+		// Sounds!
+		
+		SoundInstance *sound = gAssets.SoundSimpleShot->play(Position);
+				
 	}
 }
 

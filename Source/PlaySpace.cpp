@@ -374,7 +374,7 @@ void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
 	if(actionB)
 		Player->IsShootingSecondary = true;
 	if(actionA || actionC)
-		Player->IsShooting = true;
+		Player->IsShooting = true;	
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)

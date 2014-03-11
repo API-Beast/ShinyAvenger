@@ -19,10 +19,11 @@ ShipAI::ShipAI(Leader* lead, Ship* ship, PlaySpace* space)
 void ShipAI::update(float t, Ship* ship, PlaySpace* space)
 {
 	FindTimer += t;
-	if(t > 2.0f)
+	if(FindTimer > 2.0f)
 	{
 		FindTimer = 0.f;
 		NearbyShips = space->findShips({ship->Position - ViewRange}, {ship->Position + ViewRange});
+		std::cout << "Found " << NearbyShips.length() << std::endl;
 	}
 	
 	bool reachedTarget = false;
