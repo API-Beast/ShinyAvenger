@@ -59,7 +59,7 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	
 	// Play sounds
 	
-	music = gAssets.MusicMainTheme->play({0.f, 0.f});
+	music = gAssets.MusicMainTheme->playGlobal();
 	
 	if(IsStressTesting)
 	{
@@ -237,6 +237,9 @@ void PlaySpace::update(float time)
 	LastDeltaTime = time;
 	GameTime += time;
 	GameFrame += 1;
+	
+	SoundManager* manager = SoundManager::GetInstance();
+	manager->setListenerPosition(Player->Position);
 	
 	if(IsStressTesting)
 		time = 1.f / 30;

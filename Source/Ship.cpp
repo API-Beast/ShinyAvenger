@@ -145,9 +145,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 		weapon.ShotTimer += weapon.ShotDelay;
 		
 		// Sounds!
-		
-		SoundInstance *sound = gAssets.SoundSimpleShot->play(Position);
-				
+		SoundInstance *sound = gAssets.SoundSimpleShot->play(Position);				
 	}
 }
 
