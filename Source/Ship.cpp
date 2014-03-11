@@ -147,6 +147,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 		// Sounds!
 		gAssets.SoundSimpleShot->MinRange = 0;
 		gAssets.SoundSimpleShot->MaxRange = 400;
+		gAssets.SoundSimpleShot->Pitch = gRNG.getFloat() * 0.15f + 0.85f;
 		SoundInstance *sound = gAssets.SoundSimpleShot->play(Position);				
 	}
 }
