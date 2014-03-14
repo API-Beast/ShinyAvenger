@@ -21,6 +21,15 @@ Ship::Ship(const Image& img) : Sprite(img)
 
 void Ship::update(float t, PlaySpace* space)
 {	
+	if (!this->IsBraking && boostFlag != !this->IsBraking)
+	{
+		// Boost sound
+		gAssets.SoundBoost->MinRange = 50;
+		gAssets.SoundBoost->Pitch = gRNG.getFloat() * 0.4f + 0.9f;
+		gAssets.SoundBoost->Volume = gRNG.getFloat() * 0.2f + 0.4f;
+		SoundInstance *sound = gAssets.SoundBoost->play(Position);			
+	}
+	
 	Age += t;
 	if(AI)
 		AI->update(t, this, space);
@@ -40,6 +49,8 @@ void Ship::update(float t, PlaySpace* space)
 	}
 	else
 		Acceleration = 0;
+	
+	boostFlag = !this->IsBraking;
 }
 
 void Ship::updateControls(float t, PlaySpace* space)
@@ -145,10 +156,14 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
 		weapon.ShotTimer += weapon.ShotDelay;
 		
 		// Sounds!
-		gAssets.SoundSimpleShot->MinRange = 0;
-		gAssets.SoundSimpleShot->MaxRange = 400;
+		gAssets.SoundHeavyShot->MinRange = 50;
+		gAssets.SoundHeavyShot->Pitch = gRNG.getFloat() * 0.2f + 0.8f;
+		gAssets.SoundHeavyShot->Volume = gRNG.getFloat() * 0.2f + 0.5f;
+		gAssets.SoundHeavyShot->play(Position);	
+		gAssets.SoundSimpleShot->MinRange = 50;
 		gAssets.SoundSimpleShot->Pitch = gRNG.getFloat() * 0.15f + 0.99f;
-		SoundInstance *sound = gAssets.SoundSimpleShot->play(Position);				
+		gAssets.SoundSimpleShot->Volume = gRNG.getFloat() * 0.1f + 0.1f;
+		gAssets.SoundSimpleShot->play(Position);	
 	}
 }
 
@@ -211,6 +226,10 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 		p.Flow = 0;
 		p.Stabilizer = 0;
 		space->spawnParticle(p, true);
+		gAssets.SoundExplosion01->MinRange = 50;
+		gAssets.SoundExplosion01->Pitch = gRNG.getFloat() * 0.2f + 0.7f;
+		gAssets.SoundExplosion01->Volume = gRNG.getFloat() * 0.2f + 0.5f;
+		gAssets.SoundExplosion01->play(Position);
 	}
 }
 

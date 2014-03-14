@@ -58,6 +58,9 @@ public:
 	bool IsShootingSecondary = false;
 	bool IsStabilizing = false;
 	
+	// Sounds
+	bool boostFlag = false;
+	
 	enum WeaponType
 	{
 		MultiShot

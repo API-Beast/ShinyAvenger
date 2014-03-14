@@ -64,6 +64,10 @@ struct AssetDefinition
 	// SOUND DEFINITIONS
 	
 	SoundSource *SoundSimpleShot;
+	SoundSource *SoundHeavyShot;
+	SoundSource *SoundBoost;
+	SoundSource *SoundExplosion01;
+	SoundSource *SoundExplosion02;
 private:
 	void initBullets();
 	void initWeapons();

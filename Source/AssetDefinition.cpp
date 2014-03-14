@@ -39,6 +39,10 @@ void AssetDefinition::initSounds()
 {
 	MusicMainTheme = new SoundSource("Sounds/MainTheme.ogg");
 	SoundSimpleShot = new SoundSource("Sounds/shot01.ogg");
+	SoundHeavyShot = new SoundSource("Sounds/shot02.ogg");
+	SoundBoost = new SoundSource("Sounds/boost.ogg");
+	SoundExplosion01 = new SoundSource("Sounds/explosion01.ogg");
+	SoundExplosion02 = new SoundSource("Sounds/explosion02.ogg");
 }
 
 
@@ -333,6 +337,10 @@ void AssetDefinition::disposeSounds()
 {
 	delete MusicMainTheme;
 	delete SoundSimpleShot;
+	delete SoundHeavyShot;
+	delete SoundBoost;
+	delete SoundExplosion01;
+	delete SoundExplosion02;
 }
 
 
