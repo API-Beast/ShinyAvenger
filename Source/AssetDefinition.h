@@ -44,7 +44,9 @@ struct AssetDefinition
 	Particle::_Definition SparkParticle;
 	
 	Particle::_Definition ExplosionCloud;
+	Particle::_Definition ExplosionCloudAdditive;
 	Particle::_Definition ExplosionSparks;
+	Particle::_Definition ExplosionFlash;
 	
 	// IMAGE DEFINITIONS
 	

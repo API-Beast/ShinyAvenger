@@ -111,10 +111,11 @@ void AssetDefinition::initBullets()
 		
 		b.Sprite = Image("Ship/Missile.png");
 		b.Power = 60;
-		b.Speed = 1000;
+		b.Speed = 400;
 		b.Explodes = true;
+		b.Lifetime = 10.f;
 		
-		b.RotationRate = 20.f;
+		b.RotationRate = 40.f;
 		b.Acceleration = 2000;
 	}
 }
@@ -330,6 +331,79 @@ void AssetDefinition::initParticles()
 			anim.insert(1.0f, Vec2F(1.f, 2.f));
 		}
 	}
+	
+	// ------------------------------------------------------------------
+	// ### Explosion Cloud
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = ExplosionCloud;
+		
+		p.Sprite = Image("ExplosionCloud.png");
+		p.DrawMode = RenderContext::Default;
+		p.Lifetime = 0.5f;
+		p.PhysicsProperties.Mass = -1.f;
+		p.PhysicsProperties.Drag = 4.f;
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 1.0f);
+			anim.insert(0.7f, 1.0f);
+			anim.insert(1.0f, 0.0f);
+		}
+		
+		{
+			auto& anim = p.Animation.Col;
+			
+			anim.clear();
+			anim.insert(0.00f, RGB(1.0f, 1.0f, 1.0f));
+			anim.insert(0.70f, RGB(1.0f, 0.6f, 0.4f));
+			anim.insert(0.95f, RGB(0.3f, 0.3f, 0.3f));
+		}
+		
+		{
+			auto& anim = p.Animation.Scale;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.f);
+			anim.insert(0.1f, 1.f);
+			anim.insert(1.0f, 3.f);
+		}
+		
+		{
+			auto& anim = p.Animation.Rotation;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.0_turn);
+			anim.insert(0.8f, 0.2_turn);
+			anim.insert(1.0f, 0.8_turn);
+		}
+	}
+	
+	ExplosionCloudAdditive = ExplosionCloud;
+	ExplosionCloudAdditive.DrawMode = RenderContext::Additive;
+	
+	// ------------------------------------------------------------------
+	// ### Explosion Flash
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = ExplosionFlash;
+		
+		p = GlowParticle;
+		p.Sprite = Image("Flash.png");
+
+		{
+			auto& anim = p.Animation.Scale;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.f);
+			anim.insert(0.1f, 2.f);
+			anim.insert(0.3f, 1.f);
+		}
+	}
+	
+	ExplosionSparks = SparkParticle;
 }
 
 

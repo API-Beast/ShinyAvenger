@@ -419,3 +419,40 @@ ContainerSubrange<ViewBase< Ship*, float >, Ship*> PlaySpace::findShips(Vec2F to
 {
 	return GeoViews.Ships.XAxisView.getRange(topLeft.X, bottomRight.X);
 }
+
+void PlaySpace::castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col, RangeF scale, RangeF lifetime)
+{
+	for(int i = 0; i < amount; ++i)
+	{
+		Particle p(def);
+		Angle angle = Angle::FromTurn(gRNG.getFloat());
+		p.Colorization = col;
+		p.Position = position;
+		p.Size = gRNG.getNumber(scale);
+		p.Speed = angle.toDirection() * gRNG.getNumber(power);
+		p.Rotation = angle;
+		p.LifeTimeMult = gRNG.getNumber(lifetime);
+		spawnParticle(p, false);
+	}
+}
+
+void PlaySpace::spawnParticle(Particle def, Vec2F position, float scale, Angle rotation, Color col, float lifetime, bool important)
+{
+	def.Position = position;
+	def.Size = scale;
+	def.Rotation = rotation;
+	def.Colorization = col;
+	def.LifeTimeMult = lifetime;
+	spawnParticle(def, important);
+}
+
+void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fireColor)
+{
+	RangeI amountParticles = RangeI(size/10, size/10+size/20);
+	std::cout << amountParticles << " Particles will be spawned" << std::endl;
+	castParticles(gAssets.ExplosionCloud,          position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, (fireColor+Colors::White)/2, {size/800, size/600}, {0.75f, 1.25f});
+	castParticles(gAssets.ExplosionCloudAdditive,  position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, fireColor, {size/1000, size/700}, {0.75f, 1.25f});
+	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*0.9f, force*1.4f} + 10, fireColor);
+	spawnParticle(gAssets.ExplosionFlash,  position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
+	spawnParticle(gAssets.GlowParticle,    position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
+}

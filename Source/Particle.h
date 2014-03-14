@@ -17,6 +17,7 @@ struct Particle : public PhysicsObject
 	Color Colorization = Colors::White;
 	float Size = 1;
 	float Alpha = 1;
+	float LifeTimeMult = 1.0f;
 	
 	struct _Definition
 	{
@@ -39,6 +40,6 @@ struct Particle : public PhysicsObject
 	virtual void update(float dt, PlaySpace* space);
 	virtual void draw(RenderContext r);
 	
-	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime; };
-	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };
+	bool canBeDespawned(){ return TimeSinceSpawn > (Definition->Lifetime * LifeTimeMult); };
+	float normalizedAge(){ return TimeSinceSpawn / (Definition->Lifetime * LifeTimeMult); };
 };

@@ -17,6 +17,7 @@ struct Bullet : public PhysicsObject
 	int Faction = -1;
 	float TimeSinceSpawn = 0.f;
 	bool HitObject = false;
+	bool Exploded = false;
 	PhysicsObject* CurrentTarget = nullptr; // Not used by the standard definition
 	
 	struct _Definition
@@ -56,6 +57,7 @@ struct Bullet : public PhysicsObject
 	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime || HitObject; };
 	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };
 	void onHit(Ship* which, PlaySpace* space);
+	void impact(PlaySpace* space);
 };
 
 struct MissileDefinition : public Bullet::_Definition

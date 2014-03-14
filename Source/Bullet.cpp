@@ -11,7 +11,19 @@
 void Bullet::update(float dt, PlaySpace* space)
 {
 	TimeSinceSpawn += dt;
+	if(TimeSinceSpawn > Definition->Lifetime)
+		impact(space);
+	
 	Definition->update(*this, dt, space);
+}
+
+void Bullet::impact(PlaySpace* space)
+{
+	if(Definition->Explodes && !Exploded)
+	{
+		space->spawnExplosion(Position, Definition->Power*4, Definition->Power*10, Colors::Oxygen::Orange);
+		Exploded = true;
+	}
 }
 
 void Bullet::draw(RenderContext r)
@@ -58,7 +70,7 @@ void Bullet::onHit(Ship* which, PlaySpace* space)
 	which->doDamage(Definition->Power);
 	if(Definition->Explodes)
 	{
-		// TODO
+		impact(space);
 	}
 	else
 	{
@@ -110,8 +122,8 @@ void MissileDefinition::update(Bullet& b, float dt, PlaySpace* space)
 	// Found one? Align.
 	if(b.CurrentTarget)
 	{
-		b.Acceleration = b.Rotation.toDirection() * Acceleration;
 		Angle targetAngle = Angle(b.CurrentTarget->Position - b.Position);
 		b.Rotation = Approach(b.Rotation, targetAngle, Angle(RotationRate*dt));
 	}
+	b.Acceleration = b.Rotation.toDirection() * Acceleration;
 }
