@@ -70,7 +70,7 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 
 Ship* SolarSystem::spawnShip(PlaySpace* space)
 {
-	float radius = gRNG.getNumber(700.f, 1000.f);
+	float radius = gRNG.getNumber(100+TheGravitySource.CenterSize*800, TheGravitySource.CenterSize*1200.f);
 	Angle angle = Angle::FromTurn(gRNG.getFloat());
 	spawnShip(Position + angle.toDirection().normalized() * radius, space);
 	
