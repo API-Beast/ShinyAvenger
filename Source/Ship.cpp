@@ -42,10 +42,8 @@ void Ship::update(float t, PlaySpace* space)
 		updateControls(t, space);
 		updateFX      (t, space);
 		
-		if(IsShooting)
-			updateWeapon(PrimaryWeapon, t, space);
-		if(IsShootingSecondary)
-			updateWeapon(SecondaryWeapon, t, space);
+		updateWeapon(PrimaryWeapon, t, space, IsShooting);
+		updateWeapon(SecondaryWeapon, t, space, IsShootingSecondary);
 	}
 	else
 		Acceleration = 0;
@@ -122,48 +120,62 @@ void Ship::shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, i
 }
 
 
-void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space)
+void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool shooting)
 {
-	weapon.ShotTimer -= t;
-	while(weapon.ShotTimer <= 0.f)
+	
+	weapon.ReloadTimer -= t;
+	if(weapon.ReloadTimer <= 0.f)
 	{
-		if(weapon.MuzzleFlashSize)
-		{
-			Particle muzzleFlash(gAssets.GlowParticle);
-			muzzleFlash.Position = this->Position;
-			muzzleFlash.Size = weapon.MuzzleFlashSize;
-			muzzleFlash.Colorization = weapon.MuzzleFlashColor;
-			muzzleFlash.Alpha = 0.1f;
-			space->spawnParticle(muzzleFlash);
+		weapon.ReloadTimer = weapon.ReloadDelay;
+		weapon.CurReloadStack = Min(weapon.CurReloadStack+1, weapon.MaxReloadStack);
+	}
+	
+	if(shooting && (weapon.CurReloadStack > 0))
+	{
+		weapon.ShotTimer -= t;
+		while(weapon.ShotTimer <= 0.f)
+		{				
+			weapon.CurReloadStack -= 1;
+			
+			if(weapon.Bullets <= 1)
+				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, gRNG.getNumber(-1.0f, +1.0f) * weapon.Spread);
+			else if(weapon.Bullets == 2)
+			{
+				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, +10, +weapon.Spread / 2);
+				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, -10, -weapon.Spread / 2);
+			}
+			else if(Modulo(weapon.Bullets, 2) == 1)
+			{
+				for(int i = -weapon.Bullets/2; i <= weapon.Bullets/2; ++i)
+					shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
+			}
+			else
+				for(int i = -weapon.Bullets/2; i < weapon.Bullets/2; ++i)
+					shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
+				
+			weapon.ShotTimer += weapon.ShotDelay;
+			
+			if(weapon.MuzzleFlashSize)
+			{
+				Particle muzzleFlash(gAssets.GlowParticle);
+				muzzleFlash.Position = this->Position;
+				muzzleFlash.Size = weapon.MuzzleFlashSize;
+				muzzleFlash.Colorization = weapon.MuzzleFlashColor;
+				muzzleFlash.Alpha = 0.1f;
+				space->spawnParticle(muzzleFlash);
+			}
+			
+			// Sounds!
+			gAssets.SoundHeavyShot->MinRange = 50;
+			gAssets.SoundHeavyShot->Pitch = gRNG.getFloat() * 0.2f + 0.8f;
+			gAssets.SoundHeavyShot->Volume = gRNG.getFloat() * 0.2f + 0.5f;
+			gAssets.SoundHeavyShot->play(Position);	
+			
+			gAssets.SoundSimpleShot->MinRange = 50;
+			gAssets.SoundSimpleShot->Pitch = gRNG.getFloat() * 0.15f + 0.99f;
+			gAssets.SoundSimpleShot->Volume = gRNG.getFloat() * 0.1f + 0.1f;
+			gAssets.SoundSimpleShot->play(Position);	
 		}
-		
-		if(weapon.Bullets <= 1)
-			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, 0, gRNG.getNumber(-1.0f, +1.0f) * weapon.Spread);
-		else if(weapon.Bullets == 2)
-		{
-			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, +10, +weapon.Spread / 2);
-			shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, -10, -weapon.Spread / 2);
-		}
-		else if(Modulo(weapon.Bullets, 2) == 1)
-		{
-			for(int i = -weapon.Bullets/2; i <= weapon.Bullets/2; ++i)
-				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
-		}
-		else
-			for(int i = -weapon.Bullets/2; i < weapon.Bullets/2; ++i)
-				shootBullet(space, weapon.BulletPrototype, -weapon.ShotTimer, i*(3 + 14 / weapon.Bullets), weapon.Spread / weapon.Bullets * i);
-		
-		weapon.ShotTimer += weapon.ShotDelay;
-		
-		// Sounds!
-		gAssets.SoundHeavyShot->MinRange = 50;
-		gAssets.SoundHeavyShot->Pitch = gRNG.getFloat() * 0.2f + 0.8f;
-		gAssets.SoundHeavyShot->Volume = gRNG.getFloat() * 0.2f + 0.5f;
-		gAssets.SoundHeavyShot->play(Position);	
-		gAssets.SoundSimpleShot->MinRange = 50;
-		gAssets.SoundSimpleShot->Pitch = gRNG.getFloat() * 0.15f + 0.99f;
-		gAssets.SoundSimpleShot->Volume = gRNG.getFloat() * 0.1f + 0.1f;
-		gAssets.SoundSimpleShot->play(Position);	
 	}
 }
 

@@ -113,6 +113,7 @@ void AssetDefinition::initBullets()
 		b.Power = 60;
 		b.Speed = 400;
 		b.Explodes = true;
+		b.Glow = false;
 		b.Lifetime = 10.f;
 		
 		b.RotationRate = 40.f;
@@ -145,6 +146,9 @@ void AssetDefinition::initWeapons()
 		w.Bullets = 3;
 		w.ShotDelay = 0.10f;
 		w.Spread = 0.05_turn;
+		
+		w.ReloadDelay = 0.15f;
+		w.MaxReloadStack = 20;
 	}
 	
 	// ------------------------------------------------------------------
@@ -166,9 +170,12 @@ void AssetDefinition::initWeapons()
 		Ship::_Weapon& w = MissileLauncher;
 		
 		w.BulletPrototype = HomingMissile;
-		w.Bullets = 1;
-		w.ShotDelay = 1.00f;
-		w.Spread = 0.125_turn;
+		w.Bullets = 2;
+		
+		w.ShotDelay = 0.15f;
+		w.MaxReloadStack = 3;
+		w.ReloadDelay = 2.00f;
+		w.Spread = 0.0_turn;
 	}
 }
 

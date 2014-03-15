@@ -70,6 +70,12 @@ public:
 	{
 		float ShotDelay = 0.15f;
 		float ShotTimer = 0.0f;
+		
+		float ReloadDelay = 0.10f;
+		float ReloadTimer = 0.0f;
+		int MaxReloadStack = 2;
+		int CurReloadStack = 2;
+		
 		WeaponType Type = Ship::MultiShot;
 		Bullet BulletPrototype;
 		int Bullets = 2;
@@ -92,7 +98,7 @@ public:
 	virtual Vec2F getPosition() const;
 	void doDamage(float damage);
 	void updateControls(float t, PlaySpace* space);
-	void updateWeapon(_Weapon& weapon, float t, PlaySpace* space);
+	void updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool shooting);
 	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);
 	void updateFX(float t, PlaySpace* space);
 	void onHit(Bullet* bullet, PlaySpace* space);
