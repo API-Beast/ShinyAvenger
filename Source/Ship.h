@@ -41,7 +41,7 @@ public:
 	// Particle Effects
 	float ImpulseTimer = 0.f;
 	float ImpulseSparkTimer = 0.f;
-	KeyframeList<Color> ShieldColors;
+	KeyframeList<Color> ShieldColors = {{1.0f, Colors::White}, {0.5f, Colors::Saturated::Cyan}, {0.0f, Colors::Saturated::Red}};
 	Color ImpulseColor = Palette::Orange;
 	
 	// Diplomacy
