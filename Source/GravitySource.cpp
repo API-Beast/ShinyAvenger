@@ -14,8 +14,14 @@ void GravitySource::update(float dt, PlaySpace* space)
 	TimeSinceSpawn += dt;
 	auto ships = space->findShips(Position - CenterSize*950, Position + CenterSize*950);
 	for(Ship* ship : ships)
+	{
+		if(InRange(ship->Position, Position, CenterSize * 700))
+			ship->doDamage(20*dt, space);
+		if(InRange(ship->Position, Position, CenterSize * 600))
+			ship->doDamage(50*dt, space);
 		if(InRange(ship->Position, Position, CenterSize * 450))
-			ship->doDamage(200*dt, space);
+			ship->doDamage(400*dt, space);
+	}
 }
 
 void GravitySource::draw(RenderContext r)
