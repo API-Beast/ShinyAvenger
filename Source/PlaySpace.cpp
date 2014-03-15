@@ -271,6 +271,17 @@ void PlaySpace::update(float time)
 	}
 	
 	
+	for(int i = 0; i < Ships.UsedLength; ++i)
+	{
+		if(Ships[i]->canBeDespawned())
+		{
+			ObjectPointer<Ship>(Ships[i]).destroy(); // Object pointer lets other object pointers know that the object got deleted.
+			Objects.quickRemove(Objects.findIndex(Ships[i]));
+			Ships.quickRemove(i--);
+		}
+	}
+	
+	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
 	for(GravitySource& src : GravitySources)

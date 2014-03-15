@@ -42,7 +42,6 @@ public:
 	float ImpulseTimer = 0.f;
 	float ImpulseSparkTimer = 0.f;
 	KeyframeList<Color> ShieldColors;
-	Particle::_Definition ShieldParticleDef;
 	Color ImpulseColor = Palette::Orange;
 	
 	// Diplomacy

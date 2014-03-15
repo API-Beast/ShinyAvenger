@@ -12,11 +12,6 @@
 Ship::Ship(const Image& img) : Sprite(img)
 {	
 	FactionColorSprite = Image("Player/FactionColor.png");
-	
-	ShieldParticleDef = gAssets.EnergyShield;
-	ShieldColors.insert(1.0f, Colors::White);
-	ShieldColors.insert(0.5f, Colors::Saturated::Cyan);
-	ShieldColors.insert(0.0f, Colors::Saturated::Red);
 }
 
 void Ship::update(float t, PlaySpace* space)
@@ -216,14 +211,15 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 	if(ShieldEnergy > 0)
 	{
 		shield = true;
-		
-		Particle p(ShieldParticleDef);
+		float percentShield = (Max(ShieldEnergy, 1.f) / (MaxShield));
+		Particle p(gAssets.EnergyShield);
 		reinterpret_cast<PhysicsObject&>(p) = reinterpret_cast<PhysicsObject&>(*this);
 		p.Rotation = Angle(bullet->Position - Position);
 		p.RotationSpeed = 0;
 		p.Drag = 0;
 		p.Flow = 0;
 		p.Stabilizer = 0;
+		p.Colorization = ShieldColors[percentShield];
 		space->spawnParticle(p, true);
 	}
 	
