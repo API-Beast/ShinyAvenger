@@ -247,8 +247,11 @@ void Ship::doDamage(float damage, PlaySpace* space)
 		ShieldEnergy -= damage;
 	else
 	{
-		Status = Destroyed;
-		space->spawnExplosion(Position, MaxShield*3, MaxShield*6, ImpulseColor);
+		if(Status != Destroyed)
+		{
+			Status = Destroyed;
+			space->spawnExplosion(Position, MaxShield*3, MaxShield*6, ImpulseColor);
+		}
 	}
 }
 

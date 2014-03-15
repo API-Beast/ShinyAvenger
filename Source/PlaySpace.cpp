@@ -6,6 +6,7 @@
 
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
+#include <Springbok/Procedural/Noise.h>
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
 #include <Springbok/Utils/CliArgumentParser.h>
@@ -431,16 +432,23 @@ ContainerSubrange<ViewBase< Ship*, float >, Ship*> PlaySpace::findShips(Vec2F to
 	return GeoViews.Ships.XAxisView.getRange(topLeft.X, bottomRight.X);
 }
 
-void PlaySpace::castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col, RangeF scale, RangeF lifetime)
+void PlaySpace::castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col, RangeF scale, RangeF lifetime, float turbulenceFactor)
 {
 	for(int i = 0; i < amount; ++i)
 	{
+		Noise1D turbulence;
+		turbulence.Octaves = 2;
+		turbulence.Interval = 0.25f;
+		
 		Particle p(def);
-		Angle angle = Angle::FromTurn(gRNG.getFloat());
+		float angleF = gRNG.getFloat();
+		Angle angle = Angle::FromTurn(angleF);
+		float angTurb = turbulence.calc(angleF);
+		
 		p.Colorization = col;
 		p.Position = position;
 		p.Size = gRNG.getNumber(scale);
-		p.Speed = angle.toDirection() * gRNG.getNumber(power);
+		p.Speed = angle.toDirection() * power.interpolate(gRNG.getFloat()  * ((1-turbulenceFactor) + angTurb*angTurb*turbulenceFactor));
 		p.Rotation = angle;
 		p.LifeTimeMult = gRNG.getNumber(lifetime);
 		spawnParticle(p, false);
@@ -461,11 +469,11 @@ void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fi
 {
 	RangeI amountParticles = RangeI(size/10, size/10+size/20);
 	std::cout << amountParticles << " Particles will be spawned" << std::endl;
-	castParticles(gAssets.ExplosionCloud,          position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, (fireColor+Colors::White)/2, {size/800, size/600}, {0.75f, 1.25f});
-	castParticles(gAssets.ExplosionCloudAdditive,  position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, fireColor, {size/1000, size/700}, {0.75f, 1.25f});
-	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*0.9f, force*1.4f} + 10, fireColor);
+	//castParticles(gAssets.ExplosionCloud,          position, gRNG.getNumber(amountParticles), {0.f, force*2}, (fireColor+Colors::White)/2, {size/800, size/600}, {0.75f, 1.25f});
+	castParticles(gAssets.ExplosionCloudAdditive,  position, gRNG.getNumber(amountParticles), {0.f, force*0.5f}, fireColor, {size/1000, size/700}, {0.75f, 1.25f});
+	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*1, force*3} + 10, fireColor);
 	
 	spawnParticle(gAssets.ExplosionFlash,          position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
-	spawnParticle(gAssets.ExplosionShockwave,      position, size/40 , Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
+	spawnParticle(gAssets.ExplosionShockwave,      position, force/80 , Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
 	spawnParticle(gAssets.GlowParticle,            position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
 }

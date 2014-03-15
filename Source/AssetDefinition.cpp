@@ -349,7 +349,7 @@ void AssetDefinition::initParticles()
 		p.DrawMode = RenderContext::Default;
 		p.Lifetime = 0.5f;
 		p.PhysicsProperties.Mass = -1.f;
-		p.PhysicsProperties.Drag = 4.f;
+		p.PhysicsProperties.Drag = 3.f;
 		
 		{
 			auto& anim = p.Animation.Alpha;
@@ -373,9 +373,10 @@ void AssetDefinition::initParticles()
 			auto& anim = p.Animation.Scale;
 			
 			anim.clear();
-			anim.insert(0.0f, 0.f);
-			anim.insert(0.1f, 1.f);
-			anim.insert(1.0f, 3.f);
+			anim.insert(0.0f, {0.f, 1.f});
+			anim.insert(0.02f, {1.f, 1.f});
+			anim.insert(0.6f, {2.f, 2.f});
+			anim.insert(1.0f, {3.f, 4.f});
 		}
 		
 		{

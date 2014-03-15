@@ -44,7 +44,7 @@ public:
 	void spawnParticle(Particle particle, bool important = false);
 	
 	void spawnParticle(Particle def, Vec2F position, float scale, Angle rotation, Color col, float lifetime = 1.f, bool important = false);
-	void castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col = Colors::White, RangeF scale = 1.f, RangeF lifetime = 1.f);
+	void castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col = Colors::White, RangeF scale = 1.f, RangeF lifetime = 1.f, float turbulenceFactor = 1.0f);
 	
 	void spawnExplosion(Vec2F position, float size, float force, Color sparkColor);
 	void onActionInput(bool actionA, bool actionB, bool actionC);
