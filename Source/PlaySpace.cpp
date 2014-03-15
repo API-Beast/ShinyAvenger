@@ -98,6 +98,7 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 	if(sector.Generated == false)
 	{
 		sector.Generated = true;
+		NumberGeneratedSectors++;
 		std::cout << "Generating sector at " << sectCoordinates << " / " << position << std::endl;
 		
 		Vec2F sectStart = sectCoordinates * SectorSize;
@@ -106,7 +107,12 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 		int secondaryFaction = WorldRNG.getNumber(0, 2);
 		while(primaryFaction == secondaryFaction)
 			secondaryFaction = WorldRNG.getNumber(0, 2);
+		
 		int type = WorldRNG.getNumber(0, 2);
+		
+		// First sector is always a sector that is at war.
+		if(NumberGeneratedSectors == 1)
+			type = 1;
 		
 		if(type == 0)
 		{

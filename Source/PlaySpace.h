@@ -104,6 +104,8 @@ public:
 	Vec2F SectorSize = 17500;
 	float SectorLookAhead = 20000;
 	
+	int NumberGeneratedSectors = 0;
+	
 	// User Interface
 	Arrows ShipArrows;
 	Label FrameRate;
