@@ -453,6 +453,8 @@ void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fi
 	castParticles(gAssets.ExplosionCloud,          position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, (fireColor+Colors::White)/2, {size/800, size/600}, {0.75f, 1.25f});
 	castParticles(gAssets.ExplosionCloudAdditive,  position, gRNG.getNumber(amountParticles), {0.f, force*0.2f}, fireColor, {size/1000, size/700}, {0.75f, 1.25f});
 	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*0.9f, force*1.4f} + 10, fireColor);
-	spawnParticle(gAssets.ExplosionFlash,  position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
-	spawnParticle(gAssets.GlowParticle,    position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
+	
+	spawnParticle(gAssets.ExplosionFlash,          position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
+	spawnParticle(gAssets.ExplosionShockwave,      position, size/40 , Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
+	spawnParticle(gAssets.GlowParticle,            position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
 }

@@ -411,6 +411,35 @@ void AssetDefinition::initParticles()
 	}
 	
 	ExplosionSparks = SparkParticle;
+	
+	// ------------------------------------------------------------------
+	// ### Explosion Shockwave
+	// ------------------------------------------------------------------
+	{
+		Particle::_Definition& p = ExplosionShockwave;
+		p = GlowParticle;
+		p.Sprite = Image("ExplosionShockwave.png");
+		p.Lifetime = 0.6f;
+		
+		{
+			auto& anim = p.Animation.Scale;
+			
+			anim.clear();
+			anim.insert(0.0f, {0.f, 1.f});
+			anim.insert(0.1f, {1.f, 1.f});
+			anim.insert(1.0f, {3.f, 1.f});
+		}
+		
+		{
+			auto& anim = p.Animation.Alpha;
+			
+			anim.clear();
+			anim.insert(0.0f, 0.0f);
+			anim.insert(0.2f, 1.0f);
+			anim.insert(0.7f, 0.2f);
+			anim.insert(1.0f, 0.0f);
+		}
+	}
 }
 
 
