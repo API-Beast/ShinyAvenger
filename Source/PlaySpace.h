@@ -36,7 +36,7 @@ public:
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
-	virtual bool isFinished(){ return Player == nullptr; };
+	virtual bool isFinished(){ return TimeSincePlayerDestruction > 2; };
 	void applyPhysics(PhysicsObject* obj, float dt);
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);
@@ -120,6 +120,7 @@ public:
 	
 	int GameFrame = 0;
 	float GameTime = 0.0f;
+	float TimeSincePlayerDestruction = 0.f;
 	float LastDeltaTime = 0.0f;
 	
 	int ParticleBudget = 0;

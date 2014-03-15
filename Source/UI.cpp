@@ -9,10 +9,7 @@
 #include <iostream>
 
 void Arrows::draw(RenderContext* Context)
-{
-	if(!Space->Player)
-		return;
-	
+{	
 	Context->setBlendingMode(RenderContext::Additive);
 	for(Ship* ship : Space->Ships)
 	{
@@ -21,7 +18,7 @@ void Arrows::draw(RenderContext* Context)
 			continue;
 		
 		Vec2F EnemyPosition = ship->Position;
-		Vec2F Direction = ship->Position - Space->Player->Position;
+		Vec2F Direction = ship->Position - Space->CameraPos;
 		float Length = Direction.length();
 		Vec2F Normalized = Direction.normalized();
 			
@@ -43,7 +40,7 @@ void Arrows::draw(RenderContext* Context)
 	for(GravitySource& source : Space->GravitySources)
 	{
 		Vec2F EnemyPosition = source.Position;
-		Vec2F Direction = source.Position - Space->Player->Position;
+		Vec2F Direction = source.Position - Space->CameraPos;
 		float Length = Direction.length();
 		Vec2F Normalized = Direction.normalized();
 			

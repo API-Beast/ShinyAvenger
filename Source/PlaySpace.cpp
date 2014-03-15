@@ -163,7 +163,6 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.21f;
 		rBG.Scale = 1.2f;
-		//rBG.setColor(BackgroundGradient[Player->Position.getLength()+2500]* 0.8f);
 		BackgroundStars.drawRepeated(rBG);
 	}
 	
@@ -171,8 +170,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.25f;
 		rBG.Scale = 1.9f;
-		if(Player)
-			rBG.setColor(BackgroundGradient[Player->Position.length()+4000]* 0.6f);
+		rBG.setColor(BackgroundGradient[CameraPos.length()+4000]* 0.6f);
 		BackgroundFogB.drawRepeated(rBG);
 	}
 	
@@ -180,7 +178,6 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.28f;
 		rBG.Scale = 1.6f;
-		//rBG.setColor(BackgroundGradient[Player->Position.getLength()+2500]* 0.8f);
 		BackgroundStars.drawRepeated(rBG);
 	}
 	
@@ -188,8 +185,7 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.35f;
 		rBG.Scale = 3.f;
-		if(Player)
-			rBG.setColor(BackgroundGradient[Player->Position.length()]* 0.9f);
+		rBG.setColor(BackgroundGradient[CameraPos.length()]* 0.9f);
 		BackgroundFog.drawRepeated(rBG);
 	}
 	
@@ -200,13 +196,6 @@ void PlaySpace::draw()
 	float end = start + ScreenSize.Y + 600;
 	
 	r.setColor(Colors::White);
-	// Draw clipped
-	/*for(Bullet& obj : GeoViews.Bullets.YAxisView.getRange(start, end))
-		obj.draw(r);
-	for(PhysicsObject* obj : GeoViews.Objects.YAxisView.getRange(start, end))
-		obj->draw(r);
-	for(Particle& particle : GeoViews.Particles.YAxisView.getRange(start, end))
-		particle.draw(r);*/
 	
 	// Draw unclipped
 	for(Bullet& obj : Bullets)
@@ -215,14 +204,6 @@ void PlaySpace::draw()
 		obj->draw(r);
 	for(Particle& particle : Particles)
 		particle.draw(r);
-	
-	/*{
-		RenderContext rBG(r);
-		rBG.Parallaxity = 2.00f;
-		rBG.Scale = 2.f;
-		rBG.setColor(BackgroundGradient[Player->Position.getLength()+2000]* 0.9f);
-		ForegroundFog.drawRepeated(rBG);
-	}*/
 	
 	for(GravitySource& src : GravitySources)
 		src.drawTop(r);
@@ -247,10 +228,13 @@ void PlaySpace::update(float time)
 	GameTime += time;
 	GameFrame += 1;
 	
+	if(!Player)
+		TimeSincePlayerDestruction += time;
+	
 	GeoViews.update();
 	
 	SoundManager* manager = SoundManager::GetInstance();
-	manager->setListenerPosition(Player->Position);
+	manager->setListenerPosition(CameraPos);
 	
 	if(IsStressTesting)
 		time = 1.f / 30;
