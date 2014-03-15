@@ -54,7 +54,7 @@ public:
 	Color getFactionColor(int);
 	ContainerSubrange< ViewBase< Ship*, float >, Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
 public:
-	Ship* Player;
+	ObjectPointer<Ship> Player;
 	
 	SolarSystem* HomeSystem;
 	
@@ -87,6 +87,7 @@ public:
 		
 		template<typename A, typename B, typename C, typename D>
 		_GeoViews(A& a, B& b, C& c, D& d):Bullets(a),Objects(b),Particles(c),Ships(d){};
+		void update(){ Bullets.XAxisView.update(); Objects.XAxisView.update(); Particles.XAxisView.update(); Ships.XAxisView.update();};
 	} GeoViews;
 	
 	Map<Sector, Vec2I, &Sector::Position> Sectors;

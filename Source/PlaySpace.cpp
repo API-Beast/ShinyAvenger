@@ -244,6 +244,8 @@ void PlaySpace::update(float time)
 	GameTime += time;
 	GameFrame += 1;
 	
+	GeoViews.update();
+	
 	SoundManager* manager = SoundManager::GetInstance();
 	manager->setListenerPosition(Player->Position);
 	
@@ -281,7 +283,6 @@ void PlaySpace::update(float time)
 		}
 	}
 	
-	
 	for(PhysicsObject* obj : Objects)
 		obj->update(time, this);
 	for(GravitySource& src : GravitySources)
@@ -302,9 +303,7 @@ void PlaySpace::update(float time)
 	for(Particle& particle : Particles)
 		applyPhysics(&particle, time * particleTimeFactor);
 	
-	GeoViews.Objects.XAxisView.update();
-	GeoViews.Bullets.XAxisView.update();
-	GeoViews.Particles.XAxisView.update();
+	GeoViews.update();
 	
 	// Add gravity
 	for(GravitySource& src : GravitySources)
@@ -320,8 +319,7 @@ void PlaySpace::update(float time)
 			src.influence(&obj, time);
 	}
 	
-	GeoViews.Bullets.XAxisView.update();
-	GeoViews.Ships.XAxisView.update();
+	GeoViews.update();
 	
 	for(Bullet& bullet : Bullets)
 		for(Ship* ship : Ships)

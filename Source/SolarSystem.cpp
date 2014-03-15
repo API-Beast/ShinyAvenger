@@ -38,7 +38,7 @@ void SolarSystem::update(float delta, PlaySpace *Space)
 		const int GROUP_SIZE = 4;
 		Clock.start();
 		
-		float radius = gRNG.getNumber(700.f, 1000.f);
+		float radius = gRNG.getNumber(TheGravitySource.CenterSize*700, TheGravitySource.CenterSize*1000.f);
 		Angle angle = Angle::FromTurn(gRNG.getFloat());
 		
 		spawnGroup(Position + angle.toDirection().normalized() * radius, GROUP_SIZE, Space);

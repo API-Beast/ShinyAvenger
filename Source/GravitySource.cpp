@@ -6,11 +6,16 @@
 
 #include "GravitySource.h"
 #include "AssetDefinition.h"
+#include "PlaySpace.h"
 #include <GL/gl.h>
 
 void GravitySource::update(float dt, PlaySpace* space)
 {
 	TimeSinceSpawn += dt;
+	auto ships = space->findShips(Position - CenterSize*950, Position + CenterSize*950);
+	for(Ship* ship : ships)
+		if(InRange(ship->Position, Position, CenterSize * 500))
+			ship->doDamage(200*dt, space);
 }
 
 void GravitySource::draw(RenderContext r)
