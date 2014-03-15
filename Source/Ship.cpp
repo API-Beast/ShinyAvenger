@@ -245,12 +245,15 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 	}
 }
 
-void Ship::doDamage(float damage)
+void Ship::doDamage(float damage, PlaySpace* space)
 {
 	if(ShieldEnergy >= 0)
 		ShieldEnergy -= damage;
 	else
+	{
 		Status = Destroyed;
+		space->spawnExplosion(Position, MaxShield, MaxShield, ImpulseColor);
+	}
 }
 
 Ship::~Ship()

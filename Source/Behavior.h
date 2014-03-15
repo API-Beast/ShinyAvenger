@@ -29,7 +29,7 @@ class ShipAI : public Behavior
 public:
 	ShipAI(Leader* lead, Ship* ship, PlaySpace* space);
 	virtual void update(float t, Ship* ship, PlaySpace* space);
-	Ship* findHostileTarget(Ship* ship, PlaySpace* space, float range);
+	ObjectPointer<Ship> findHostileTarget(Ship* ship, PlaySpace* space, float range);
 	void steerTowards(Ship* ship, Vec2F point, float timePrediction = 0.f, bool fireAtPoint = false);
 public:
 	enum _TacticState
@@ -47,7 +47,7 @@ public:
 	} GoalState = Wait;
 	
 	Vec2F Waypoint;
-	Ship* Target;
+	ObjectPointer<Ship> Target;
 	Leader* Home;
 	float FindTimer;
 	decltype(PlaySpace().findShips(Vec2F(), Vec2F())) NearbyShips;

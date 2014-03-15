@@ -67,7 +67,7 @@ Bullet::Bullet(Bullet::_Definition& def)
 void Bullet::onHit(Ship* which, PlaySpace* space)
 {
 	HitObject = true;
-	which->doDamage(Definition->Power);
+	which->doDamage(Definition->Power, space);
 	if(Definition->Explodes)
 	{
 		impact(space);

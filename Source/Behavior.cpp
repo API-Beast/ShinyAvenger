@@ -98,7 +98,7 @@ void ShipAI::update(float t, Ship* ship, PlaySpace* space)
 	}
 }
 
-Ship* ShipAI::findHostileTarget(Ship* ship, PlaySpace* space, float range)
+ObjectPointer< Ship > ShipAI::findHostileTarget(Ship* ship, PlaySpace* space, float range)
 {
 	for(Ship* other : NearbyShips)
 		if(space->isHostile(ship, other) && InRange(ship->Position, other->Position, range) && !other->isDestroyed())

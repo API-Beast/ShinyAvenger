@@ -96,7 +96,7 @@ public:
 	virtual void updateBounds();
 	bool canBeDespawned(){ return Status == Destroyed; };
 	virtual Vec2F getPosition() const;
-	void doDamage(float damage);
+	void doDamage(float damage, PlaySpace* space);
 	void updateControls(float t, PlaySpace* space);
 	void updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool shooting);
 	void shootBullet(PlaySpace* space, Bullet prototype, float deltaTimeFix, int xOffset, Angle rotation);

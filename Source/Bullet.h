@@ -18,7 +18,7 @@ struct Bullet : public PhysicsObject
 	float TimeSinceSpawn = 0.f;
 	bool HitObject = false;
 	bool Exploded = false;
-	PhysicsObject* CurrentTarget = nullptr; // Not used by the standard definition
+	ObjectPointer<Ship> CurrentTarget = nullptr; // Not used by the standard definition
 	
 	struct _Definition
 	{
