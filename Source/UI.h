@@ -84,6 +84,7 @@ private:
 	Angle Rotation;
 	PlaySpace *Space;
 	Image ArrowImage = Image("UI/Arrow.png");
+	Image PlanetArrowImage = Image("UI/PlanetArrow.png");
 public:
 	Arrows(PlaySpace *TheSpace) : Space(TheSpace) { 
 		Size = ArrowImage.getSize();
