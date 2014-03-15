@@ -59,7 +59,7 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	
 	// Play sounds
 	
-	music = gAssets.MusicMainTheme->playGlobal();
+	Music = gAssets.MusicMainTheme->playGlobal();
 	
 	if(IsStressTesting)
 	{
@@ -87,7 +87,8 @@ PlaySpace::~PlaySpace()
 	for(SolarSystem* sec : Systems)
 		delete sec;
 	
-	gAssets.disposeAll();
+	Music->Permanent = false;
+	Music->pause();
 }
 
 void PlaySpace::checkSectorGeneration(Vec2F position)
@@ -363,7 +364,7 @@ void PlaySpace::update(float time)
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 	ParticleBudget = 0;
 	
-	if(music->isFinished()){ music->setOffset(0); music->resume(); };
+	if(Music->isFinished()){ Music->setOffset(0); Music->resume(); };
 }
 
 void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)

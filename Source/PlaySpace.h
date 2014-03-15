@@ -116,7 +116,7 @@ public:
 	
 	// Sounds
 	
-	SoundInstance *music;
+	SoundInstance *Music;
 	
 	int GameFrame = 0;
 	float GameTime = 0.0f;
