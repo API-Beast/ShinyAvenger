@@ -79,6 +79,12 @@ void Game::execute()
 		Playfield->draw();
 		
 		Surface->switchBuffers();
+		
+		if(Playfield->isFinished())
+		{
+			delete Playfield;
+			Playfield = new PlaySpace(Surface, {});
+		}
 	}
 	return;
 }

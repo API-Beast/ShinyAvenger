@@ -36,6 +36,7 @@ public:
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
+	virtual bool isFinished(){ return Player == nullptr; };
 	void applyPhysics(PhysicsObject* obj, float dt);
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);

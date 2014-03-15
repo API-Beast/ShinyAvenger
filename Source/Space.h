@@ -12,4 +12,5 @@ public:
 	virtual ~Space(){};
 	virtual void update(float time){};
 	virtual void draw(){};
+	virtual bool isFinished(){ return false; };
 };

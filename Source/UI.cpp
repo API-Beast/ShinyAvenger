@@ -10,6 +10,9 @@
 
 void Arrows::draw(RenderContext* Context)
 {
+	if(!Space->Player)
+		return;
+	
 	Context->setBlendingMode(RenderContext::Additive);
 	for(Ship* ship : Space->Ships)
 	{

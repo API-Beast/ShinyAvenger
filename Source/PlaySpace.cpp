@@ -170,7 +170,8 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.25f;
 		rBG.Scale = 1.9f;
-		rBG.setColor(BackgroundGradient[Player->Position.length()+4000]* 0.6f);
+		if(Player)
+			rBG.setColor(BackgroundGradient[Player->Position.length()+4000]* 0.6f);
 		BackgroundFogB.drawRepeated(rBG);
 	}
 	
@@ -186,7 +187,8 @@ void PlaySpace::draw()
 		RenderContext rBG(r);
 		rBG.Parallaxity = 0.35f;
 		rBG.Scale = 3.f;
-		rBG.setColor(BackgroundGradient[Player->Position.length()]* 0.9f);
+		if(Player)
+			rBG.setColor(BackgroundGradient[Player->Position.length()]* 0.9f);
 		BackgroundFog.drawRepeated(rBG);
 	}
 	
@@ -328,31 +330,34 @@ void PlaySpace::update(float time)
 					if(IsIntersecting(bullet.Bounds, ship->Bounds))
 						ship->onHit(&bullet, this);
 		
-	CameraPos = -(ScreenSize/2) + Player->Position;
-	
-	// Will be reset to true before next PlaySpace::update
-	Player->IsShooting = false;
-	Player->IsShootingSecondary = false;
-	Player->IsBraking = false;
-	Player->IsStabilizing = false;
-	Player->Steering = 0.0f;
-	
-	if(!IsStressTesting)
+	if(Player)
 	{
-		checkSectorGeneration(Player->Position);
-		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
-		checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
-		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
-		checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
-		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
-		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
-		
-		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2, 0));
-		checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead/2));
-		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2, 0));
-		checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead/2));
-		checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2));
-		checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2));
+		CameraPos = -(ScreenSize/2) + Player->Position;
+	
+		// Will be reset to true before next PlaySpace::update
+		Player->IsShooting = false;
+		Player->IsShootingSecondary = false;
+		Player->IsBraking = false;
+		Player->IsStabilizing = false;
+		Player->Steering = 0.0f;
+	
+		if(!IsStressTesting)
+		{
+			checkSectorGeneration(Player->Position);
+			checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead, 0));
+			checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead));
+			checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead, 0));
+			checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead));
+			checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead));
+			checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead));
+			
+			checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2, 0));
+			checkSectorGeneration(Player->Position + Vec2F(0, SectorLookAhead/2));
+			checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2, 0));
+			checkSectorGeneration(Player->Position - Vec2F(0, SectorLookAhead/2));
+			checkSectorGeneration(Player->Position + Vec2F(SectorLookAhead/2));
+			checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2));
+		}
 	}
 	
 	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
@@ -378,21 +383,27 @@ void PlaySpace::applyPhysics(PhysicsObject* obj, float dt)
 
 void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float time)
 {
-	if(down)
-		Player->IsBraking = true;
-	if(up);
-	if(right)
-		Player->Steering =  1.0f;
-	if(left)
-		Player->Steering = -1.0f;
+	if(Player)
+	{
+		if(down)
+			Player->IsBraking = true;
+		if(up);
+		if(right)
+			Player->Steering =  1.0f;
+		if(left)
+			Player->Steering = -1.0f;
+	}
 }
 
 void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
 {
-	if(actionB)
-		Player->IsShootingSecondary = true;
-	if(actionA || actionC)
-		Player->IsShooting = true;	
+	if(Player)
+	{
+		if(actionB)
+			Player->IsShootingSecondary = true;
+		if(actionA || actionC)
+			Player->IsShooting = true;	
+	}
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)
