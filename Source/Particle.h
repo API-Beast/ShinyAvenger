@@ -10,6 +10,7 @@
 #include <Springbok/Graphics/Color.h>
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
+#include <Springbok/Graphics/VertexStruct.h>
 
 struct Particle : public PhysicsObject
 {
@@ -23,7 +24,7 @@ struct Particle : public PhysicsObject
 	{
 		Image Sprite;
 		float Lifetime = 2.f;
-		RenderContext::BlendingMode DrawMode = RenderContext::Additive;
+		Blending DrawMode = Blending::Additive;
 		PhysicsObject PhysicsProperties;
 		struct
 		{
@@ -38,7 +39,7 @@ struct Particle : public PhysicsObject
 	Particle(Particle::_Definition& def);
 	
 	virtual void update(float dt, PlaySpace* space);
-	virtual void draw(RenderContext r);
+	virtual void draw(BatchRenderer2D& r);
 	
 	bool canBeDespawned(){ return TimeSinceSpawn > (Definition->Lifetime * LifeTimeMult); };
 	float normalizedAge(){ return TimeSinceSpawn / (Definition->Lifetime * LifeTimeMult); };

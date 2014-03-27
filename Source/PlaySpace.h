@@ -11,7 +11,6 @@
 #include "PhysicsObject.h"
 #include "GravitySource.h"
 #include "Bullet.h"
-#include "UI.h"
 #include "Particle.h"
 #include "Ship.h"
 
@@ -19,6 +18,7 @@
 #include <Springbok/Geometry/GeometryView.h>
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
+#include <Springbok/Audio/SoundInstance.h>
 
 class Ship;
 
@@ -31,7 +31,7 @@ struct Sector
 class PlaySpace : public Space
 {
 public:
-	PlaySpace() : ShipArrows(this), GeoViews(Bullets, Objects, Particles, Ships) {};
+	PlaySpace() : GeoViews(Bullets, Objects, Particles, Ships), RenderContext(nullptr) {};
 	PlaySpace(GameSurface* surface, const List<std::string>& arguments);
 	virtual ~PlaySpace();
 	virtual void update(float time);
@@ -55,6 +55,7 @@ public:
 	Color getFactionColor(int);
 	ContainerSubrange< ViewBase< Ship*, float >, Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
 public:
+	RenderContext2D RenderContext;
 	ObjectPointer<Ship> Player;
 	
 	SolarSystem* HomeSystem;
@@ -96,7 +97,6 @@ public:
 	KeyframeList<Color> BackgroundGradient;
 	
 	Vec2F CameraPos;
-	Vec2F ScreenSize;
 	
 	Vec2I Size;
 
@@ -108,15 +108,8 @@ public:
 	
 	int NumberGeneratedSectors = 0;
 	
-	// User Interface
-	Arrows ShipArrows;
-	Label FrameRate;
-	ShieldBar Shield;
-	UIContainer GUIContainer;
-	
 	// Sounds
-	
-	SoundInstance *Music;
+	SoundInstance* Music;
 	
 	int GameFrame = 0;
 	float GameTime = 0.0f;

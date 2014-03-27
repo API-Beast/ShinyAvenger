@@ -6,6 +6,7 @@
 
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
+#include <Springbok/Graphics/BatchRenderer.h>
 #include <Springbok/Procedural/Noise.h>
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
@@ -14,7 +15,7 @@
 
 #include <iostream>
 
-PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) : ShipArrows(this), GeoViews(Bullets, Objects, Particles, Ships)
+PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) : RenderContext(surface), GeoViews(Bullets, Objects, Particles, Ships)
 {
 	gAssets.initAll();
 	
@@ -35,7 +36,6 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	BackgroundGradient.insert(30000, Color(0.12f, 0.10f, 0.10f));
 	BackgroundGradient.insert(35000, Colors::Black);
 	
-	ScreenSize = surface->getSize();
 	Size = Vec2I(5000, 5000);
 	
 	checkSectorGeneration(0);
@@ -48,18 +48,8 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	Player->SecondaryWeapon = gAssets.MissileLauncher;
 	Player->ImpulseColor = RGB(0.4f, 0.8f, 1.0f);
 	Player->AI = NULL;
-
-	// User Interface
-	GUIContainer.append(&ShipArrows);
-	GUIContainer.append(&FrameRate);
-	//FrameRate.Font = &gAssets.BigFont;
-	Shield.Target = Player;
-	Shield.Position.X = 15;
-	Shield.Position.Y = 25;
-	GUIContainer.append(&Shield);
 	
 	// Play sounds
-	
 	Music = gAssets.MusicMainTheme->playGlobal();
 	
 	if(IsStressTesting)
@@ -145,60 +135,18 @@ SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 
 void PlaySpace::draw()
 {
-	//Color bgColor = BackgroundGradient[Player->Position.getLength()];
-	//glClearColor(bgColor.Red, bgColor.Green, bgColor.Blue, 1.f);
-	glClearColor(0, 0, 0, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	RenderContext.clear(Colors::Dawnbringer::Shadow[0]);
 	
 	GeoViews.Objects.YAxisView.update();
 	GeoViews.Bullets.YAxisView.update();
 	GeoViews.Particles.YAxisView.update();
 	
-	RenderContext r;
-	r.RenderTargetOrigin = 0;
-	r.RenderTargetSize = ScreenSize;
-	r.CameraPos = CameraPos;
-	r.setColor(Colors::White);
-	
-	{
-		RenderContext rBG(r);
-		rBG.Parallaxity = 0.21f;
-		rBG.Scale = 1.2f;
-		BackgroundStars.drawRepeated(rBG);
-	}
-	
-	{
-		RenderContext rBG(r);
-		rBG.Parallaxity = 0.25f;
-		rBG.Scale = 1.9f;
-		rBG.setColor(BackgroundGradient[CameraPos.length()+4000]* 0.6f);
-		BackgroundFogB.drawRepeated(rBG);
-	}
-	
-	{
-		RenderContext rBG(r);
-		rBG.Parallaxity = 0.28f;
-		rBG.Scale = 1.6f;
-		BackgroundStars.drawRepeated(rBG);
-	}
-	
-	{
-		RenderContext rBG(r);
-		rBG.Parallaxity = 0.35f;
-		rBG.Scale = 3.f;
-		rBG.setColor(BackgroundGradient[CameraPos.length()]* 0.9f);
-		BackgroundFog.drawRepeated(rBG);
-	}
+	BatchRenderer2D r;
+	r.startBatching(RenderContext);
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
 	
-	float start = CameraPos.Y - 600;
-	float end = start + ScreenSize.Y + 600;
-	
-	r.setColor(Colors::White);
-	
-	// Draw unclipped
 	for(Bullet& obj : Bullets)
 		obj.draw(r);
 	for(PhysicsObject* obj : Objects)
@@ -211,8 +159,7 @@ void PlaySpace::draw()
 	for(Bullet& obj : Bullets)
 		obj.drawTop(r);
 	
-	RenderContext gui;	
-	GUIContainer.render(&gui);
+	r.flushBatches();
 }
 
 void PlaySpace::update(float time)
@@ -245,8 +192,6 @@ void PlaySpace::update(float time)
 		{
 			Systems[i]->update(time, this);
 		}
-	
-	GUIContainer.update(time);
 	
 	for(int i = 0; i < Bullets.UsedLength; ++i)
 	{
@@ -318,7 +263,8 @@ void PlaySpace::update(float time)
 		
 	if(Player)
 	{
-		CameraPos = -(ScreenSize/2) + Player->Position;
+		CameraPos = Player->Position;
+		RenderContext.CameraPos = Player->Position;
 	
 		// Will be reset to true before next PlaySpace::update
 		Player->IsShooting = false;
@@ -345,8 +291,6 @@ void PlaySpace::update(float time)
 			checkSectorGeneration(Player->Position - Vec2F(SectorLookAhead/2));
 		}
 	}
-	
-	FrameRate.Text = std::to_string(LastDeltaTime*1000).substr(0, 4);
 	ParticleBudget = 0;
 	
 	if(Music->isFinished()){ Music->setOffset(0); Music->resume(); };
@@ -474,6 +418,6 @@ void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fi
 	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*1, force*3} + 10, fireColor);
 	
 	spawnParticle(gAssets.ExplosionFlash,          position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
-	spawnParticle(gAssets.ExplosionShockwave,      position, force/80 , Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
+	spawnParticle(gAssets.ExplosionShockwave,      position, force/80, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
 	spawnParticle(gAssets.GlowParticle,            position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
 }

@@ -6,9 +6,12 @@
 
 #pragma once
 
-#include <Springbok/Platform.h>
 #include <Springbok/Geometry/Angle.h>
-#include "PlaySpace.h"
+
+class GameSurface;
+class InputMonitor;
+class PreciseClock;
+class PlaySpace;
 
 class Game
 {

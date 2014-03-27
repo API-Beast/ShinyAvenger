@@ -5,6 +5,8 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Particle.h"
+#include <Springbok/Graphics/Transform2D.h>
+#include <Springbok/Graphics/BatchRenderer.h>
 
 Particle::Particle(Particle::_Definition& def)
 {
@@ -12,15 +14,19 @@ Particle::Particle(Particle::_Definition& def)
 	Definition = &def;
 }
 
-void Particle::draw(RenderContext r)
+void Particle::draw(BatchRenderer2D& r)
 {
 	float age = normalizedAge();
-	r.Offset = Position;
-	r.Rotation = Rotation + Definition->Animation.Rotation[age];
-	r.Scale = Definition->Animation.Scale[age] * Size;
-	r.setColor(Definition->Animation.Col[age] * Colorization, Definition->Animation.Alpha[age] * Alpha);
-	r.setBlendingMode(Definition->DrawMode);
-	Definition->Sprite.draw(r);
+	
+	Vec4F color;
+	color.XYZ = Colorization * Definition->Animation.  Col[age];
+	color.W   = Alpha        * Definition->Animation.Alpha[age];
+	
+	Transform2D t = Position2D(Position);
+	t += Rotate2D(Rotation + Definition->Animation.Rotation[age]);
+	t +=  Scale2D(Size     * Definition->Animation.   Scale[age]);
+	
+	r.addToBatch(Definition->Sprite, t, color, Definition->DrawMode);
 }
 
 void Particle::update(float dt, PlaySpace* space)

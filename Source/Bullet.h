@@ -7,6 +7,7 @@
 #pragma once
 
 #include "PhysicsObject.h"
+#include <Springbok/Graphics/VertexStruct.h>
 #include <Springbok/Graphics/Image.h>
 #include <Springbok/Animation/KeyframeList.h>
 
@@ -33,7 +34,7 @@ struct Bullet : public PhysicsObject
 		
 		bool Explodes = false;
 		
-		RenderContext::BlendingMode Blending = RenderContext::Default;
+		Blending BlendMode = Blending::Alpha;
 		
 		PhysicsObject PhysicsProperties;
 		
@@ -51,8 +52,8 @@ struct Bullet : public PhysicsObject
 	Bullet(Bullet::_Definition& def);
 	
 	virtual void update(float dt, PlaySpace* space);
-	virtual void draw(RenderContext r);
-	void drawTop(RenderContext r);
+	virtual void draw(BatchRenderer2D& r);
+	void drawTop(BatchRenderer2D& r);
 	
 	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime || HitObject; };
 	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };

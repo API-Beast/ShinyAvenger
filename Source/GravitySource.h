@@ -18,8 +18,8 @@ public:
 	 : Position(pos),Gravity(grav),Range(range),CenterColor(color),HighlightColor(hcolor),BackgroundColor(CenterColor*0.3f){};
 	GravitySource() = default;
 	void update(float dt, PlaySpace* space);
-	void draw(RenderContext r);
-	void drawTop(RenderContext r);
+	void draw(BatchRenderer2D& r);
+	void drawTop(BatchRenderer2D& r);
 	void influence(PhysicsObject* obj, float dt);
 public:
 	Vec2F Position;
@@ -35,8 +35,8 @@ public:
 	
 	BoundingRect Bounds;
 	
-	Image GlowSprite = Image("GravityCloud.png");
-	Image Graphics = Image("GravitySource.png");
-	Image HighlightGraphics = Image("GravitySourceHighlight.png");
-	Image HighlightGraphics2 = Image("GravitySourceHighHighlight.png");
+	Image CloudSprite = Image("GravityCloud.png");
+	Image Sprite = Image("GravitySource.png");
+	Image HighlightSprite = Image("GravitySourceHighlight.png");
+	Image HighlightSprite2 = Image("GravitySourceHighHighlight.png");
 };

@@ -8,6 +8,8 @@
 #include "Behavior.h"
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
+#include <Springbok/Graphics/Transform2D.h>
+#include <Springbok/Graphics/BatchRenderer.h>
 
 Ship::Ship(const Image& img) : Sprite(img)
 {	
@@ -174,28 +176,20 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool s
 	}
 }
 
-void Ship::draw(RenderContext r)
+void Ship::draw(BatchRenderer2D& r)
 {
-	if(Status == Destroyed)
-		r.setColor(Palette::Grey[1]);
-	
-	r.Offset = Position;
-	r.Rotation = Rotation;
-	Sprite.draw(r);
-	r.setColor(FactionColor, 1.f);
-	FactionColorSprite.draw(r);
+	Transform2D t = Position2D(Position) + Rotate2D(Rotation);
+	r.addToBatch(Sprite, t);
+	r.addToBatch(FactionColorSprite, t, Vec4F(FactionColor));
 	
 	if(ShieldEnergy < (MaxShield * 0.8f) && ShieldEnergy > 0.f)
 	{
 		float percentShield = (Max(ShieldEnergy, 1.f) / (MaxShield * 0.8f));
-		r.setBlendingMode(RenderContext::Additive);
-		r.setColor(ShieldColors[percentShield], 1.0f * (1 - percentShield));
-		r.Rotation = 0_turn;
-		gAssets.ShieldStaticSprite.draw(r);
+		r.addToBatch(gAssets.ShieldStaticSprite, Position2D(Position), Vec4F{ShieldColors[percentShield], 1.0f * (1 - percentShield)});
 		
-		r.setColor(ShieldColors[percentShield+0.2f], Max(Angle::FromTurn(Age).cos(), 0.) * (1 - percentShield));
-		r.Rotation = Angle::FromDegree(int(Age)*60);
-		gAssets.ShieldRechargeSprite.draw(r);
+		Angle rot = Angle::FromDegree(int(Age)*60);
+		Vec4F col = Vec4F(ShieldColors[percentShield+0.2f], Max<float>(Angle::FromTurn(Age).cos(), 0.f) * (1 - percentShield));
+		r.addToBatch(gAssets.ShieldRechargeSprite, Position2D(Position) + Rotate2D(rot), col);
 	}
 }
 

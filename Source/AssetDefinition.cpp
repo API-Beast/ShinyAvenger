@@ -61,7 +61,7 @@ void AssetDefinition::initBullets()
 		b.Power = 10.f;
 		b.Speed = 800.f;
 
-		b.Blending = RenderContext::Additive;
+		b.BlendMode = Blending::Additive;
 		
 		b.ColorAnimation.insert(0.5, Palette::Orange);
 		b.ColorAnimation.insert(1.0, Palette::Red);
@@ -83,7 +83,7 @@ void AssetDefinition::initBullets()
 		Bullet::_Definition& b = MiniGunBullet;
 		
 		b.Bullet::_Definition::operator=(PhaserBullet);
-		b.Blending = RenderContext::Additive;
+		b.BlendMode = Blending::Additive;
 		b.PhysicsProperties.Flow = 0;
 		b.PhysicsProperties.Drag = 0;
 		b.PhysicsProperties.Mass = 0.2;
@@ -189,7 +189,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = PulseEngineGlow;
 		
 		p.Sprite = Image("Player/Impulse.png");
-		p.DrawMode = RenderContext::Additive;
+		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.3f;
 		p.PhysicsProperties.Drag = 2;
 		p.PhysicsProperties.Mass = 0.5f;
@@ -250,7 +250,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = EnergyShield;
 		
 		p.Sprite = Image("Ship/ShieldImpact.png");
-		p.DrawMode = RenderContext::Additive;
+		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Drag = 0.f;
 		
@@ -283,7 +283,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = GlowParticle;
 		
 		p.Sprite = Image("Glow.png");
-		p.DrawMode = RenderContext::Additive;
+		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Mass = 0.f;
 		p.PhysicsProperties.Drag = 0.0f;
@@ -306,7 +306,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = SparkParticle;
 		
 		p.Sprite = Image("spark.png");
-		p.DrawMode = RenderContext::Additive;
+		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Mass = 2.f;
 		p.PhysicsProperties.Drag = 1.f;
@@ -346,7 +346,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = ExplosionCloud;
 		
 		p.Sprite = Image("ExplosionCloud.png");
-		p.DrawMode = RenderContext::Default;
+		p.DrawMode = Blending::Alpha;
 		p.Lifetime = 0.5f;
 		p.PhysicsProperties.Mass = -1.f;
 		p.PhysicsProperties.Drag = 3.f;
@@ -390,7 +390,7 @@ void AssetDefinition::initParticles()
 	}
 	
 	ExplosionCloudAdditive = ExplosionCloud;
-	ExplosionCloudAdditive.DrawMode = RenderContext::Additive;
+	ExplosionCloudAdditive.DrawMode = Blending::Additive;
 	
 	// ------------------------------------------------------------------
 	// ### Explosion Flash

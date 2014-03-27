@@ -7,6 +7,8 @@
 #include "Bullet.h"
 #include "Ship.h"
 #include "PlaySpace.h"
+#include "AssetDefinition.h"
+#include <Springbok/Graphics/BatchRenderer.h>
 
 void Bullet::update(float dt, PlaySpace* space)
 {
@@ -26,34 +28,30 @@ void Bullet::impact(PlaySpace* space)
 	}
 }
 
-void Bullet::draw(RenderContext r)
+void Bullet::draw(BatchRenderer2D& r)
 {
-	r.Offset = Position;
-	r.Rotation = Rotation;
-	
 	float age = normalizedAge();
-
-	r.setColor(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]);
-	r.Scale = Definition->ScaleAnimation[age];
-	r.setBlendingMode(Definition->Blending);
-	Definition->Sprite.draw(r);
+	Vec4F col = Vec4F(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]);
 	
-
+	Transform2D t = Position2D(Position);
+	t += Rotate2D(Rotation);
+	t += Scale2D(Definition->ScaleAnimation[age]);
+	
+	r.addToBatch(Definition->Sprite, t, col, Definition->BlendMode);
 }
 
-void Bullet::drawTop(RenderContext r)
+void Bullet::drawTop(BatchRenderer2D& r)
 {
 	if(Definition->Glow)
 	{
-		r.Offset = Position;
-		r.Rotation = Rotation;
-		
 		float age = normalizedAge();
+		Vec4F col = Vec4F(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]/20);
 		
-		r.setColor(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]/20);
-		r.Scale = Definition->ScaleAnimation[age];
-		r.setBlendingMode(RenderContext::Additive);
-		gAssets.GlowSprite.drawStretched(Definition->Sprite.getSize()*4, r);
+		Transform2D t = Position2D(Position);
+		t += Scale2D(Definition->ScaleAnimation[age]);
+		t += Rotate2D(Rotation);
+		
+		r.addToBatch(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.getSize() / gAssets.GlowSprite.getSize()), col, Blending::Additive);
 	}
 }
 

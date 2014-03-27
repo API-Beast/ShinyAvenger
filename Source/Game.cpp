@@ -5,8 +5,15 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Game.h"
+#include "PlaySpace.h"
+
 #include <Springbok/Utils/CliArgumentParser.h>
-#include <Springbok/Graphics/RenderContext.h>
+#include <Springbok/Graphics/RenderContext2D.h>
+
+#include <Springbok/Platform/GameSurface.h>
+#include <Springbok/Platform/InputMonitor.h>
+#include <Springbok/Platform/PreciseClock.h>
+#include <Springbok/Platform/InputDevice.h>
 
 #include <iostream>
 
@@ -27,7 +34,6 @@ Game::Game(int argc, char** argv)
 	Input   = new InputMonitor(Surface);
 	Clock   = new PreciseClock();
 	Playfield = new PlaySpace(Surface, argParser.LooseArguments);
-	RenderContext::Setup2DEnvironment();
 }
 
 Game::~Game()

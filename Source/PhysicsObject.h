@@ -7,8 +7,8 @@
 #pragma once
 
 #include <Springbok/Geometry/Vec2.h>
-#include <Springbok/Graphics/RenderContext.h>
 #include <Springbok/Geometry/BoundingShapes.h>
+#include <Springbok/Graphics/BatchRenderer.h>
 
 class PlaySpace;
 
@@ -30,7 +30,7 @@ struct PhysicsObject
 	Vec2F BoundsOffset = 0;
 	BoundingRect Bounds = BoundingRect{0, 16}; // Position updated every frame
 public:
-	virtual void draw(RenderContext r){};
+	virtual void draw(BatchRenderer2D& r){};
 	virtual void update(float dt, PlaySpace* space){};
 	virtual void updateBounds(){ Bounds.setCenter(Position - BoundsOffset); };
 	PhysicsObject& operator=(const PhysicsObject& other) = default;
