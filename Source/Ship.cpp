@@ -179,17 +179,17 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool s
 void Ship::draw(BatchRenderer2D& r)
 {
 	Transform2D t = Position2D(Position) + Rotate2D(Rotation);
-	r.addToBatch(Sprite, t);
-	r.addToBatch(FactionColorSprite, t, Vec4F(FactionColor));
+	r.draw(Sprite, t);
+	r.draw(FactionColorSprite, t, Vec4F(FactionColor));
 	
 	if(ShieldEnergy < (MaxShield * 0.8f) && ShieldEnergy > 0.f)
 	{
 		float percentShield = (Max(ShieldEnergy, 1.f) / (MaxShield * 0.8f));
-		r.addToBatch(gAssets.ShieldStaticSprite, Position2D(Position), Vec4F{ShieldColors[percentShield], 1.0f * (1 - percentShield)});
+		r.draw(gAssets.ShieldStaticSprite, Position2D(Position), Vec4F{ShieldColors[percentShield], 1.0f * (1 - percentShield)});
 		
 		Angle rot = Angle::FromDegree(int(Age)*60);
 		Vec4F col = Vec4F(ShieldColors[percentShield+0.2f], Max<float>(Angle::FromTurn(Age).cos(), 0.f) * (1 - percentShield));
-		r.addToBatch(gAssets.ShieldRechargeSprite, Position2D(Position) + Rotate2D(rot), col);
+		r.draw(gAssets.ShieldRechargeSprite, Position2D(Position) + Rotate2D(rot), col);
 	}
 }
 

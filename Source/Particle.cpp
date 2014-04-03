@@ -26,7 +26,7 @@ void Particle::draw(BatchRenderer2D& r)
 	t += Rotate2D(Rotation + Definition->Animation.Rotation[age]);
 	t +=  Scale2D(Size     * Definition->Animation.   Scale[age]);
 	
-	r.addToBatch(Definition->Sprite, t, color, Definition->DrawMode);
+	r.draw(Definition->Sprite, t, color, Definition->DrawMode);
 }
 
 void Particle::update(float dt, PlaySpace* space)

@@ -35,9 +35,9 @@ void GravitySource::draw(BatchRenderer2D& r)
 	Transform2D t = Position2D(Position);
 	
 	// Three different background layers
-	r.addToBatch(CloudSprite, t + Scale2D(Range * 2.4f / 1024) + Rotate2D(TimeSinceSpawn * 0.040_turn), Vec4F{BackgroundColor*0.2f});
-	r.addToBatch(CloudSprite, t + Scale2D(Range * 2.0f / 1024) + Rotate2D(TimeSinceSpawn * 0.070_turn), Vec4F{BackgroundColor*0.2f, 0.9f});
-	r.addToBatch(CloudSprite, t + Scale2D((256 + Range * 0.25f) / 1024) + Rotate2D(TimeSinceSpawn * 0.090_turn), Vec4F{Colors::Black, 0.5f});
+	r.draw(CloudSprite, t + Scale2D(Range * 2.4f / 1024) + Rotate2D(TimeSinceSpawn * 0.040_turn), Vec4F{BackgroundColor*0.2f});
+	r.draw(CloudSprite, t + Scale2D(Range * 2.0f / 1024) + Rotate2D(TimeSinceSpawn * 0.070_turn), Vec4F{BackgroundColor*0.2f, 0.9f});
+	r.draw(CloudSprite, t + Scale2D((256 + Range * 0.25f) / 1024) + Rotate2D(TimeSinceSpawn * 0.090_turn), Vec4F{Colors::Black, 0.5f});
 }
 
 void GravitySource::drawTop(BatchRenderer2D& r)
@@ -58,8 +58,8 @@ void GravitySource::drawTop(BatchRenderer2D& r)
 	// Draw.
 	Transform2D t = Position2D(Position);
 	
-	r.addToBatch(gAssets.GlowSprite, t + Scale2D(Range / 128.f), Vec4F{CenterColor, 0.2f}, Blending::Additive);
-	r.addToBatch(gAssets.GlowSprite, t + Scale2D(Range / 3 / 128.f), Vec4F{HighlightColor, 0.4f}, Blending::Additive);
+	r.draw(gAssets.GlowSprite, t + Scale2D(Range / 128.f), Vec4F{CenterColor, 0.2f}, Blending::Additive);
+	r.draw(gAssets.GlowSprite, t + Scale2D(Range / 3 / 128.f), Vec4F{HighlightColor, 0.4f}, Blending::Additive);
 	
 	Angle phaseRotation[4];
 	
@@ -67,13 +67,13 @@ void GravitySource::drawTop(BatchRenderer2D& r)
 		phaseRotation[i] = TimeSinceSpawn * (0.08_turn + 0.02_turn * i) + (0.99_turn / 3 * i);
 	
 	for(int i = 0; i < 4; ++i)
-		r.addToBatch(Sprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{CenterColor, Min(phase[i]*2, 1.0f)});
+		r.draw(Sprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{CenterColor, Min(phase[i]*2, 1.0f)});
 	
 	for(int i = 0; i < 4; ++i)
-		r.addToBatch(HighlightSprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{HighlightColor, Min(phase[i]/3, 1.0f)});
+		r.draw(HighlightSprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{HighlightColor, Min(phase[i]/3, 1.0f)});
 	
 	for(int i = 0; i < 4; ++i)
-		r.addToBatch(HighlightSprite2, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{Colors::White, Min(phase[i]/2, 1.0f)}, Blending::Additive);
+		r.draw(HighlightSprite2, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{Colors::White, Min(phase[i]/2, 1.0f)}, Blending::Additive);
 }
 
 void GravitySource::influence(PhysicsObject* obj, float dt)

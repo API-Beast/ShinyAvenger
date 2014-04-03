@@ -37,7 +37,7 @@ void Bullet::draw(BatchRenderer2D& r)
 	t += Rotate2D(Rotation);
 	t += Scale2D(Definition->ScaleAnimation[age]);
 	
-	r.addToBatch(Definition->Sprite, t, col, Definition->BlendMode);
+	r.draw(Definition->Sprite, t, col, Definition->BlendMode);
 }
 
 void Bullet::drawTop(BatchRenderer2D& r)
@@ -51,7 +51,7 @@ void Bullet::drawTop(BatchRenderer2D& r)
 		t += Scale2D(Definition->ScaleAnimation[age]);
 		t += Rotate2D(Rotation);
 		
-		r.addToBatch(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.getSize() / gAssets.GlowSprite.getSize()), col, Blending::Additive);
+		r.draw(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.getSize() / gAssets.GlowSprite.getSize()), col, Blending::Additive);
 	}
 }
 
