@@ -8,7 +8,7 @@
 
 #include <Springbok/Geometry/Vec2.h>
 #include <Springbok/Geometry/BoundingShapes.h>
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 
 class PlaySpace;
 

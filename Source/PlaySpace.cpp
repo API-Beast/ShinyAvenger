@@ -6,7 +6,7 @@
 
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 #include <Springbok/Procedural/Noise.h>
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
@@ -143,6 +143,17 @@ void PlaySpace::draw()
 	
 	BatchRenderer2D r;
 	r.startBatching(RenderContext);
+	RenderTarget* sur = RenderContext.renderTarget();
+	
+	auto drawBG = [&](Image& img, Vec2F scale, Vec2F parral, Vec4F color = Colors::White)
+	{
+	};
+	
+
+	drawBG(BackgroundStars, 1.20f, 0.18f);
+	drawBG(BackgroundFogB,  1.90f, 0.25f, Colors::Dawnbringer::Clay[2]);
+	drawBG(BackgroundStars, 1.60f, 0.28f);
+	drawBG(BackgroundFog,   1.75f, 0.30f, Colors::Dawnbringer::Red[2]);
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
@@ -264,7 +275,7 @@ void PlaySpace::update(float time)
 	if(Player)
 	{
 		CameraPos = Player->Position;
-		RenderContext.CameraPos = Player->Position;
+		RenderContext.Camera.Position = CameraPos;
 	
 		// Will be reset to true before next PlaySpace::update
 		Player->IsShooting = false;

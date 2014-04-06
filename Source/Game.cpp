@@ -8,7 +8,7 @@
 #include "PlaySpace.h"
 
 #include <Springbok/Utils/CliArgumentParser.h>
-#include <Springbok/Graphics/RenderContext2D.h>
+#include <Springbok/Graphics/Core/RenderContext2D.h>
 
 #include <Springbok/Platform/GameSurface.h>
 #include <Springbok/Platform/InputMonitor.h>

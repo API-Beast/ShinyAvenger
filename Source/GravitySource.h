@@ -8,6 +8,7 @@
 #include "PhysicsObject.h"
 
 #include <Springbok/Graphics/Image.h>
+#include <Springbok/Graphics/Color.h>
 
 class PlaySpace;
 

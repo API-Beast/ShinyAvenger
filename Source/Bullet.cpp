@@ -8,7 +8,7 @@
 #include "Ship.h"
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 
 void Bullet::update(float dt, PlaySpace* space)
 {
@@ -51,7 +51,7 @@ void Bullet::drawTop(BatchRenderer2D& r)
 		t += Scale2D(Definition->ScaleAnimation[age]);
 		t += Rotate2D(Rotation);
 		
-		r.draw(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.getSize() / gAssets.GlowSprite.getSize()), col, Blending::Additive);
+		r.draw(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.size() / gAssets.GlowSprite.size()), col, Blending::Additive);
 	}
 }
 

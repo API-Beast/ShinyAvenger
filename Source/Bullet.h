@@ -7,9 +7,12 @@
 #pragma once
 
 #include "PhysicsObject.h"
-#include <Springbok/Graphics/VertexStruct.h>
-#include <Springbok/Graphics/Image.h>
 #include <Springbok/Animation/KeyframeList.h>
+
+#include <Springbok/Graphics/Core/VertexStruct.h>
+
+#include <Springbok/Graphics/Image.h>
+#include <Springbok/Graphics/Color.h>
 
 class Ship;
 

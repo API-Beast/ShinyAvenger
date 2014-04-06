@@ -10,7 +10,7 @@
 #include <Springbok/Graphics/Color.h>
 #include <Springbok/Graphics/Image.h>
 #include "PhysicsObject.h"
-#include <Springbok/Graphics/VertexStruct.h>
+#include <Springbok/Graphics/Core/VertexStruct.h>
 
 struct Particle : public PhysicsObject
 {

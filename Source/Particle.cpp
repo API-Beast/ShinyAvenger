@@ -5,8 +5,8 @@
 //  0. You just DO WHAT THE FUCK YOU WANT TO.
 
 #include "Particle.h"
-#include <Springbok/Graphics/Transform2D.h>
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/Transform2D.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 
 Particle::Particle(Particle::_Definition& def)
 {

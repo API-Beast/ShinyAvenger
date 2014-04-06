@@ -7,8 +7,8 @@
 #include "GravitySource.h"
 #include "AssetDefinition.h"
 #include "PlaySpace.h"
-#include <Springbok/Graphics/Transform2D.h>
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/Transform2D.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 #include <GL/gl.h>
 
 void GravitySource::update(float dt, PlaySpace* space)

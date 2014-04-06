@@ -8,8 +8,8 @@
 #include "Behavior.h"
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
-#include <Springbok/Graphics/Transform2D.h>
-#include <Springbok/Graphics/BatchRenderer.h>
+#include <Springbok/Graphics/Core/Transform2D.h>
+#include <Springbok/Graphics/Core/BatchRenderer.h>
 
 Ship::Ship(const Image& img) : Sprite(img)
 {	
@@ -195,7 +195,7 @@ void Ship::draw(BatchRenderer2D& r)
 
 void Ship::updateBounds()
 {
-	Bounds.Size = Sprite.getSize();
+	Bounds.Size = Sprite.size();
 	PhysicsObject::updateBounds();
 }
 
