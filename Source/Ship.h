@@ -91,7 +91,7 @@ public:
 	Ship(const Image& img);
 	virtual ~Ship();
 	virtual void update(float t, PlaySpace* space);	
-	virtual void draw(BatchRenderer2D& r);
+	virtual void draw(SpriteRenderer& r);
 	virtual void updateBounds();
 	bool canBeDespawned(){ return Status == Destroyed; };
 	virtual Vec2F getPosition() const;

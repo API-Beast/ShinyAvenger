@@ -19,8 +19,8 @@ public:
 	 : Position(pos),Gravity(grav),Range(range),CenterColor(color),HighlightColor(hcolor),BackgroundColor(CenterColor*0.3f){};
 	GravitySource() = default;
 	void update(float dt, PlaySpace* space);
-	void draw(BatchRenderer2D& r);
-	void drawTop(BatchRenderer2D& r);
+	void draw(SpriteRenderer& r);
+	void drawTop(SpriteRenderer& r);
 	void influence(PhysicsObject* obj, float dt);
 public:
 	Vec2F Position;

@@ -6,7 +6,7 @@
 
 #include "Particle.h"
 #include <Springbok/Graphics/Core/Transform2D.h>
-#include <Springbok/Graphics/Core/BatchRenderer.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 
 Particle::Particle(Particle::_Definition& def)
 {
@@ -14,7 +14,7 @@ Particle::Particle(Particle::_Definition& def)
 	Definition = &def;
 }
 
-void Particle::draw(BatchRenderer2D& r)
+void Particle::draw(SpriteRenderer& r)
 {
 	float age = normalizedAge();
 	

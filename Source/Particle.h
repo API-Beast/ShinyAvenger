@@ -39,7 +39,7 @@ struct Particle : public PhysicsObject
 	Particle(Particle::_Definition& def);
 	
 	virtual void update(float dt, PlaySpace* space);
-	virtual void draw(BatchRenderer2D& r);
+	virtual void draw(SpriteRenderer& r);
 	
 	bool canBeDespawned(){ return TimeSinceSpawn > (Definition->Lifetime * LifeTimeMult); };
 	float normalizedAge(){ return TimeSinceSpawn / (Definition->Lifetime * LifeTimeMult); };

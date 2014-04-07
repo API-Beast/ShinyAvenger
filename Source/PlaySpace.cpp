@@ -6,7 +6,7 @@
 
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
-#include <Springbok/Graphics/Core/BatchRenderer.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 #include <Springbok/Procedural/Noise.h>
 #include <GL/gl.h>
 #include <Springbok/Animation/Interpolation.h>
@@ -15,7 +15,10 @@
 
 #include <iostream>
 
-PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) : RenderContext(surface), GeoViews(Bullets, Objects, Particles, Ships)
+PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments)
+:
+Renderer(surface),
+GeoViews(Bullets, Objects, Particles, Ships)
 {
 	gAssets.initAll();
 	
@@ -29,12 +32,6 @@ PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments) :
 	BackgroundFog = Image("BackgroundFog.png");
 	BackgroundFogB = Image("BackgroundFogB.png");
 	ForegroundFog = Image("ForegroundFog.png");
-	
-	BackgroundGradient.insert(0, Color(0.22f, 0.15f, 0.24f));
-	BackgroundGradient.insert(10000, Color(0.42f, 0.15f, 0.14f));
-	BackgroundGradient.insert(20000, Color(0.32f, 0.10f, 0.24f));
-	BackgroundGradient.insert(30000, Color(0.12f, 0.10f, 0.10f));
-	BackgroundGradient.insert(35000, Colors::Black);
 	
 	Size = Vec2I(5000, 5000);
 	
@@ -134,26 +131,23 @@ SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 }
 
 void PlaySpace::draw()
-{
-	RenderContext.clear(Colors::Dawnbringer::Shadow[0]);
-	
+{	
 	GeoViews.Objects.YAxisView.update();
 	GeoViews.Bullets.YAxisView.update();
 	GeoViews.Particles.YAxisView.update();
 	
-	BatchRenderer2D r;
-	r.startBatching(RenderContext);
-	RenderTarget* sur = RenderContext.renderTarget();
+	Renderer.clear(Colors::Dawnbringer::Shadow[0]);
 	
 	auto drawBG = [&](Image& img, Vec2F scale, Vec2F parral, Vec4F color = Colors::White)
 	{
+		Renderer.drawRepeatedInf(img, 0, scale, parral, color);
 	};
+	auto& r = Renderer;
 	
-
-	drawBG(BackgroundStars, 1.20f, 0.18f);
-	drawBG(BackgroundFogB,  1.90f, 0.25f, Colors::Dawnbringer::Clay[2]);
-	drawBG(BackgroundStars, 1.60f, 0.28f);
-	drawBG(BackgroundFog,   1.75f, 0.30f, Colors::Dawnbringer::Red[2]);
+	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Color(0.42f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Color(0.32f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Color(0.32f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Color(0.32f, 0.15f, 0.14f));
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
@@ -170,7 +164,7 @@ void PlaySpace::draw()
 	for(Bullet& obj : Bullets)
 		obj.drawTop(r);
 	
-	r.flushBatches();
+	r.flush();
 }
 
 void PlaySpace::update(float time)
@@ -275,7 +269,7 @@ void PlaySpace::update(float time)
 	if(Player)
 	{
 		CameraPos = Player->Position;
-		RenderContext.Camera.Position = CameraPos;
+		Renderer.Context.Camera.Position = CameraPos;
 	
 		// Will be reset to true before next PlaySpace::update
 		Player->IsShooting = false;
@@ -431,4 +425,6 @@ void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fi
 	spawnParticle(gAssets.ExplosionFlash,          position, size/100, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
 	spawnParticle(gAssets.ExplosionShockwave,      position, force/80, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
 	spawnParticle(gAssets.GlowParticle,            position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
+
+	gAssets.SoundExplosion02->play(position);
 }

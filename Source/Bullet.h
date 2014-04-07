@@ -55,8 +55,8 @@ struct Bullet : public PhysicsObject
 	Bullet(Bullet::_Definition& def);
 	
 	virtual void update(float dt, PlaySpace* space);
-	virtual void draw(BatchRenderer2D& r);
-	void drawTop(BatchRenderer2D& r);
+	virtual void draw(SpriteRenderer& r);
+	void drawTop(SpriteRenderer& r);
 	
 	bool canBeDespawned(){ return TimeSinceSpawn > Definition->Lifetime || HitObject; };
 	float normalizedAge(){ return TimeSinceSpawn / Definition->Lifetime; };

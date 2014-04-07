@@ -19,6 +19,7 @@
 #include <Springbok/Containers/List.h>
 #include <Springbok/Platform/GameSurface.h>
 #include <Springbok/Audio/SoundInstance.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 
 class Ship;
 
@@ -31,7 +32,7 @@ struct Sector
 class PlaySpace : public Space
 {
 public:
-	PlaySpace() : GeoViews(Bullets, Objects, Particles, Ships), RenderContext(nullptr) {};
+	PlaySpace() : GeoViews(Bullets, Objects, Particles, Ships), Renderer(nullptr) {};
 	PlaySpace(GameSurface* surface, const List<std::string>& arguments);
 	virtual ~PlaySpace();
 	virtual void update(float time);
@@ -55,7 +56,6 @@ public:
 	Color getFactionColor(int);
 	ContainerSubrange< ViewBase< Ship*, float >, Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
 public:
-	RenderContext2D RenderContext;
 	ObjectPointer<Ship> Player;
 	
 	SolarSystem* HomeSystem;
@@ -93,8 +93,7 @@ public:
 	} GeoViews;
 	
 	Map<Sector, Vec2I, &Sector::Position> Sectors;
-
-	KeyframeList<Color> BackgroundGradient;
+	SpriteRenderer Renderer;
 	
 	Vec2F CameraPos;
 	

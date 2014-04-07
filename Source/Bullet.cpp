@@ -8,7 +8,7 @@
 #include "Ship.h"
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
-#include <Springbok/Graphics/Core/BatchRenderer.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 
 void Bullet::update(float dt, PlaySpace* space)
 {
@@ -28,7 +28,7 @@ void Bullet::impact(PlaySpace* space)
 	}
 }
 
-void Bullet::draw(BatchRenderer2D& r)
+void Bullet::draw(SpriteRenderer& r)
 {
 	float age = normalizedAge();
 	Vec4F col = Vec4F(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]);
@@ -40,7 +40,7 @@ void Bullet::draw(BatchRenderer2D& r)
 	r.draw(Definition->Sprite, t, col, Definition->BlendMode);
 }
 
-void Bullet::drawTop(BatchRenderer2D& r)
+void Bullet::drawTop(SpriteRenderer& r)
 {
 	if(Definition->Glow)
 	{

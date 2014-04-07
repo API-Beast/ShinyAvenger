@@ -8,7 +8,7 @@
 #include "AssetDefinition.h"
 #include "PlaySpace.h"
 #include <Springbok/Graphics/Core/Transform2D.h>
-#include <Springbok/Graphics/Core/BatchRenderer.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 #include <GL/gl.h>
 
 void GravitySource::update(float dt, PlaySpace* space)
@@ -30,7 +30,7 @@ void GravitySource::update(float dt, PlaySpace* space)
 	}
 }
 
-void GravitySource::draw(BatchRenderer2D& r)
+void GravitySource::draw(SpriteRenderer& r)
 {
 	Transform2D t = Position2D(Position);
 	
@@ -40,7 +40,7 @@ void GravitySource::draw(BatchRenderer2D& r)
 	r.draw(CloudSprite, t + Scale2D((256 + Range * 0.25f) / 1024) + Rotate2D(TimeSinceSpawn * 0.090_turn), Vec4F{Colors::Black, 0.5f});
 }
 
-void GravitySource::drawTop(BatchRenderer2D& r)
+void GravitySource::drawTop(SpriteRenderer& r)
 {	
 	// Calculate phases.
 	float phase[] = {0.5f, 0.f, 0.f, 0.f};

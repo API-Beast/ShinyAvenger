@@ -9,7 +9,7 @@
 #include "PlaySpace.h"
 #include "AssetDefinition.h"
 #include <Springbok/Graphics/Core/Transform2D.h>
-#include <Springbok/Graphics/Core/BatchRenderer.h>
+#include <Springbok/Graphics/SpriteRenderer.h>
 
 Ship::Ship(const Image& img) : Sprite(img)
 {	
@@ -176,7 +176,7 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool s
 	}
 }
 
-void Ship::draw(BatchRenderer2D& r)
+void Ship::draw(SpriteRenderer& r)
 {
 	Transform2D t = Position2D(Position) + Rotate2D(Rotation);
 	r.draw(Sprite, t);
