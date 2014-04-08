@@ -20,6 +20,7 @@
 #include <Springbok/Platform/GameSurface.h>
 #include <Springbok/Audio/SoundInstance.h>
 #include <Springbok/Graphics/SpriteRenderer.h>
+#include <Springbok/Graphics/Framebuffer.h>
 
 class Ship;
 
@@ -37,6 +38,7 @@ public:
 	virtual ~PlaySpace();
 	virtual void update(float time);
 	virtual void draw();
+	void drawHUD();
 	virtual bool isFinished(){ return TimeSincePlayerDestruction > 2; };
 	void applyPhysics(PhysicsObject* obj, float dt);
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
@@ -94,6 +96,7 @@ public:
 	
 	Map<Sector, Vec2I, &Sector::Position> Sectors;
 	SpriteRenderer Renderer;
+	Framebuffer* HDRTarget;
 	
 	Vec2F CameraPos;
 	

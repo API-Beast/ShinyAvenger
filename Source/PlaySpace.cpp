@@ -33,6 +33,8 @@ GeoViews(Bullets, Objects, Particles, Ships)
 	BackgroundFogB = Image("BackgroundFogB.png");
 	ForegroundFog = Image("ForegroundFog.png");
 	
+	HDRTarget = new Framebuffer(surface->size().X, surface->size().Y, 16);
+	
 	Size = Vec2I(5000, 5000);
 	
 	checkSectorGeneration(0);
@@ -136,7 +138,10 @@ void PlaySpace::draw()
 	GeoViews.Bullets.YAxisView.update();
 	GeoViews.Particles.YAxisView.update();
 	
-	Renderer.clear(Colors::Dawnbringer::Shadow[0]);
+	RenderTarget* oldTarget = Renderer.Context.renderTarget();
+	
+	Renderer.Context.setRenderTarget(HDRTarget);
+	Renderer.clear(Colors::Black);
 	
 	auto drawBG = [&](Image& img, Vec2F scale, Vec2F parral, Vec4F color = Colors::White)
 	{
@@ -144,10 +149,10 @@ void PlaySpace::draw()
 	};
 	auto& r = Renderer;
 	
-	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Color(0.42f, 0.15f, 0.14f));
-	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Color(0.32f, 0.15f, 0.14f));
-	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Color(0.32f, 0.15f, 0.14f));
-	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Color(0.32f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Vec4F(0.42f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Vec4F(0.32f, 0.15f, 0.14f, 0.85f));
+	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Vec4F(0.32f, 0.15f, 0.14f));
+	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Vec4F(0.32f, 0.20f, 0.14f, 0.64f));
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
@@ -165,6 +170,18 @@ void PlaySpace::draw()
 		obj.drawTop(r);
 	
 	r.flush();
+	
+	drawHUD();
+	
+	r.flush();
+	Renderer.Context.setRenderTarget(oldTarget);
+	Renderer.clear(Colors::Black);
+	Renderer.drawRenderpass(*HDRTarget);
+}
+
+void PlaySpace::drawHUD()
+{
+	
 }
 
 void PlaySpace::update(float time)
