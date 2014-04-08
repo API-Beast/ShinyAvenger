@@ -49,7 +49,7 @@ void GravitySource::drawTop(SpriteRenderer& r)
 	
 	phase[1] *= phase[1];
 	phase[2] *= phase[2];
-	phase[3]  = 1-phase[1]-phase[2] + (TimeSinceSpawn * 0.4_turn + 0.20_turn).cos()*0.2f;
+	phase[3]  = 1.4f-phase[1]-phase[2];
 	
 	phase[1] = BoundBy<float>(0, phase[1], 1.2f);
 	phase[2] = BoundBy<float>(0, phase[2], 1.2f);
@@ -57,9 +57,6 @@ void GravitySource::drawTop(SpriteRenderer& r)
 	
 	// Draw.
 	Transform2D t = Position2D(Position);
-	
-	r.draw(gAssets.GlowSprite, t + Scale2D(Range / 128.f), Vec4F{CenterColor, 0.2f}, Blending::Additive);
-	r.draw(gAssets.GlowSprite, t + Scale2D(Range / 3 / 128.f), Vec4F{HighlightColor, 0.4f}, Blending::Additive);
 	
 	Angle phaseRotation[4];
 	
@@ -70,10 +67,13 @@ void GravitySource::drawTop(SpriteRenderer& r)
 		r.draw(Sprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{CenterColor, Min(phase[i]*2, 1.0f)});
 	
 	for(int i = 0; i < 4; ++i)
-		r.draw(HighlightSprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{HighlightColor, Min(phase[i]/3, 1.0f)});
+		r.draw(HighlightSprite, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{HighlightColor, Min(phase[i]/3, 1.0f)}, Blending::Additive);
 	
 	for(int i = 0; i < 4; ++i)
 		r.draw(HighlightSprite2, t + Rotate2D(phaseRotation[i]) + Scale2D(CenterSize), Vec4F{Colors::White, Min(phase[i]/2, 1.0f)}, Blending::Additive);
+	
+	r.draw(gAssets.GlowSprite, t + Scale2D(Range / 128.f), Vec4F{CenterColor, 0.2f}, Blending::Additive);
+	r.draw(gAssets.GlowSprite, t + Scale2D(CenterSize*8 + Range / 512.f ), Vec4F{HighlightColor, 0.6f}, Blending::Additive);
 }
 
 void GravitySource::influence(PhysicsObject* obj, float dt)

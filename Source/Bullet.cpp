@@ -44,14 +44,14 @@ void Bullet::drawTop(SpriteRenderer& r)
 {
 	if(Definition->Glow)
 	{
-		float age = normalizedAge();
-		Vec4F col = Vec4F(Definition->ColorAnimation[age], Definition->AlphaAnimation[age]/20);
+		float age   = normalizedAge();
+		Vec3F col   = Definition->ColorAnimation[age];
+		float alpha = Definition->AlphaAnimation[age];
 		
 		Transform2D t = Position2D(Position);
-		t += Scale2D(Definition->ScaleAnimation[age]);
-		t += Rotate2D(Rotation);
 		
-		r.draw(gAssets.GlowSprite, t + Scale2D(Definition->Sprite.size() / gAssets.GlowSprite.size()), col, Blending::Additive);
+		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D(gAssets.GlowSprite.size() / Definition->Sprite.size() * 2.20f * Definition->ScaleAnimation[age]), {col, alpha * 0.04f}, Blending::Additive);
+		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D(gAssets.GlowSprite.size() / Definition->Sprite.size() * 0.20f * Definition->ScaleAnimation[age]), {col, alpha * 0.40f}, Blending::Additive);
 	}
 }
 
