@@ -14,6 +14,7 @@ void AssetDefinition::initAll()
 	initImages();
 	initFonts();
 	initSounds();
+	initShaders();
 }
 
 void AssetDefinition::disposeAll()
@@ -443,6 +444,15 @@ void AssetDefinition::initParticles()
 	}
 }
 
+void AssetDefinition::initShaders()
+{
+	ToneMapping = ShaderProgram("Shaders/ToneMapping_Fragment.glsl");
+	ToneMapping.FragmentShader->compile();
+	//ToneMapping.bindVertexAttribute(0, "Position");
+	//ToneMapping.bindVertexAttribute(1, "TextureCoordinate");
+	//ToneMapping.bindVertexAttribute(2, "Color");
+	ToneMapping.link();
+}
 
 void AssetDefinition::disposeSounds()
 {

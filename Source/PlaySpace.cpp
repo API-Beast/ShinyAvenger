@@ -176,7 +176,9 @@ void PlaySpace::draw()
 	r.flush();
 	Renderer.Context.setRenderTarget(oldTarget);
 	Renderer.clear(Colors::Black);
+	Renderer.Context.setShader(gAssets.ToneMapping);
 	Renderer.drawRenderpass(*HDRTarget);
+	Renderer.Context.setShader(ShaderProgram::GetDefaultShader());
 }
 
 void PlaySpace::drawHUD()

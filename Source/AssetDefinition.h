@@ -71,6 +71,10 @@ struct AssetDefinition
 	SoundSource *SoundBoost;
 	SoundSource *SoundExplosion01;
 	SoundSource *SoundExplosion02;
+	
+	// SHADER DEFINITIONS
+	
+	ShaderProgram ToneMapping;
 private:
 	void initBullets();
 	void initWeapons();
@@ -78,6 +82,7 @@ private:
 	void initImages();
 	void initFonts();
 	void initSounds();
+	void initShaders();
 	
 	void disposeSounds();
 };
