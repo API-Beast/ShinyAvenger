@@ -50,8 +50,8 @@ void Bullet::drawTop(SpriteRenderer& r)
 		
 		Transform2D t = Position2D(Position);
 		
-		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D(gAssets.GlowSprite.size() / Definition->Sprite.size() * 2.20f * Definition->ScaleAnimation[age]), {col, alpha * 0.04f}, Blending::Additive);
-		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D(gAssets.GlowSprite.size() / Definition->Sprite.size() * 0.20f * Definition->ScaleAnimation[age]), {col, alpha * 0.40f}, Blending::Additive);
+		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D((gAssets.GlowSprite.size() / Definition->Sprite.size()) * 0.60f * Definition->ScaleAnimation[age]), {col, alpha * 0.10f}, Blending::Additive);
+		r.draw(gAssets.GlowSprite, Rotate2D(Rotation) + t + Scale2D((gAssets.GlowSprite.size() / Definition->Sprite.size()) * 0.10f * Definition->ScaleAnimation[age]), {col, alpha * 0.40f}, Blending::Additive);
 	}
 }
 

@@ -149,10 +149,10 @@ void PlaySpace::draw()
 	};
 	auto& r = Renderer;
 	
-	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Vec4F(0.42f, 0.15f, 0.14f));
-	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Vec4F(0.32f, 0.15f, 0.14f, 0.85f));
-	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Vec4F(0.32f, 0.15f, 0.14f));
-	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Vec4F(0.32f, 0.20f, 0.14f, 0.64f));
+	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Vec4F(Colors::White, 0.5f));
+	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Vec4F(0.22f, 0.15f, 0.14f, 0.5f));
+	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Vec4F(Colors::White));
+	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Vec3F(0.32f, 0.20f, 0.14f));
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
