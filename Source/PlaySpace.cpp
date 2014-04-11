@@ -140,6 +140,11 @@ void PlaySpace::draw()
 	
 	RenderTarget* oldTarget = Renderer.Context.renderTarget();
 	
+	if(oldTarget->size() != HDRTarget->size())
+	{
+		delete HDRTarget;
+		HDRTarget = new Framebuffer(oldTarget->size().X, oldTarget->size().Y);
+	}
 	Renderer.Context.setRenderTarget(HDRTarget);
 	Renderer.clear(Colors::Black);
 	
