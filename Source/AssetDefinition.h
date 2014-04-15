@@ -10,6 +10,7 @@
 #include "Particle.h"
 #include "Ship.h"
 
+#include <Springbok/Parsing/ConfigFile.h>
 #include <Springbok/Graphics/BitmapFont.h>
 #include <Springbok/Audio/SoundSource.h>
 
@@ -75,6 +76,11 @@ struct AssetDefinition
 	// SHADER DEFINITIONS
 	
 	ShaderProgram ToneMapping;
+	
+	// CONFIG FILE
+	
+	ConfigFile Config;
+	
 private:
 	void initBullets();
 	void initWeapons();
@@ -83,6 +89,7 @@ private:
 	void initFonts();
 	void initSounds();
 	void initShaders();
+	void initMisc();
 	
 	void disposeSounds();
 };

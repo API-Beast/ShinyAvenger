@@ -19,13 +19,13 @@ void GravitySource::update(float dt, PlaySpace* space)
 	{
 		if(InRange(ship->Position, Position, CenterSize * 450 + 600))
 			ship->doDamage( 5*dt, space);
-		if(InRange(ship->Position, Position, CenterSize * 450 + 300))
+		if(InRange(ship->Position, Position, CenterSize * 450 + 150))
 			ship->doDamage(10*dt, space);
-		if(InRange(ship->Position, Position, CenterSize * 450 + 100))
-			ship->doDamage(25*dt, space);
 		if(InRange(ship->Position, Position, CenterSize * 450 + 50))
+			ship->doDamage(25*dt, space);
+		if(InRange(ship->Position, Position, CenterSize * 450 + 0))
 			ship->doDamage(100*dt, space);
-		if(InRange(ship->Position, Position, CenterSize * 450))
+		if(InRange(ship->Position, Position, CenterSize * 450 - 50))
 			ship->doDamage(400*dt, space);
 	}
 }
@@ -80,7 +80,8 @@ void GravitySource::influence(PhysicsObject* obj, float dt)
 {
 	Vec2F difference = (Position - obj->Position);
 	float distance = difference.length();
+	if(distance < Range/4) distance = Range/4;
 	Vec2F direction = difference.normalized();
-	obj->Speed += ((direction * Gravity * obj->Mass) / Max((distance/Range)*(distance/Range), 1.0f))*dt;
+	obj->Speed += ((direction * Gravity * obj->Mass) / (distance/Range))*dt;
 }
 

@@ -103,7 +103,7 @@ public:
 	Vec2I Size;
 
 	float AirDrag = 0.001f;
-	float RotationAirDrag = 0.01f;
+	float RotationAirDrag = 0.04f;
 	
 	Vec2F SectorSize = 17500;
 	float SectorLookAhead = 20000;

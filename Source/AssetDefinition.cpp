@@ -15,6 +15,7 @@ void AssetDefinition::initAll()
 	initFonts();
 	initSounds();
 	initShaders();
+	initMisc();
 }
 
 void AssetDefinition::disposeAll()
@@ -452,6 +453,11 @@ void AssetDefinition::initShaders()
 	//ToneMapping.bindVertexAttribute(1, "TextureCoordinate");
 	//ToneMapping.bindVertexAttribute(2, "Color");
 	ToneMapping.link();
+}
+
+void AssetDefinition::initMisc()
+{
+	Config.loadFromFile("Config.xini");
 }
 
 void AssetDefinition::disposeSounds()

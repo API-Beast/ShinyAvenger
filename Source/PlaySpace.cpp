@@ -13,6 +13,8 @@
 #include <Springbok/Utils/CliArgumentParser.h>
 #include <Springbok/Audio/SoundInstance.h>
 
+#include <Springbok/Shapes/LineShape.h>
+
 #include <iostream>
 
 PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments)
@@ -64,6 +66,8 @@ GeoViews(Bullets, Objects, Particles, Ships)
 		
 		std::cout << "Stress testing: " << Ships.UsedLength << " Ships, " << Systems.UsedLength << " Solar Systems" << std::endl;
 	}
+	
+	Renderer.Context.Camera.Zoom = 0.75f;
 }
 
 PlaySpace::~PlaySpace()
@@ -176,7 +180,8 @@ void PlaySpace::draw()
 	
 	r.flush();
 	
-	drawHUD();
+	if(Player)
+		drawHUD();
 	
 	r.flush();
 	Renderer.Context.setRenderTarget(oldTarget);
@@ -188,7 +193,23 @@ void PlaySpace::draw()
 
 void PlaySpace::drawHUD()
 {
-	
+	LineShape movementPrediction;
+	movementPrediction.TexImage = Image("UI/PredictionLine.png");
+	float step = 1/15.f;
+	Ship playerCopy = *Player;
+	for(float t = 0; t < 15; t += step)
+	{
+		movementPrediction.insert(playerCopy.Position, 5, Vec4F(Vec3F(1), 0.3f));
+		movementPrediction.Points.back().TexCoord = t * 3;
+		playerCopy.updateControls(step, this);
+		applyPhysics(&playerCopy, step);
+		for(GravitySource& src : GravitySources)
+			src.influence(&playerCopy, step);
+	}
+	movementPrediction.Points.front().Width = 1;
+	movementPrediction.Points.back().Width = 1;
+	//movementPrediction.divideEquidistant(5);
+	Renderer.draw(movementPrediction, Align2D(0, 0));
 }
 
 void PlaySpace::update(float time)
