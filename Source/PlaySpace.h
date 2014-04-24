@@ -33,7 +33,7 @@ struct Sector
 class PlaySpace : public Space
 {
 public:
-	PlaySpace() : GeoViews(Bullets, Objects, Particles, Ships), Renderer(nullptr) {};
+	PlaySpace() : Renderer(nullptr) {};
 	PlaySpace(GameSurface* surface, const List<std::string>& arguments);
 	virtual ~PlaySpace();
 	virtual void update(float time);
@@ -43,6 +43,8 @@ public:
 	void applyPhysics(PhysicsObject* obj, float dt);
 	void onMovementInput(bool up, bool down, bool right, bool left, float time);
 	void onMouseHoldInput(Vec2F mousePos);
+	void onScrollInput(Vec2F scroll);
+	
 	void spawnPlayerBullet(Bullet bullet);
 	void spawnParticle(Particle particle, bool important = false);
 	
@@ -50,13 +52,13 @@ public:
 	void castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col = Colors::White, RangeF scale = 1.f, RangeF lifetime = 1.f, float turbulenceFactor = 1.0f);
 	
 	void spawnExplosion(Vec2F position, float size, float force, Color sparkColor);
-	void onActionInput(bool actionA, bool actionB, bool actionC);
+	void onActionInput(bool actionA, bool actionB, bool actionC, bool boost);
 	bool isHostile(Ship *, Ship*);
 	bool isHostile(int, int);
 	void checkSectorGeneration(Vec2F position);
 	SolarSystem* generateSystem(Vec2F position, int faction);
 	Color getFactionColor(int);
-	ContainerSubrange< ViewBase< Ship*, float >, Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
+	List< Ship* > findShips(Vec2F topLeft, Vec2F bottomRight);
 public:
 	ObjectPointer<Ship> Player;
 	
@@ -79,21 +81,6 @@ public:
 	
 	int SoftMaxParticleCount = 1024;
 	
-	struct _GeoViews
-	{
-		template<typename T>
-		using GeoView = GeometryView<T, BoundingRect, PhysicsObject, &PhysicsObject::Bounds>;
-		
-		GeoView<Bullet>         Bullets;
-		GeoView<PhysicsObject*> Objects;
-		GeoView<Particle>       Particles;
-		GeoView<Ship*>					Ships;
-		
-		template<typename A, typename B, typename C, typename D>
-		_GeoViews(A& a, B& b, C& c, D& d):Bullets(a),Objects(b),Particles(c),Ships(d){};
-		void update(){ Bullets.XAxisView.update(); Objects.XAxisView.update(); Particles.XAxisView.update(); Ships.XAxisView.update();};
-	} GeoViews;
-	
 	Map<Sector, Vec2I, &Sector::Position> Sectors;
 	SpriteRenderer Renderer;
 	Framebuffer* HDRTarget;
@@ -103,7 +90,7 @@ public:
 	Vec2I Size;
 
 	float AirDrag = 0.001f;
-	float RotationAirDrag = 0.04f;
+	float RotationAirDrag = 0.02f;
 	
 	Vec2F SectorSize = 17500;
 	float SectorLookAhead = 20000;

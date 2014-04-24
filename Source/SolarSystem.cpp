@@ -7,22 +7,21 @@
 #include "SolarSystem.h"
 #include "PlaySpace.h"
 #include "Behavior.h"
+#include "AssetDefinition.h"
 
 SolarSystem::SolarSystem(Vec2F center, float r, PlaySpace* space, int faction) 
-: Prototype(Image("Enemy/Enemy01.png"))
+: Prototype(gAssets.Fighter)
 {
 	Faction = faction;
 	Radius = r;
 	Position = center;
-	Prototype.FactionColorSprite = Image("Enemy/Enemy01FactionColor.png");
-	Prototype.ImpulseColor = Palette::Lilac;
 	
 	Color factionClr = space->getFactionColor(faction);
 	
 	TheGravitySource.Position = center;
 	TheGravitySource.Range = r;
 	TheGravitySource.CenterSize = r * 0.0004f * (0.60f + gRNG.getFloat() * 0.8f);
-	TheGravitySource.Gravity = 100.f;
+	TheGravitySource.Gravity = 25.f;
 	TheGravitySource.BackgroundColor = ShiftHueRight(factionClr, 0.05f) * 0.75f;
 	TheGravitySource.CenterColor = factionClr;
 	TheGravitySource.HighlightColor = ShiftHueLeft(factionClr, 0.1f);
@@ -47,7 +46,6 @@ void SolarSystem::update(float delta, PlaySpace *Space)
 
 void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 {
-	
 	const float SPRAY_FACTOR = 150.f;
 	
 	Ship* leader = NULL;
@@ -55,25 +53,19 @@ void SolarSystem::spawnGroup(Vec2F pos, int groupSize, PlaySpace *Space)
 	for(int i = 0; i < groupSize; ++i)
 	{
 		Ship* ship = spawnShip(pos + gRNG.getVec2(-Vec2F(SPRAY_FACTOR, SPRAY_FACTOR), Vec2F(SPRAY_FACTOR, SPRAY_FACTOR)), Space);
-	
-		if (leader != NULL)
-		{
-			ship->TheLeader = leader;
-		}
-		else
-		{
-			ship->TheLeader = this;
-			leader = ship;
-		}
 	}
 }
 
 Ship* SolarSystem::spawnShip(PlaySpace* space)
 {
+	spawnShip(generatePosition(), space);
+}
+
+Vec2F SolarSystem::generatePosition() const
+{
 	float radius = gRNG.getNumber(100+TheGravitySource.CenterSize*800, TheGravitySource.CenterSize*1200.f);
 	Angle angle = Angle::FromTurn(gRNG.getFloat());
-	spawnShip(Position + angle.toDirection().normalized() * radius, space);
-	
+	return Position + angle.toDirection().normalized() * radius;
 }
 
 Ship* SolarSystem::spawnShip(Vec2F position, PlaySpace *Space)

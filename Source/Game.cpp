@@ -28,9 +28,9 @@ Game::Game(int argc, char** argv)
 	if(argParser["--fullscreen"])
 		Surface = new GameSurface("ShinyAvenger");
 	else if(argParser["--size"])
-		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {std::stoi(argParser["--size"][0]), std::stoi(argParser["--size"][1])});
+		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {std::stoi(argParser["--size"][0]), std::stoi(argParser["--size"][1])}, 4);
 	else
-		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {1024, 768});
+		Surface = new GameSurface("ShinyAvenger", GameSurface::Windowed, {1024, 768}, 4);
 	Input   = new InputMonitor(Surface);
 	Clock   = new PreciseClock();
 	Playfield = new PlaySpace(Surface, argParser.LooseArguments);
@@ -71,15 +71,19 @@ void Game::execute()
 		bool actionA = Buttons::ActionA.isPressed(Input);
 		bool actionB = Buttons::ActionB.isPressed(Input);
 		bool actionC = Buttons::ActionC.isPressed(Input);
+		bool space   = Buttons::Space.isPressed(Input);
 		
 		if(up || down || right || left)
 			Playfield->onMovementInput(up, down, right, left, dt);
 		
-		if(actionA || actionB || actionC)
-			Playfield->onActionInput(actionA, actionB, actionC);
+		if(actionA || actionB || actionC || space)
+			Playfield->onActionInput(actionA, actionB, actionC, space);
 		
 		if(Input->getPrimaryPointerDevice()->anyButtonPressed())
 			Playfield->onMouseHoldInput(Input->getPrimaryPointerDevice()->getCursorPosition(0));
+		
+		Playfield->onScrollInput(Input->getPrimaryPointerDevice()->getScrollWheelState());
+		Input->getPrimaryPointerDevice()->setScrollWheelState(0);
 		
 		Playfield->update(dt);
 		Playfield->draw();

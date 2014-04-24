@@ -31,6 +31,7 @@ struct PhysicsObject
 	BoundingRect Bounds = BoundingRect{0, 16}; // Position updated every frame
 public:
 	virtual void draw(SpriteRenderer& r){};
+	virtual void drawPictogram(SpriteRenderer& r, float sizeMult){};
 	virtual void update(float dt, PlaySpace* space){};
 	virtual void updateBounds(){ Bounds.setCenter(Position - BoundsOffset); };
 	PhysicsObject& operator=(const PhysicsObject& other) = default;

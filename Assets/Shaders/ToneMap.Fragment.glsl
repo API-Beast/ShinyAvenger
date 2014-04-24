@@ -6,7 +6,8 @@ uniform sampler2D TextureSampler;
 
 void main()
 {
-	vec4 color = texture2D(TextureSampler, texCoord) * fragColor * 1.3 - 0.15;
+	vec4 color = texture2D(TextureSampler, texCoord) * fragColor;
+	color = ((color * 0.35) + (color * color * 0.65)) * 2.00 - 0.15;
 	
 	// Naive brightness correction for values above 1.0
 	// Try to correct it by adding green

@@ -17,7 +17,6 @@
 struct AssetDefinition
 {
 	void initAll();
-	void disposeAll();
 	
 	// BULLET DEFINITIONS
 	
@@ -55,23 +54,45 @@ struct AssetDefinition
 	Image ShieldRechargeSprite;
 	Image ShieldStaticSprite;
 	Image GlowSprite;
+	Image ParticleAtlas;
+	
+	struct
+	{
+		Image Fog1;
+		Image Fog2;
+		Image Stars;
+	} BG;
+	
+	struct
+	{
+		Image BgCloud;
+		Image Glow1;
+		Image Glow2;
+		Image Sprite;
+	} Sun;
+	
+	Image DottedLine;
+	
+	// SHIP DEFINITIONS
+	
+	Ship Fighter;
+	Ship Warship;
 	
 	// FONT DEFINITIONS
 	
-	BitmapFont BigFont;
-	BitmapFont SmallFont;
+	BitmapFont Font;
 	
 	// MUSIC DEFINITIONS
 	
-	SoundSource *MusicMainTheme;
+	SoundSource MusicMainTheme;
 	
 	// SOUND DEFINITIONS
 	
-	SoundSource *SoundSimpleShot;
-	SoundSource *SoundHeavyShot;
-	SoundSource *SoundBoost;
-	SoundSource *SoundExplosion01;
-	SoundSource *SoundExplosion02;
+	SoundSource SoundSimpleShot;
+	SoundSource SoundHeavyShot;
+	SoundSource SoundBoost;
+	SoundSource SoundExplosion01;
+	SoundSource SoundExplosion02;
 	
 	// SHADER DEFINITIONS
 	
@@ -88,10 +109,9 @@ private:
 	void initImages();
 	void initFonts();
 	void initSounds();
+	void initShips();
 	void initShaders();
 	void initMisc();
-	
-	void disposeSounds();
 };
 
 extern AssetDefinition gAssets;

@@ -19,8 +19,7 @@
 
 PlaySpace::PlaySpace(GameSurface* surface, const List<std::string>& arguments)
 :
-Renderer(surface),
-GeoViews(Bullets, Objects, Particles, Ships)
+Renderer(surface)
 {
 	gAssets.initAll();
 	
@@ -29,29 +28,25 @@ GeoViews(Bullets, Objects, Particles, Ships)
 	
 	argParser.parse(arguments);
 	IsStressTesting = argParser["--stress-test"].IsSet;
-
-	BackgroundStars = Image("BackgroundStars.png");
-	BackgroundFog = Image("BackgroundFog.png");
-	BackgroundFogB = Image("BackgroundFogB.png");
-	ForegroundFog = Image("ForegroundFog.png");
 	
-	HDRTarget = new Framebuffer(surface->size().X, surface->size().Y, 16);
+	HDRTarget = new Framebuffer(surface->size().X*2, surface->size().Y*2);
 	
 	Size = Vec2I(5000, 5000);
 	
 	checkSectorGeneration(0);
 	HomeSystem = Systems.front();
 	
-	Player = HomeSystem->spawnShip(this);
-	Player->Sprite = Image("Player/Ship.png");
-	Player->FactionColorSprite = Image("Player/ShipFactionColor.png");
-	Player->PrimaryWeapon = gAssets.MiniGun;
-	Player->SecondaryWeapon = gAssets.MissileLauncher;
-	Player->ImpulseColor = RGB(0.4f, 0.8f, 1.0f);
+	Player = new Ship(gAssets.Warship);
+	Player->Position = HomeSystem->generatePosition();
+	Player->Faction = HomeSystem->Faction;
+	Player->FactionColor = getFactionColor(Player->Faction);
 	Player->AI = NULL;
 	
+	Ships.pushBack(Player);
+	Objects.pushBack(Player);
+	
 	// Play sounds
-	Music = gAssets.MusicMainTheme->playGlobal();
+	Music = gAssets.MusicMainTheme.playGlobal();
 	
 	if(IsStressTesting)
 	{
@@ -66,8 +61,6 @@ GeoViews(Bullets, Objects, Particles, Ships)
 		
 		std::cout << "Stress testing: " << Ships.UsedLength << " Ships, " << Systems.UsedLength << " Solar Systems" << std::endl;
 	}
-	
-	Renderer.Context.Camera.Zoom = 0.75f;
 }
 
 PlaySpace::~PlaySpace()
@@ -94,7 +87,6 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 	{
 		sector.Generated = true;
 		NumberGeneratedSectors++;
-		std::cout << "Generating sector at " << sectCoordinates << " / " << position << std::endl;
 		
 		Vec2F sectStart = sectCoordinates * SectorSize;
 		Vec2F sectEnd = sectCoordinates * SectorSize + SectorSize;
@@ -130,7 +122,6 @@ void PlaySpace::checkSectorGeneration(Vec2F position)
 SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 {
 	SolarSystem* sect = new SolarSystem(position, WorldRNG.getNumber(3500, 4500), this, faction);
-	std::cout << "Generating solar system at " << position << std::endl;
 	sect->Prototype.PrimaryWeapon = gAssets.Phaser;
 	Systems.pushBack(sect);
 	return sect;
@@ -138,30 +129,31 @@ SolarSystem* PlaySpace::generateSystem(Vec2F position, int faction)
 
 void PlaySpace::draw()
 {	
-	GeoViews.Objects.YAxisView.update();
-	GeoViews.Bullets.YAxisView.update();
-	GeoViews.Particles.YAxisView.update();
-	
 	RenderTarget* oldTarget = Renderer.Context.renderTarget();
 	
 	if(oldTarget->size() != HDRTarget->size())
 	{
 		delete HDRTarget;
-		HDRTarget = new Framebuffer(oldTarget->size().X, oldTarget->size().Y);
+		HDRTarget = new Framebuffer(oldTarget->size().X, oldTarget->size().Y, 16);
 	}
 	Renderer.Context.setRenderTarget(HDRTarget);
-	Renderer.clear(Colors::Black);
+	float alphaMult = Max(Renderer.Context.Camera.Zoom.length()+0.2f, 0.0f);
+	alphaMult *= alphaMult;
+	alphaMult = Min(alphaMult-0.1f, 1.0f);
+	Renderer.clear(Colors::Dawnbringer::Clay[0] / 1.5f * (1-alphaMult));
 	
-	auto drawBG = [&](Image& img, Vec2F scale, Vec2F parral, Vec4F color = Colors::White)
-	{
-		Renderer.drawRepeatedInf(img, 0, scale, parral, color);
-	};
 	auto& r = Renderer;
 	
-	r.drawRepeatedInf(BackgroundStars, 0, 1.20f, 0.18f, Vec4F(Colors::White, 0.5f));
-	r.drawRepeatedInf(BackgroundFogB,  0, 1.90f, 0.25f, Vec4F(0.22f, 0.15f, 0.14f, 0.5f));
-	r.drawRepeatedInf(BackgroundStars, 0, 1.60f, 0.28f, Vec4F(Colors::White));
-	r.drawRepeatedInf(BackgroundFog,   0, 1.75f, 0.30f, Vec3F(0.32f, 0.20f, 0.14f));
+	if(alphaMult > 0.05f)
+	{
+		r.drawRepeatedInf(gAssets.BG.Stars, 0, 1.00f, 0.05f, Vec4F(Colors::White, 0.75f * alphaMult));
+		r.drawRepeatedInf(gAssets.BG.Fog2,  0, 4.20f, 0.15f, Vec4F(0.22f, 0.15f, 0.14f, 0.5f * alphaMult));
+		r.drawRepeatedInf(gAssets.BG.Stars, 0, 1.20f, 0.25f, Vec4F(Colors::White, 0.75f * alphaMult));
+		r.drawRepeatedInf(gAssets.BG.Fog1,  0, 3.90f, 0.40f, Vec4F(0.22f, 0.15f, 0.14f, alphaMult));
+		r.drawRepeatedInf(gAssets.BG.Stars, 0, 1.60f, 0.58f, Vec4F(Colors::White, alphaMult));
+		r.drawRepeatedInf(gAssets.BG.Fog2,  0, 2.75f, 0.80f, Vec4F(0.32f, 0.20f, 0.14f, alphaMult));
+	}
+	
 	
 	for(GravitySource& src : GravitySources)
 		src.draw(r);
@@ -179,36 +171,42 @@ void PlaySpace::draw()
 		obj.drawTop(r);
 	
 	r.flush();
-	
-	if(Player)
-		drawHUD();
-	
-	r.flush();
 	Renderer.Context.setRenderTarget(oldTarget);
 	Renderer.clear(Colors::Black);
 	Renderer.Context.setShader(gAssets.ToneMapping);
 	Renderer.drawRenderpass(*HDRTarget);
 	Renderer.Context.setShader(ShaderProgram::GetDefaultShader());
+	
+	if(Player)
+		drawHUD();
+	
+	float sizeMult = 1.f + (1.f / Renderer.Context.Camera.Zoom.length());
+	if(sizeMult > 3)
+	{
+		for(PhysicsObject* obj : Objects)
+			obj->drawPictogram(r, sizeMult);
+	}
+	
+	r.flush();
 }
 
 void PlaySpace::drawHUD()
 {
 	LineShape movementPrediction;
-	movementPrediction.TexImage = Image("UI/PredictionLine.png");
-	float step = 1/15.f;
+	float sizeMult = 1.f / Renderer.Context.Camera.Zoom.length();
+	movementPrediction.TexImage = gAssets.DottedLine;
+	float step = 1/60.f * sizeMult;
+	float maxLength = 5.0 + 5.0 * sizeMult;
 	Ship playerCopy = *Player;
-	for(float t = 0; t < 15; t += step)
+	for(float t = 0; t < maxLength; t += step)
 	{
-		movementPrediction.insert(playerCopy.Position, 5, Vec4F(Vec3F(1), 0.3f));
-		movementPrediction.Points.back().TexCoord = t * 3;
+		movementPrediction.insert(playerCopy.Position, 3 * sizeMult, Vec4F(Vec3F(1), Min((1.0f - (t / maxLength)) * sizeMult, 1.0f)));
+		movementPrediction.Points.back().TexCoord = t * 16 / sizeMult;
 		playerCopy.updateControls(step, this);
 		applyPhysics(&playerCopy, step);
 		for(GravitySource& src : GravitySources)
 			src.influence(&playerCopy, step);
 	}
-	movementPrediction.Points.front().Width = 1;
-	movementPrediction.Points.back().Width = 1;
-	//movementPrediction.divideEquidistant(5);
 	Renderer.draw(movementPrediction, Align2D(0, 0));
 }
 
@@ -228,8 +226,6 @@ void PlaySpace::update(float time)
 	
 	if(!Player)
 		TimeSincePlayerDestruction += time;
-	
-	GeoViews.update();
 	
 	SoundManager* manager = SoundManager::GetInstance();
 	manager->setListenerPosition(CameraPos);
@@ -286,23 +282,20 @@ void PlaySpace::update(float time)
 	for(Particle& particle : Particles)
 		applyPhysics(&particle, time * particleTimeFactor);
 	
-	GeoViews.update();
-	
 	// Add gravity
 	for(GravitySource& src : GravitySources)
 	{
 		float start = src.Position.X - src.Range*2;
 		float end = src.Position.X + src.Range*2;
 		
-		for(auto* obj : GeoViews.Objects.XAxisView.getRange(start, end))
+		for(auto* obj : Objects)
 			src.influence(obj, time);
-		for(auto& obj : GeoViews.Bullets.XAxisView.getRange(start, end))
+		for(auto& obj : Bullets)
 			src.influence(&obj, time);
-		for(auto& obj : GeoViews.Particles.XAxisView.getRange(start, end))
+		for(auto& obj : Particles)
 			src.influence(&obj, time);
 	}
 	
-	GeoViews.update();
 	
 	for(Bullet& bullet : Bullets)
 		for(Ship* ship : Ships)
@@ -321,6 +314,7 @@ void PlaySpace::update(float time)
 		Player->IsShootingSecondary = false;
 		Player->IsBraking = false;
 		Player->IsStabilizing = false;
+		Player->IsBoosting = false;
 		Player->Steering = 0.0f;
 	
 		if(!IsStressTesting)
@@ -365,17 +359,19 @@ void PlaySpace::onMovementInput(bool up, bool down, bool right, bool left, float
 {
 	if(Player)
 	{
+		float extraPrecision = Renderer.Context.Camera.Zoom.length();
 		if(down)
 			Player->IsBraking = true;
 		if(up);
 		if(right)
-			Player->Steering =  1.0f;
+			Player->Steering =  1.0f * extraPrecision;
 		if(left)
-			Player->Steering = -1.0f;
+			Player->Steering = -1.0f * extraPrecision;
 	}
+
 }
 
-void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
+void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC, bool boost)
 {
 	if(Player)
 	{
@@ -383,11 +379,19 @@ void PlaySpace::onActionInput(bool actionA, bool actionB, bool actionC)
 			Player->IsShootingSecondary = true;
 		if(actionA || actionC)
 			Player->IsShooting = true;	
+		if(boost)
+			Player->IsBoosting = true;
 	}
 }
 
 void PlaySpace::onMouseHoldInput(Vec2F mousePos)
 {
+}
+
+void PlaySpace::onScrollInput(Vec2F scroll)
+{
+	Renderer.Context.Camera.Zoom *= (1 + scroll.Y / 15);
+	Renderer.Context.Camera.Zoom = BoundBy<Vec2F>(1.f / 32, Renderer.Context.Camera.Zoom, 1.f);
 }
 
 void PlaySpace::spawnPlayerBullet(Bullet bullet)
@@ -421,9 +425,9 @@ Color PlaySpace::getFactionColor(int factionID)
 	return FactionColors[factionID];
 }
 
-ContainerSubrange<ViewBase< Ship*, float >, Ship*> PlaySpace::findShips(Vec2F topLeft, Vec2F bottomRight)
+List<Ship*> PlaySpace::findShips(Vec2F topLeft, Vec2F bottomRight)
 {
-	return GeoViews.Ships.XAxisView.getRange(topLeft.X, bottomRight.X);
+	return Ships;
 }
 
 void PlaySpace::castParticles(const Particle& def, Vec2F position, int amount, RangeF power, Color col, RangeF scale, RangeF lifetime, float turbulenceFactor)
@@ -462,7 +466,6 @@ void PlaySpace::spawnParticle(Particle def, Vec2F position, float scale, Angle r
 void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fireColor)
 {
 	RangeI amountParticles = RangeI(size/10, size/10+size/20);
-	std::cout << amountParticles << " Particles will be spawned" << std::endl;
 	//castParticles(gAssets.ExplosionCloud,          position, gRNG.getNumber(amountParticles), {0.f, force*2}, (fireColor+Colors::White)/2, {size/800, size/600}, {0.75f, 1.25f});
 	castParticles(gAssets.ExplosionCloudAdditive,  position, gRNG.getNumber(amountParticles), {0.f, force*0.5f}, fireColor, {size/1000, size/700}, {0.75f, 1.25f});
 	castParticles(gAssets.ExplosionSparks,         position, gRNG.getNumber(amountParticles), RangeF{force*1, force*3} + 10, fireColor);
@@ -471,5 +474,5 @@ void PlaySpace::spawnExplosion(Vec2F position, float size, float force, Color fi
 	spawnParticle(gAssets.ExplosionShockwave,      position, force/80, Angle::FromTurn(gRNG.getFloat()), fireColor, 1.f, true);
 	spawnParticle(gAssets.GlowParticle,            position, size/13 , Angle::FromTurn(gRNG.getFloat()), fireColor, 4.f, true);
 
-	gAssets.SoundExplosion02->play(position);
+	gAssets.SoundExplosion02.play(position);
 }

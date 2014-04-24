@@ -11,20 +11,15 @@
 #include <Springbok/Graphics/Core/Transform2D.h>
 #include <Springbok/Graphics/SpriteRenderer.h>
 
-Ship::Ship(const Image& img) : Sprite(img)
-{	
-	FactionColorSprite = Image("Player/FactionColor.png");
-}
-
 void Ship::update(float t, PlaySpace* space)
 {	
 	if (!this->IsBraking && boostFlag != !this->IsBraking)
 	{
 		// Boost sound
-		gAssets.SoundBoost->MinRange = 50;
-		gAssets.SoundBoost->Pitch = gRNG.getFloat() * 0.4f + 0.9f;
-		gAssets.SoundBoost->Volume = gRNG.getFloat() * 0.2f + 0.4f;
-		SoundInstance *sound = gAssets.SoundBoost->play(Position);			
+		gAssets.SoundBoost.MinRange = 50;
+		gAssets.SoundBoost.Pitch = gRNG.getFloat() * 0.4f + 0.9f;
+		gAssets.SoundBoost.Volume = gRNG.getFloat() * 0.2f + 0.4f;
+		SoundInstance *sound = gAssets.SoundBoost.play(Position);			
 	}
 	
 	Age += t;
@@ -46,6 +41,10 @@ void Ship::update(float t, PlaySpace* space)
 		Acceleration = 0;
 	
 	boostFlag = !this->IsBraking;
+	
+	
+	if(!IsBoosting && BoostFuel < BoostMaxFuel)
+		BoostFuel = Approach(BoostFuel, BoostMaxFuel, BoostRecharge * t);
 }
 
 void Ship::updateControls(float t, PlaySpace* space)
@@ -53,7 +52,15 @@ void Ship::updateControls(float t, PlaySpace* space)
 	if(IsBraking)
 		Acceleration = 0;
 	else
-		Acceleration = Rotation.toDirection() * EngineAccleration;
+	{
+		if(IsBoosting && BoostFuel > t)
+		{
+			BoostFuel -= t;
+			Acceleration = Rotation.toDirection() * (EngineAccleration + BoostAccleration);
+		}
+		else
+			Acceleration = Rotation.toDirection() * EngineAccleration;
+	}
 	
 	RotationSpeed += Steering * 4 * t;
 	Flow = 1;
@@ -97,6 +104,7 @@ void Ship::updateFX(float t, PlaySpace* space)
 		spark.Position = Position - Rotation.toDirection()*12 + (Rotation+0.25_turn).toDirection() * gRNG.getNumber(-4.f, 4.f);
 		spark.Speed = -Acceleration + Speed + (Rotation+0.25_turn).toDirection() * gRNG.getNumber(-60.f, 60.f);
 		spark.Colorization = ImpulseColor;
+		spark.Size = gRNG.getNumber(0.10f, 1.00f);
 		spark.update(supplementT, space);
 		space->applyPhysics(&spark, supplementT);
 		space->spawnParticle(spark);
@@ -163,15 +171,15 @@ void Ship::updateWeapon(Ship::_Weapon& weapon, float t, PlaySpace* space, bool s
 			}
 			
 			// Sounds!
-			gAssets.SoundHeavyShot->MinRange = 50;
-			gAssets.SoundHeavyShot->Pitch = gRNG.getFloat() * 0.2f + 0.8f;
-			gAssets.SoundHeavyShot->Volume = gRNG.getFloat() * 0.2f + 0.5f;
-			gAssets.SoundHeavyShot->play(Position);	
+			gAssets.SoundHeavyShot.MinRange = 50;
+			gAssets.SoundHeavyShot.Pitch = gRNG.getFloat() * 0.2f + 0.8f;
+			gAssets.SoundHeavyShot.Volume = gRNG.getFloat() * 0.2f + 0.5f;
+			gAssets.SoundHeavyShot.play(Position);	
 			
-			gAssets.SoundSimpleShot->MinRange = 50;
-			gAssets.SoundSimpleShot->Pitch = gRNG.getFloat() * 0.15f + 0.99f;
-			gAssets.SoundSimpleShot->Volume = gRNG.getFloat() * 0.1f + 0.1f;
-			gAssets.SoundSimpleShot->play(Position);	
+			gAssets.SoundSimpleShot.MinRange = 50;
+			gAssets.SoundSimpleShot.Pitch = gRNG.getFloat() * 0.15f + 0.99f;
+			gAssets.SoundSimpleShot.Volume = gRNG.getFloat() * 0.1f + 0.1f;
+			gAssets.SoundSimpleShot.play(Position);	
 		}
 	}
 }
@@ -180,7 +188,7 @@ void Ship::draw(SpriteRenderer& r)
 {
 	Transform2D t = Position2D(Position) + Rotate2D(Rotation);
 	r.draw(Sprite, t);
-	r.draw(FactionColorSprite, t, Vec4F(FactionColor));
+	r.draw(Overlay, t, Vec4F(FactionColor));
 	
 	if(ShieldEnergy < (MaxShield * 0.8f) && ShieldEnergy > 0.f)
 	{
@@ -191,6 +199,12 @@ void Ship::draw(SpriteRenderer& r)
 		Vec4F col = Vec4F(ShieldColors[percentShield+0.2f], Max<float>(Angle::FromTurn(Age).cos(), 0.f) * (1 - percentShield));
 		r.draw(gAssets.ShieldRechargeSprite, Position2D(Position) + Rotate2D(rot), col);
 	}
+}
+
+void Ship::drawPictogram(SpriteRenderer& r, float sizeMult)
+{
+	r.draw(Pictogram, Position2D(Position) + Scale2D(sizeMult));
+	r.draw(PictogramOverlay, Position2D(Position) + Scale2D(sizeMult), FactionColor);
 }
 
 void Ship::updateBounds()
@@ -228,10 +242,10 @@ void Ship::onHit(Bullet* bullet, PlaySpace* space)
 		p.Flow = 0;
 		p.Stabilizer = 0;
 		space->spawnParticle(p, true);
-		gAssets.SoundExplosion01->MinRange = 50;
-		gAssets.SoundExplosion01->Pitch = gRNG.getFloat() * 0.2f + 0.7f;
-		gAssets.SoundExplosion01->Volume = gRNG.getFloat() * 0.2f + 0.5f;
-		gAssets.SoundExplosion01->play(Position);
+		gAssets.SoundExplosion01.MinRange = 50;
+		gAssets.SoundExplosion01.Pitch = gRNG.getFloat() * 0.2f + 0.7f;
+		gAssets.SoundExplosion01.Volume = gRNG.getFloat() * 0.2f + 0.5f;
+		gAssets.SoundExplosion01.play(Position);
 	}
 }
 

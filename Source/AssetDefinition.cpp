@@ -8,43 +8,72 @@
 
 void AssetDefinition::initAll()
 {
-	initParticles();
-	initBullets();
-	initWeapons();
 	initImages();
 	initFonts();
 	initSounds();
 	initShaders();
 	initMisc();
+	
+	// Gameplay
+	initParticles();
+	initBullets();
+	initWeapons(); // Requires bullets to be initialized first
+	initShips();   // Requires weapons to be initialized first
 }
-
-void AssetDefinition::disposeAll()
-{
-	disposeSounds();
-}
-
 
 void AssetDefinition::initImages()
 {
 	ShieldRechargeSprite = Image("Ship/ShieldRecharge.png");
 	ShieldStaticSprite = Image("Ship/ShieldStatic.png");
-	GlowSprite = Image("Glow.png");
+	ParticleAtlas = Image("Particles/Atlas.png");
+	DottedLine = Image("HUD/DottedLine.png");
+	GlowSprite = ParticleAtlas.cut({0, 128}, {256, 256});
+	
+	BG.Fog1  = Image("Background/Fog01.png");
+	BG.Fog2  = Image("Background/Fog02.png");
+	BG.Stars = Image("Background/Stars.png");
+	
+	Sun.BgCloud = Image("Sun/Background.png");
+	Sun.Glow1   = Image("Sun/Glow01.png");
+	Sun.Glow2   = Image("Sun/Glow02.png");
+	Sun.Sprite  = Image("Sun/Sprite.png");
+}
+
+void AssetDefinition::initShips()
+{
+	Fighter.Sprite           = Image("Ship/Fighter.png");
+	Fighter.Overlay          = Image("Ship/FighterOverlay.png");
+	Fighter.PrimaryWeapon    = Phaser;
+	Fighter.SecondaryWeapon  = MissileLauncher;
+	Fighter.Pictogram        = Image("Ship/FighterPicture.png");
+	Fighter.PictogramOverlay = Image("Ship/FighterPictureOverlay.png");
+	Fighter.ImpulseColor     = Palette::Lilac;
+	
+	Warship.Sprite           = Image("Ship/Player.png");
+	Warship.Overlay          = Image("Ship/PlayerOverlay.png");
+	Warship.PrimaryWeapon    = MiniGun;
+	Warship.SecondaryWeapon  = MissileLauncher;
+	Warship.Pictogram        = Image("Ship/FighterPicture.png");
+	Warship.PictogramOverlay = Image("Ship/FighterPictureOverlay.png");
+	Warship.ImpulseColor     = RGB(0.4f, 0.8f, 1.0f);
 }
 
 void AssetDefinition::initFonts()
-{	
-	BigFont.loadRange(Image("UI/BigNumbers.png"), '\'', ':');
-	SmallFont.loadGrid(Image("UI/SmallFont.png"), 0, 16);	
+{
+	Font.loadGrid(Image("HUD/Font16.png"), 0, 16);
 }
 
 void AssetDefinition::initSounds()
 {
-	MusicMainTheme = new SoundSource("Sounds/MainTheme.ogg");
-	SoundSimpleShot = new SoundSource("Sounds/shot01.ogg");
-	SoundHeavyShot = new SoundSource("Sounds/shot02.ogg");
-	SoundBoost = new SoundSource("Sounds/boost.ogg");
-	SoundExplosion01 = new SoundSource("Sounds/explosion01.ogg");
-	SoundExplosion02 = new SoundSource("Sounds/explosion02.ogg");
+	MusicMainTheme   = SoundSource("Music/MainTheme.ogg");
+	
+	SoundSimpleShot  = SoundSource("Sounds/Bullets/Energy01.ogg");
+	SoundHeavyShot   = SoundSource("Sounds/Bullets/Energy02.ogg");
+	
+	SoundBoost       = SoundSource("Sounds/Boost.ogg");
+	
+	SoundExplosion01 = SoundSource("Sounds/Explosion01.ogg");
+	SoundExplosion02 = SoundSource("Sounds/Explosion02.ogg");
 }
 
 
@@ -75,7 +104,7 @@ void AssetDefinition::initBullets()
 		b.ScaleAnimation.insert(0.8, {1.5f, 3.f});
 		b.ScaleAnimation.insert(1.0, {0.5f, 4.f});
 
-		b.Sprite = Image("Player/Bullet.png");
+		b.Sprite = Image("Weapons/EnergyBullet.png");
 	}
 	
 	// ------------------------------------------------------------------
@@ -111,7 +140,7 @@ void AssetDefinition::initBullets()
 	{
 		MissileDefinition& b = HomingMissile;
 		
-		b.Sprite = Image("Ship/Missile.png");
+		b.Sprite = Image("Weapons/Missile.png");
 		b.Power = 60;
 		b.Speed = 400;
 		b.Explodes = true;
@@ -184,13 +213,15 @@ void AssetDefinition::initWeapons()
 
 void AssetDefinition::initParticles()
 {
+	ParticleAtlas = Image("Particles/Atlas.png");
+	
 	//  ----------------------------------------------
 	//  ### Pulse Engine Glow           
 	//  ----------------------------------------------
 	{
 		Particle::_Definition& p = PulseEngineGlow;
 		
-		p.Sprite = Image("Player/Impulse.png");
+		p.Sprite = ParticleAtlas.cut({256, 128}, {64, 64});
 		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.3f;
 		p.PhysicsProperties.Drag = 2;
@@ -230,7 +261,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = PulseEngineSpark;
 		
 		p = PulseEngineGlow;
-		p.Sprite = Image("Player/Spark.png");
+		p.Sprite = ParticleAtlas.cut({320, 128}, {32, 32});
 		p.PhysicsProperties.Drag = 1;
 		p.PhysicsProperties.Mass = 1;
 		p.Lifetime = 0.15f;
@@ -251,7 +282,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = EnergyShield;
 		
-		p.Sprite = Image("Ship/ShieldImpact.png");
+		p.Sprite = ParticleAtlas.cut({256, 192}, {128, 128});
 		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Drag = 0.f;
@@ -275,7 +306,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = EnergyShieldDestruction;
 		
 		p = EnergyShield;
-		p.Sprite = Image("Ship/ShieldDestruction.png");
+		p.Sprite = ParticleAtlas.cut({256, 320}, {128, 128});
 	}
 	
 	// ------------------------------------------------------------------
@@ -284,7 +315,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = GlowParticle;
 		
-		p.Sprite = Image("Glow.png");
+		p.Sprite = GlowSprite;
 		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Mass = 0.f;
@@ -307,7 +338,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = SparkParticle;
 		
-		p.Sprite = Image("spark.png");
+		p.Sprite = ParticleAtlas.cut({384, 0}, {8, 75});
 		p.DrawMode = Blending::Additive;
 		p.Lifetime = 0.2f;
 		p.PhysicsProperties.Mass = 2.f;
@@ -347,7 +378,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = ExplosionCloud;
 		
-		p.Sprite = Image("ExplosionCloud.png");
+		p.Sprite = ParticleAtlas.cut({0, 0}, {128, 128});
 		p.DrawMode = Blending::Alpha;
 		p.Lifetime = 0.5f;
 		p.PhysicsProperties.Mass = -1.f;
@@ -401,7 +432,7 @@ void AssetDefinition::initParticles()
 		Particle::_Definition& p = ExplosionFlash;
 		
 		p = GlowParticle;
-		p.Sprite = Image("Flash.png");
+		p.Sprite = ParticleAtlas.cut({0, 0}, {128, 128});
 
 		{
 			auto& anim = p.Animation.Scale;
@@ -421,7 +452,7 @@ void AssetDefinition::initParticles()
 	{
 		Particle::_Definition& p = ExplosionShockwave;
 		p = GlowParticle;
-		p.Sprite = Image("ExplosionShockwave.png");
+		p.Sprite = ParticleAtlas.cut({128, 0}, {128, 128});
 		p.Lifetime = 0.6f;
 		
 		{
@@ -447,7 +478,7 @@ void AssetDefinition::initParticles()
 
 void AssetDefinition::initShaders()
 {
-	ToneMapping = ShaderProgram("Shaders/ToneMapping_Fragment.glsl");
+	ToneMapping = ShaderProgram("Shaders/ToneMap.Fragment.glsl");
 	ToneMapping.FragmentShader->compile();
 	//ToneMapping.bindVertexAttribute(0, "Position");
 	//ToneMapping.bindVertexAttribute(1, "TextureCoordinate");
@@ -459,16 +490,5 @@ void AssetDefinition::initMisc()
 {
 	Config.loadFromFile("Config.xini");
 }
-
-void AssetDefinition::disposeSounds()
-{
-	delete MusicMainTheme;
-	delete SoundSimpleShot;
-	delete SoundHeavyShot;
-	delete SoundBoost;
-	delete SoundExplosion01;
-	delete SoundExplosion02;
-}
-
 
 AssetDefinition gAssets;

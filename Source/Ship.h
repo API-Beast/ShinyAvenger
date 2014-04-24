@@ -30,13 +30,20 @@ public:
 	
 	// General
 	Image Sprite;
+	Image Pictogram;
+	Image PictogramOverlay;
+	
 	float EngineAccleration = 400;
+	float  BoostAccleration = 800;
 	
 	float ShieldEnergy = 100;
 	float MaxShield = 100;
 	float ShieldRegeneration = 10;
 	ShipState Status = Ship::Okay;
-	float Age;
+	float Age = 0;
+	float BoostFuel = 1.f;
+	float BoostMaxFuel = 1.f;
+	float BoostRecharge = 0.1f;
 	
 	// Particle Effects
 	float ImpulseTimer = 0.f;
@@ -47,8 +54,7 @@ public:
 	// Diplomacy
 	int Faction = -1;
 	Color FactionColor = Colors::White;
-	Image FactionColorSprite;
-	Leader *TheLeader = NULL;
+	Image Overlay;
 	
 	// Controls
 	float Steering = 0.0f;
@@ -56,6 +62,7 @@ public:
 	bool IsShooting = false;
 	bool IsShootingSecondary = false;
 	bool IsStabilizing = false;
+	bool IsBoosting = false;
 	
 	// Sounds
 	bool boostFlag = false;
@@ -88,10 +95,10 @@ public:
 	// AI
 	Behavior* AI = nullptr;
 public:
-	Ship(const Image& img);
 	virtual ~Ship();
 	virtual void update(float t, PlaySpace* space);	
 	virtual void draw(SpriteRenderer& r);
+	virtual void drawPictogram(SpriteRenderer& r, float sizeMult);
 	virtual void updateBounds();
 	bool canBeDespawned(){ return Status == Destroyed; };
 	virtual Vec2F getPosition() const;

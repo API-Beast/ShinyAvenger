@@ -31,8 +31,13 @@ void ShipAI::update(float t, Ship* ship, PlaySpace* space)
 	{
 		case Follow:
 		{
-			steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f);
-			if(InRange(ship->Position, Target->Position, 250))
+			if(Target)
+			{
+				steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f);
+				if(InRange(ship->Position, Target->Position, 250))
+					reachedTarget = true;
+			}
+			else
 				reachedTarget = true;
 			break;
 		}
@@ -45,8 +50,13 @@ void ShipAI::update(float t, Ship* ship, PlaySpace* space)
 		}
 		case ShotAt:
 		{
-			steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f, true);
-			if(Target->isDestroyed())
+			if(Target)
+			{
+				steerTowards(ship, Target->Position + Target->Speed*0.2f, 0.2f, true);
+				if(Target->isDestroyed())
+					reachedTarget = true;
+			}
+			else
 				reachedTarget = true;
 			break;
 		}

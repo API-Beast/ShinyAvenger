@@ -34,6 +34,7 @@ public:
 	Ship* spawnShip(PlaySpace* space);
 	void update(float, PlaySpace*);
 	Vec2F getPosition() const;
+	Vec2F generatePosition() const;
 	bool hasMoved() const { return false; }
 	bool isDestroyed() const { return false; }
 };

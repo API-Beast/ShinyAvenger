@@ -35,9 +35,4 @@ public:
 	float CenterSize = 1.0f;
 	
 	BoundingRect Bounds;
-	
-	Image CloudSprite = Image("GravityCloud.png");
-	Image Sprite = Image("GravitySource.png");
-	Image HighlightSprite = Image("GravitySourceHighlight.png");
-	Image HighlightSprite2 = Image("GravitySourceHighHighlight.png");
 };

@@ -1,0 +1,14 @@
+Explosion:
+ Cloud      -   0,   0; 128 x 128
+ Shockwave  - 128,   0; 128 x 128
+ Flash      - 256,   0; 128 x 113
+ Spark      - 384,   0;   8 x  75
+
+Basic particles:
+ Glow/Flash     -   0, 128; 256 x 256 // This is also used as a overlay sometimes
+
+Ship:
+ Engine Impulse - 256, 128;  64 x  64
+ Engine Spark   - 320, 128;  32 x  32
+ Shield Hit     - 256, 192; 128 x 128
+ Shield Destruc - 256, 320; 128 x 128
